@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-
 .formulario {
     display: flex;
     flex-direction: column;
@@ -29,19 +28,16 @@ h2 {
 
 .inputRegBedel::placeholder {
     color: gray;
-    /* Color rojo para el placeholder */
     opacity: 1;
-    /* Asegúrate de que el placeholder sea completamente opaco */
 }
 
 .inputRegBedel:focus::placeholder {
     color: #aaa;
-    /* Color más claro al hacer foco en el input */
 }
 
-.input-error::placeholder {
-    color: red;
-    /* Color del placeholder si hay error */
+.input-error {
+    background-color: #ffe5e5; /* Rojo claro */
+    border: 1px solid #ff6666; /* Borde rojo suave para errores */
 }
 
 .BotonesBedel {
@@ -72,16 +68,8 @@ h2 {
     background-color: #ff9100;
 }
 
-.botonCancelar:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    /* Sombra */
-    transform: translateY(-2px);
-    /* Levanta el botón un poco */
-}
-
+.botonCancelar:hover,
 .botonRegBedel:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    /* Sombra */
     transform: translateY(-2px);
-    /* Levanta el botón un poco */
 }

@@ -1,20 +1,19 @@
-import { useState } from 'react'
+import React from 'react';
 import './CancelarBedel.css';
 
-const CancelarBedel = ({ mostrar }) => {
-
-
-    return (
-        <div className='container1' >
-            <div className='Titulos'>
-                <h1>Esta seguro de cancelar?</h1>
-                <h3>Si cancela el procedimiento, perdera todo el progreso hasta ahora.</h3>
-            </div>
-            <div className='Botones'>
-                <button className='BotonVolver' onClick={mostrar}>Volver</button>
-                <button className='BotonCancelar'>Cancelar</button>
-            </div>
+const CancelarBedel = ({ onCancel, onConfirm }) => {
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h1>¿Estás seguro de que deseas cancelar?</h1>
+        <p>Si cancelas, perderás todo el progreso hasta ahora.</p>
+        <div className="modal-buttons">
+          <button className="modal-button volver" onClick={onCancel}>Volver</button>
+          <button className="modal-button cancelar" onClick={onConfirm}>Cancelar</button>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
+
 export default CancelarBedel;

@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css';
 import RegistrarBedel from './RegistrarBedel';
-import CancelarBedel from './CancelarBedel'
+import ModalConfirmacion from './CancelarBedel';
+
 const App = () => {
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const formRef = useRef(null); // Referencia para resetear el formulario
 
-  const [mostrarRegistroBedel, setMostrarRegistroBedel] = useState(true)
+  const mostrarCancelarBedel = () => setMostrarModal(true);
+  const ocultarModal = () => setMostrarModal(false);
 
-  const mostrarCancelarBedel = () => setMostrarRegistroBedel(false)
-
-  const mostrarRegistrarBedel = () => setMostrarRegistroBedel(true)
+  const confirmarCancelacion = () => {
+    setMostrarModal(false);
+    formRef.current(); // Llama a la función de reset del formulario
+  };
 
   return (
-    mostrarRegistroBedel ? (
-      <div className="container">
-
-        <div className="seccion-bienvenida">
-          <h1>Bienvenido</h1>
-          <p>Ingrese los datos solicitados</p>
-        </div>
-        <div className="seccion-form">
-          <RegistrarBedel mostrar={mostrarCancelarBedel} />
-        </div>
-
-
-      </div>) : (<CancelarBedel mostrar={mostrarRegistrarBedel} />)
-
+    <div className="container">
+      <div className="seccion-bienvenida">
+        <h1>Por favor</h1>
+        <p>Ingrese los datos solicitados</p>
+      </div>
+      <div className="seccion-form">
+        <RegistrarBedel mostrar={mostrarCancelarBedel} resetForm={formRef} />
+      </div>
+      
+      {mostrarModal && (
+        <ModalConfirmacion onCancel={ocultarModal} onConfirm={confirmarCancelacion} />
+      )}
+    </div>
   );
 };
 

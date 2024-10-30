@@ -151,4 +151,3 @@ const RegistrarBedel = ({ mostrar }) => {
 };
 
 export default RegistrarBedel;
-

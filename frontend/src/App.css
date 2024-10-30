@@ -6,6 +6,23 @@
     box-sizing: border-box;
 }
 
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%); /* Empieza fuera de la pantalla a la izquierda */
+    }
+    75% {
+        opacity: 1;
+        transform: translateX(5%); /* Rebota ligeramente hacia adelante */
+    }
+    90% {
+        transform: translateX(-2%); /* Rebota ligeramente hacia atrás */
+    }
+    100% {
+        transform: translateX(0); /* Llega a la posición final */
+    }
+}
+
 html,
 body {
     /* Asegura que el body ocupe todo el alto de la pantalla */
@@ -27,6 +44,10 @@ body {
 
 
 .seccion-bienvenida {
+    position: relative;
+    left: -20px; /* Desplaza toda la sección un poco a la izquierda */
+    margin-left: -20px; /* Ajusta para cubrir cualquier espacio adicional */
+    padding-left: 40px; /* Ajusta el contenido dentro sin afectar el borde */
     background-color: #f7a544;
     border-radius: 0 42px 42px 0;
     color: white;
@@ -38,6 +59,7 @@ body {
     width: 40%;
     height: 100%;
     text-align: center;
+    animation: slideIn 1000ms ease-out; 
 }
 
 .seccion-bienvenida h1 {
