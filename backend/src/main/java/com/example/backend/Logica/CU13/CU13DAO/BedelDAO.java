@@ -1,9 +1,11 @@
-package com.example.backend.Logica.CU13;
+package com.example.backend.Logica.CU13.CU13DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.example.backend.Logica.CU13.Bedel.BedelDTO;
 
 public class BedelDAO implements AutoCloseable {
     private final Connection conn;
@@ -29,7 +31,7 @@ public class BedelDAO implements AutoCloseable {
             stmt.setString(2, bedelDTO.getNombre());
             stmt.setString(3, bedelDTO.getApellido());
             stmt.setString(4, bedelDTO.getTurnoDeTrabajo().name());
-            stmt.setInt(5, bedelDTO.getIDAdminCreador());
+            stmt.setInt(5, bedelDTO.getID_admin_creador());
 
             stmt.executeUpdate();
         }
@@ -40,4 +42,5 @@ public class BedelDAO implements AutoCloseable {
             conn.close();
         }
     }
+    
 }

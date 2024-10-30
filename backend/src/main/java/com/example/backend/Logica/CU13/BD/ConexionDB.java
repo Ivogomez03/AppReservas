@@ -1,5 +1,5 @@
 
-package com.example.backend.Logica.CU13;
+package com.example.backend.Logica.CU13.BD;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,8 +1,11 @@
-package com.example.backend.Logica.CU13;
+package com.example.backend.Logica.CU13.Admin;
 
 import com.example.backend.Logica.usuario;
 public class Administrador extends usuario{
 
+    public Administrador() {
+        super();
+    }
 public Administrador(String nombre, String apellido, int id_usuario, String contraseña) {
         super(nombre, apellido, id_usuario, contraseña);
     }

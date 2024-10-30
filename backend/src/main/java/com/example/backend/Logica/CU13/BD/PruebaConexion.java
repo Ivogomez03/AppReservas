@@ -1,6 +1,10 @@
-package com.example.backend.Logica.CU13;
+package com.example.backend.Logica.CU13.BD;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import com.example.backend.Logica.CU13.Bedel.BedelDTO;
+import com.example.backend.Logica.CU13.Bedel.TurnoDeTrabajo;
+import com.example.backend.Logica.CU13.CU13DAO.BedelDAO;
 public class PruebaConexion {
     @SuppressWarnings("CallToPrintStackTrace")
     public static void main(String[] args) {
