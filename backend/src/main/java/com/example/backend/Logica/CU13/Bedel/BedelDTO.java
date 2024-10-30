@@ -15,7 +15,7 @@ public class BedelDTO {
 
     public BedelDTO() { }
 
-    public BedelDTO(String nombre, String apellido, int idUsuario, String contrasena, TurnoDeTrabajo turnoDeTrabajo, int ID_admin_creador) {
+    public BedelDTO(String nombre, String apellido, int idUsuario, TurnoDeTrabajo turnoDeTrabajo, int ID_admin_creador, String contrasena) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.idUsuario = idUsuario;

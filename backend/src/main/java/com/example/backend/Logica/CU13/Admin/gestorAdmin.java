@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.backend.Logica.CU13.Bedel.BedelDTO;
 import com.example.backend.Logica.CU13.CU13DAO.BedelDAO;
 
@@ -34,6 +35,7 @@ public class gestorAdmin {
         return null;
     }
 
+     @SuppressWarnings("CallToPrintStackTrace")
     public Boolean ControlarID(BedelDTO bedelDTO) {
 
         try{
@@ -45,9 +47,9 @@ public class gestorAdmin {
                     bedelDTO.getNombre(),
                     bedelDTO.getApellido(),
                     bedelDTO.getIdUsuario(),
-                    bedelDTO.getContrasena(),
                     bedelDTO.getTurnoDeTrabajo(),
-                    bedelDTO.getID_admin_creador()
+                    bedelDTO.getID_admin_creador(),
+                    bedelDTO.getContrasena()
                 );
                 BedelDAO.guardarBedel(bedel);
                 return true;

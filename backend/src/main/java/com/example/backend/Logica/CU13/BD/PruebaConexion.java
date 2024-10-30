@@ -11,10 +11,10 @@ public class PruebaConexion {
         BedelDTO nuevoBedel = new BedelDTO(
                 "Carlos", 
                 "González", 
-                143,  // ID_usuario
-                "password123", 
+                143, // ID_usuario
                 TurnoDeTrabajo.Tarde, 
-                1  // ID_admin_creador (clave foránea)
+                1,  // ID_admin_creador (clave foránea)
+                "password123"
         );
 
         // Llamamos a los métodos del DAO para verificar y guardar
