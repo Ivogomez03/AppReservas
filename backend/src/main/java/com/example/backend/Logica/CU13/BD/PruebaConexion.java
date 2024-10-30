@@ -8,7 +8,7 @@ import com.example.backend.Logica.CU13.CU13DAO.BedelDAOImpl;
 public class PruebaConexion {
     @SuppressWarnings("CallToPrintStackTrace")
     public static void main(String[] args) {
-        BedelDTO nuevoBedel = new Bedel(
+        BedelDTO nuevoBedel = new BedelDTO(
                 "Carlos", 
                 "González", 
                 143,  // ID_usuario
