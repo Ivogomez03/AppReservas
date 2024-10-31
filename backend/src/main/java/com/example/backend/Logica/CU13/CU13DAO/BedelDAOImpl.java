@@ -1,51 +1,45 @@
 package com.example.backend.Logica.CU13.CU13DAO;
+import java.util.List;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import com.example.backend.Logica.CU13.Bedel.Bedel;
 import com.example.backend.Logica.CU13.Bedel.BedelDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Repository;
+@Repository
+public class BedelDAOImpl implements BedelDAO{
 
-public class BedelDAOImpl implements BedelDAO, AutoCloseable{
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    private final Connection conn;
     
     @Override
-     public boolean existeBedel(int idUsuario) throws SQLException {
-        String sql = "SELECT 1 FROM Bedel WHERE ID_usuario = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idUsuario);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
-            }
-        }
-    }
+    @Transactional
+    public void guardarBedel(BedelDTO bedelDTO) {
+        Bedel bedel = new Bedel();
+        bedel.setNombre(bedelDTO.getNombre());
+        bedel.setApellido(bedelDTO.getApellido());
+        //bedel.setIdUsuario(bedelDTO.getIdUsuario());
+        bedel.setContraseña("defaultPassword"); // Cambia según sea necesario
+        //bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
+        //bedel.setIdAdminCreador(bedelDTO.getIdAdminCreador());
 
-    public BedelDAOImpl(Connection conn) {
-        this.conn = conn;
+        entityManager.persist(bedel);
     }
 
     @Override
-    public void guardarBedel(BedelDTO bedelDTO) throws SQLException {
-        String sql = "INSERT INTO Bedel (ID_usuario, Nombre, Apellido, Turno_de_trabajo, ID_admin_creador, Contrasena) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, bedelDTO.getIdUsuario());
-            stmt.setString(2, bedelDTO.getNombre());
-            stmt.setString(3, bedelDTO.getApellido());
-            stmt.setString(4, bedelDTO.getTurnoDeTrabajo().name());
-            stmt.setInt(5, bedelDTO.getID_admin_creador());
-            stmt.setString(6, bedelDTO.getContrasena());
-
-            stmt.executeUpdate();
-        }
+    public boolean existeBedelPorID(int idUsuario) {
+        String sql = "SELECT COUNT(b) FROM Bedel b WHERE b.idUsuario = :idUsuario";
+        Long count = (Long) entityManager.createQuery(sql)
+                .setParameter("idUsuario", idUsuario)
+                .getSingleResult();
+        return count > 0;
     }
 
-    @SuppressWarnings("override")
-     public void close() throws SQLException {
-        if (conn != null && !conn.isClosed()) {
-            conn.close();
-        }
+    @Override
+    public List<BedelDTO> recuperarBedeles() {
+        String sql = "SELECT new com.example.backend.Logica.CU13.BedelDTO(b.nombre, b.apellido, b.idUsuario, b.turnoDeTrabajo, b.idAdminCreador) FROM Bedel b";
+        return entityManager.createQuery(sql, BedelDTO.class).getResultList();
     }
-
 }

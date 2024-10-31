@@ -1,4 +1,4 @@
-package com.example.backend.Logica.CU13.Admin;
+ package com.example.backend.Logica.CU13.Admin;
 
 import java.sql.SQLException;
 
@@ -38,26 +38,20 @@ public class gestorAdmin {
      @SuppressWarnings("CallToPrintStackTrace")
     public Boolean ControlarID(BedelDTO bedelDTO) {
 
-        try{
-            if (BedelDAO.existeBedel(bedelDTO.getIdUsuario())) {
-                return false;
-            }
-            else {
-                BedelDTO bedel = new BedelDTO(
-                    bedelDTO.getNombre(),
-                    bedelDTO.getApellido(),
-                    bedelDTO.getIdUsuario(),
-                    bedelDTO.getTurnoDeTrabajo(),
-                    bedelDTO.getID_admin_creador(),
-                    bedelDTO.getContrasena()
-                );
-                BedelDAO.guardarBedel(bedel);
-                return true;
-            }
-        }catch (SQLException e) {
-            e.printStackTrace();
-            return false; // O maneja la excepción de acuerdo a la lógica de tu aplicación
-        }
+         if (BedelDAO.existeBedelPorID(bedelDTO.getIdUsuario())) {
+             return false;
+         } else {
+             BedelDTO bedel = new BedelDTO(
+                     bedelDTO.getNombre(),
+                     bedelDTO.getApellido(),
+                     bedelDTO.getIdUsuario(),
+                     bedelDTO.getTurnoDeTrabajo(),
+                     bedelDTO.getID_admin_creador(),
+                     bedelDTO.getContrasena()
+             );
+             BedelDAO.guardarBedel(bedel);
+             return true;
+         } // O maneja la excepción de acuerdo a la lógica de tu aplicación
         
     }
 

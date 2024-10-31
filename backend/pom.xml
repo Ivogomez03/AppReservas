@@ -17,7 +17,7 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>17</java.version>  <!-- Usa 17 o 21 según prefieras -->
+        <java.version>21</java.version>  <!-- Usa 17 o 21 según prefieras -->
     </properties>
 
     <dependencies>
@@ -34,6 +34,11 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        
+        <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
 
         <!-- Lombok para evitar escribir código repetitivo -->
         <dependency>
@@ -41,9 +46,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
-        <!-- Dependencias para pruebas -->
+<!-- Dependencias para pruebas -->
+        
         <dependency>
+    <groupId>jakarta.persistence</groupId>
+    <artifactId>jakarta.persistence-api</artifactId>    
+</dependency>
+<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -53,6 +62,7 @@
        <dependency>
     <groupId>com.mysql</groupId>
     <artifactId>mysql-connector-j</artifactId>
+<scope>runtime</scope>
 </dependency>
     </dependencies>
 
