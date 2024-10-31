@@ -1,7 +1,5 @@
  package com.example.backend.Logica.CU13.Admin;
 
-import java.sql.SQLException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
