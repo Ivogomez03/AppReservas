@@ -4,25 +4,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter 
+@Setter
 @Entity
 
-@Table(name = "Bedel")
+@Table(name = "bedel")
 public class Bedel extends usuario {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Turno_de_trabajo")
+    @Column(name = "turnoDeTrabajo")
     private TurnoDeTrabajo turnoDeTrabajo;
 
-    @Column(name = "ID_admin_creador")
+    @Column(name = "idAdminCreador")
     private int idAdminCreador;
 
     public Bedel() {
         super();
     }
 
-    public Bedel(String nombre, String apellido, int idUsuario, String contraseña, TurnoDeTrabajo turnoDeTrabajo, int idAdminCreador) {
-        super(nombre, apellido, idUsuario, contraseña);
+    public Bedel(String nombre, String apellido, int idUsuario, String contrasena, TurnoDeTrabajo turnoDeTrabajo, int idAdminCreador) {
+        super(nombre, apellido, idUsuario, contrasena);
         this.turnoDeTrabajo = turnoDeTrabajo;
         this.idAdminCreador = idAdminCreador;
     }

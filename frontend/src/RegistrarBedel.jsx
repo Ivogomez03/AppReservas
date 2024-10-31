@@ -77,6 +77,26 @@ const RegistrarBedel = ({ mostrar }) => {
       return;
     }
 
+    try {
+      const response = await fetch('http://localhost:8080/api/bedel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form) // Envía los datos del formulario en formato JSON
+      });
+
+      if (response.ok) {
+        alert("Bedel registrado con éxito");
+        // Resetear el formulario aquí si es necesario
+      } else {
+        alert("Hubo un error al registrar el bedel");
+      }
+    } catch (error) {
+      console.error("Error al enviar los datos:", error);
+      alert("Error en la conexión al backend");
+    }
+
   }
 
   return (

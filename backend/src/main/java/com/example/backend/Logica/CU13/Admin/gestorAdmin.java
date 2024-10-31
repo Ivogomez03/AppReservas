@@ -46,7 +46,7 @@ public class gestorAdmin {
                      bedelDTO.getApellido(),
                      bedelDTO.getIdUsuario(),
                      bedelDTO.getTurnoDeTrabajo(),
-                     bedelDTO.getID_admin_creador(),
+                     bedelDTO.getIdAdminCreador(),
                      bedelDTO.getContrasena()
              );
              BedelDAO.guardarBedel(bedel);

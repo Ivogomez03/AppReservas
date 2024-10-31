@@ -39,7 +39,11 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
-
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <optional>true</optional>
+    </dependency>
         <!-- Lombok para evitar escribir código repetitivo -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -49,6 +53,7 @@
 <!-- Dependencias para pruebas -->
         
         <dependency>
+        
     <groupId>jakarta.persistence</groupId>
     <artifactId>jakarta.persistence-api</artifactId>    
 </dependency>

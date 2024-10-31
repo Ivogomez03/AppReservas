@@ -7,18 +7,18 @@ import lombok.Setter;
 @Getter @Setter
 @MappedSuperclass
 public abstract class usuario {
-    private String Nombre;
-    private String Apellido;
+    private String nombre;
+    private String apellido;
     @Id 
-    private int ID_usuario;
-    private String Contraseña;
+    private int idUsuario;
+    private String contrasena;
     
     public usuario() {
     }
-    public usuario(String nombre, String apellido, int id_usuario, String contraseña) {
-        Nombre = nombre;
-        Apellido = apellido;
-        ID_usuario = id_usuario;
-        Contraseña = contraseña;
+    public usuario(String nombre, String apellido, int idUsuario, String contrasena) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.idUsuario = idUsuario;
+        this.contrasena = contrasena;
     }
 }
