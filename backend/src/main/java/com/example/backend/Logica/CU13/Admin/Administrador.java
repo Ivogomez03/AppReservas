@@ -6,8 +6,8 @@ public class Administrador extends usuario{
     public Administrador() {
         super();
     }
-public Administrador(String nombre, String apellido, int id_usuario, String contraseña) {
-        super(nombre, apellido, id_usuario, contraseña);
+public Administrador(String nombre, String apellido, int idUsuario, String contraseña) {
+        super(nombre, apellido, idUsuario, contraseña);
     }
 //public Bedel CrearBedel() {
 // Bedel bedel = new Bedel(String nombre, String apellido, int id_usuario, String contraseña, TurnoDeTrabajo turno);

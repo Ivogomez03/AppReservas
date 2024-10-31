@@ -21,7 +21,7 @@ public class BedelDAOImpl implements BedelDAO{
         bedel.setNombre(bedelDTO.getNombre());
         bedel.setApellido(bedelDTO.getApellido());
         bedel.setIdUsuario(bedelDTO.getIdUsuario());
-        bedel.setContrasena("defaultPassword"); // Cambia según sea necesario
+        bedel.setContrasena(bedelDTO.getContrasena()); // Cambia según sea necesario
         bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
         bedel.setIdAdminCreador(bedelDTO.getIdAdminCreador());
 
