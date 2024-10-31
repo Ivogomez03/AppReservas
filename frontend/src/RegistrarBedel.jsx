@@ -6,27 +6,28 @@ const RegistrarBedel = ({ mostrar }) => {
   const [form, setForm] = useState({
     apellido: '',
     nombre: '',
-    turno: '',
-    identificador: '',
-    contraseña: '',
-    confirmarContraseña: ''
+    turnoDeTrabajo: '',
+    idUsuario: '',
+    idAdminCreador: '1',
+    contrasena: '',
+    confirmarContrasena: ''
   });
 
   const [placeholders, setPlaceholders] = useState({
     apellido: "Apellido",
     nombre: "Nombre",
-    turno: "Turno de trabajo",
-    identificador: "Identificador de usuario",
-    contraseña: "Contraseña",
-    confirmarContraseña: "Confirmar contraseña"
+    turnoDeTrabajo: "Turno de trabajo",
+    idUsuario: "Identificador de usuario",
+    contrasena: "Contraseña",
+    confirmarContrasena: "Confirmar contraseña"
   });
 
   const [errors, setErrors] = useState({
     apellido: false,
     nombre: false,
-    turno: false,
-    identificador: false,
-    confirmarContraseña: false
+    turnoDeTrabajo: false,
+    idUsuario: false,
+    confirmarContrasena: false
   });
 
   const handleChange = (e) => {
@@ -56,45 +57,46 @@ const RegistrarBedel = ({ mostrar }) => {
       setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
     }
 
-    if (!form.turno || form.turno.length > 10) {
-      newErrors.turno = true;
-      setPlaceholders(prev => ({ ...prev, turno: "Completa el turno de trabajo (máximo 10 caracteres)." }));
+    if (!form.turnoDeTrabajo || form.turnoDeTrabajo.length > 10) {
+      newErrors.turnoDeTrabajo = true;
+      setPlaceholders(prev => ({ ...prev, turnoDeTrabajo: "Completa el turno de trabajo (máximo 10 caracteres)." }));
     }
-    if (!form.identificador || form.identificador.length > 10) {
-      newErrors.identificador = true;
-      setPlaceholders(prev => ({ ...prev, identificador: "Completa el identificador (máximo 10 caracteres)." }));
+    if (!form.idUsuario || form.idUsuario.length > 10) {
+      newErrors.idUsuario = true;
+      setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
     }
-    if (form.contraseña != form.confirmarContraseña) {
-      newErrors.confirmarContraseña = true;
-      setPlaceholders(prev => ({ ...prev, confirmarContraseña: "Las contraseñas no coinciden" }));
+    if (form.contrasena != form.confirmarContrasena) {
+      newErrors.confirmarContrasena = true;
+      setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden" }));
       // Limpiar el campo de confirmarContraseña
-      setForm(prev => ({ ...prev, confirmarContraseña: "" }));
+      setForm(prev => ({ ...prev, confirmarContrasena: "" }));
     }
 
     // Si hay errores, actualizar el estado de errores y detener el envío
-    if (newErrors.apellido || newErrors.nombre || newErrors.turno || newErrors.confirmarContraseña) {
+    if (newErrors.apellido || newErrors.nombre || newErrors.turnoDeTrabajo || newErrors.confirmarContrasena) {
       setErrors(newErrors);
+      console.log(newErrors)
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/bedel', {
+
+      const response = await fetch('/admin/crear', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form) // Envía los datos del formulario en formato JSON
+        body: JSON.stringify(form),
       });
 
-      if (response.ok) {
-        alert("Bedel registrado con éxito");
-        // Resetear el formulario aquí si es necesario
+
+      if (response.status === 200) {
+        console.log('Bedel creado exitosamente:', response.data);
       } else {
-        alert("Hubo un error al registrar el bedel");
+        console.log('Hubo un error al crear el Bedel');
       }
     } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      alert("Error en la conexión al backend");
+      console.error('Error en la solicitud:', error);
     }
 
   }
@@ -124,38 +126,38 @@ const RegistrarBedel = ({ mostrar }) => {
       />
 
       <input
-        className={`inputRegBedel ${errors.turno ? 'input-error' : ''}`}
+        className={`inputRegBedel ${errors.turnoDeTrabajo ? 'input-error' : ''}`}
         type="text"
-        name="turno"
-        placeholder={placeholders.turno}
-        value={form.turno}
+        name="turnoDeTrabajo"
+        placeholder={placeholders.turnoDeTrabajo}
+        value={form.turnoDeTrabajo}
         onChange={handleChange}
       />
 
       <input
-        className={`inputRegBedel ${errors.identificador ? 'input-error' : ''}`}
+        className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
         type="text"
-        name="identificador"
-        placeholder={placeholders.identificador}
-        value={form.identificador}
+        name="idUsuario"
+        placeholder={placeholders.idUsuario}
+        value={form.idUsuario}
         onChange={handleChange}
       />
 
       <input
         className='inputRegBedel'
         type="password"
-        name="contraseña"
-        placeholder={placeholders.contraseña}
-        value={form.contraseña}
+        name="contrasena"
+        placeholder={placeholders.contrasena}
+        value={form.contrasena}
         onChange={handleChange}
       />
 
       <input
-        className={`inputRegBedel ${errors.confirmarContraseña ? 'input-error' : ''}`}
+        className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
         type="password"
-        name="confirmarContraseña"
-        placeholder={placeholders.confirmarContraseña}
-        value={form.confirmarContraseña}
+        name="confirmarContrasena"
+        placeholder={placeholders.confirmarContrasena}
+        value={form.confirmarContrasena}
         onChange={handleChange}
       />
 
