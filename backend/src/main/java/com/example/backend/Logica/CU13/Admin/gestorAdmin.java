@@ -1,7 +1,5 @@
  package com.example.backend.Logica.CU13.Admin;
 
-import java.sql.SQLException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,19 +18,14 @@ public class gestorAdmin {
     private BedelDAO BedelDAO;
 
     @PostMapping("/crear")
-    public Void crearBedel(@RequestBody BedelDTO bedelDTO) {
+    public Boolean crearBedel(@RequestBody BedelDTO bedelDTO) {
         boolean incorrecto = false;
 
-        while(!incorrecto) {
-            if(ControlarID(bedelDTO)){
-                incorrecto = true;
-            }
-            else {
-                //volver a pedir datos
-            }
-        
+        if(ControlarID(bedelDTO)){
+            incorrecto = true;
         }
-        return null;
+        
+        return incorrecto;
     }
 
      @SuppressWarnings("CallToPrintStackTrace")

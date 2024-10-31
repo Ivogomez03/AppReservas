@@ -7,10 +7,14 @@ import lombok.Setter;
 @Getter @Setter
 @MappedSuperclass
 public abstract class usuario {
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "apellido")
     private String apellido;
     @Id 
+    @Column(name = "idUsuario")
     private int idUsuario;
+    @Column(name = "contrasena")
     private String contrasena;
     
     public usuario() {
