@@ -12,7 +12,7 @@ const App = () => {
 
   const confirmarCancelacion = () => {
     setMostrarModal(false);
-    formRef.current(); // Llama a la función de reset del formulario
+    if (formRef.current) formRef.current(); // Llama a la función de reset del formulario, si existe
   };
 
   return (

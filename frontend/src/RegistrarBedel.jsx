@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './RegistrarBedel.css';
 
 
-const RegistrarBedel = ({ mostrar }) => {
+const RegistrarBedel = ({ mostrar , resetForm}) => {
   const [form, setForm] = useState({
     apellido: '',
     nombre: '',
@@ -12,6 +12,24 @@ const RegistrarBedel = ({ mostrar }) => {
     contrasena: '',
     confirmarContrasena: ''
   });
+
+  const resetFormulario = () => {
+    setForm({
+      apellido: '',
+      nombre: '',
+      turnoDeTrabajo: '',
+      idUsuario: '',
+      idAdminCreador: '1',
+      contrasena: '',
+      confirmarContrasena: ''
+    });
+  };
+
+  useEffect(() => {
+    if (resetForm) {
+      resetForm.current = resetFormulario;
+    }
+  }, [resetForm]);
 
   const [placeholders, setPlaceholders] = useState({
     apellido: "Apellido",
