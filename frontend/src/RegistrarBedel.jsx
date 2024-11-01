@@ -82,16 +82,25 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
       newErrors.idUsuario = true;
       setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
     }
+
+    // Resetear errores de contraseña
+    newErrors.contrasena = false;
+    newErrors.confirmarContrasena = false;
+
+    // Validaciones de la contraseña
     if (form.contrasena.length < 8) {
       newErrors.contrasena = true;
       setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe tener al menos 8 caracteres." }));
-    } else if (!/[!@#$%^&*]/.test(form.contrasena)) {
+    }
+    if (!/[!@#$%^&*]/.test(form.contrasena)) {
       newErrors.contrasena = true;
       setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un signo especial (@#$%&*)." }));
-    } else if (!/[A-Z]/.test(form.contrasena)) {
+    }
+    if (!/[A-Z]/.test(form.contrasena)) {
       newErrors.contrasena = true;
       setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos una letra mayúscula." }));
-    } else if (!/\d/.test(form.contrasena)) {
+    }
+    if (!/\d/.test(form.contrasena)) {
       newErrors.contrasena = true;
       setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un dígito." }));
     }
@@ -185,7 +194,14 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
         onChange={handleChange}
         className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
       />
-      {errors.contrasena && <span className="error-message">La contraseña no cumple con los requisitos.</span>}
+      {errors.contrasena && (
+        <>
+          {form.contrasena.length < 8 && <span className="error-message">La contraseña debe tener al menos 8 caracteres.</span>}
+          {!/[!@#$%^&*]/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos un signo especial (@#$%&*).</span>}
+          {!/[A-Z]/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos una letra mayúscula.</span>}
+          {!/\d/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos un dígito.</span>}
+        </>
+      )}
 
       <input
         type="password"
