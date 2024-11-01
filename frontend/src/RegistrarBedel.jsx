@@ -60,21 +60,20 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
     });
   };
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const newErrors = { ...errors };
 
+    // Validaciones
     if (!form.apellido || form.apellido.length > 50) {
       newErrors.apellido = true;
       setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
     }
-
     if (!form.nombre || form.nombre.length > 50) {
       newErrors.nombre = true;
       setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
     }
-
     if (!form.turnoDeTrabajo || form.turnoDeTrabajo.length > 10) {
       newErrors.turnoDeTrabajo = true;
       setPlaceholders(prev => ({ ...prev, turnoDeTrabajo: "Completa el turno de trabajo (máximo 10 caracteres)." }));
@@ -83,19 +82,34 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
       newErrors.idUsuario = true;
       setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
     }
-    if (form.contrasena != form.confirmarContrasena) {
+    if (form.contrasena.length < 8) {
+      newErrors.contrasena = true;
+      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe tener al menos 8 caracteres." }));
+    } else if (!/[!@#$%^&*]/.test(form.contrasena)) {
+      newErrors.contrasena = true;
+      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un signo especial (@#$%&*)." }));
+    } else if (!/[A-Z]/.test(form.contrasena)) {
+      newErrors.contrasena = true;
+      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos una letra mayúscula." }));
+    } else if (!/\d/.test(form.contrasena)) {
+      newErrors.contrasena = true;
+      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un dígito." }));
+    }
+    if (form.contrasena !== form.confirmarContrasena) {
       newErrors.confirmarContrasena = true;
-      setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden" }));
-      // Limpiar el campo de confirmarContraseña
-      setForm(prev => ({ ...prev, confirmarContrasena: "" }));
+      setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
+      setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
     }
 
-    // Si hay errores, actualizar el estado de errores y detener el envío
-    if (newErrors.apellido || newErrors.nombre || newErrors.turnoDeTrabajo || newErrors.confirmarContrasena) {
-      setErrors(newErrors);
-      console.log(newErrors)
+    // Actualizar el estado de errores
+    setErrors(newErrors);
+
+    // Si hay errores, detener el envío
+    if (Object.values(newErrors).some(error => error)) {
+      console.log(newErrors);
       return;
     }
+    
 
     try {
 
@@ -120,9 +134,7 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
   }
 
   return (
-
     <form onSubmit={handleSubmit} className='formulario'>
-
       <h2>Registrar Bedel</h2>
 
       <input
@@ -133,59 +145,62 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
         onChange={handleChange}
         className={`inputRegBedel ${errors.apellido ? 'input-error' : ''}`}
       />
+      {errors.apellido && <span className="error-message">Completa el apellido (máximo 50 caracteres).</span>}
 
       <input
-        className={`inputRegBedel ${errors.nombre ? 'input-error' : ''}`}
         type="text"
         name="nombre"
         placeholder={placeholders.nombre}
         value={form.nombre}
         onChange={handleChange}
+        className={`inputRegBedel ${errors.nombre ? 'input-error' : ''}`}
       />
+      {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
 
       <input
-        className={`inputRegBedel ${errors.turnoDeTrabajo ? 'input-error' : ''}`}
         type="text"
         name="turnoDeTrabajo"
         placeholder={placeholders.turnoDeTrabajo}
         value={form.turnoDeTrabajo}
         onChange={handleChange}
+        className={`inputRegBedel ${errors.turnoDeTrabajo ? 'input-error' : ''}`}
       />
+      {errors.turnoDeTrabajo && <span className="error-message">Completa el turno de trabajo (máximo 10 caracteres).</span>}
 
       <input
-        className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
         type="text"
         name="idUsuario"
         placeholder={placeholders.idUsuario}
         value={form.idUsuario}
         onChange={handleChange}
+        className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
       />
+      {errors.idUsuario && <span className="error-message">Completa el identificador (máximo 10 caracteres).</span>}
 
       <input
-        className='inputRegBedel'
         type="password"
         name="contrasena"
         placeholder={placeholders.contrasena}
         value={form.contrasena}
         onChange={handleChange}
+        className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
       />
+      {errors.contrasena && <span className="error-message">La contraseña no cumple con los requisitos.</span>}
 
       <input
-        className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
         type="password"
         name="confirmarContrasena"
         placeholder={placeholders.confirmarContrasena}
         value={form.confirmarContrasena}
         onChange={handleChange}
+        className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
       />
+      {errors.confirmarContrasena && <span className="error-message">Las contraseñas no coinciden.</span>}
 
       <div className='BotonesBedel'>
-
         <button className='botonRegBedel' type="submit">Registrar</button>
         <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
-
       </div>
-
     </form>
   );
 };
