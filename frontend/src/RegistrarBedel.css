@@ -41,11 +41,16 @@ h2 {
     border: 1px solid #ff6666;
     /* Borde rojo suave para errores */
 }
+
 .error-message {
-    color: red; /* Color del texto del mensaje de error */
-    font-size: 14px; /* Tamaño de fuente para los mensajes de error */
-    margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
-    font-weight: bold; /* Hacer el texto en negrita */
+    color: red;
+    /* Color del texto del mensaje de error */
+    font-size: 14px;
+    /* Tamaño de fuente para los mensajes de error */
+    margin-top: 5px;
+    /* Espacio entre el campo y el mensaje de error */
+    font-weight: bold;
+    /* Hacer el texto en negrita */
 }
 
 .BotonesBedel {
@@ -80,4 +85,38 @@ h2 {
 .botonRegBedel:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.backend-message-exito {
+    margin-top: 10px;
+    color: green;
+    /* Puedes cambiar el color según tu diseño */
 }

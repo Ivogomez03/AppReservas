@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './RegistrarBedel.css';
 
 
-const RegistrarBedel = ({ mostrar , resetForm}) => {
+const RegistrarBedel = ({ mostrar, resetForm }) => {
   const [form, setForm] = useState({
     apellido: '',
     nombre: '',
@@ -13,23 +13,8 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
     confirmarContrasena: ''
   });
 
-  const resetFormulario = () => {
-    setForm({
-      apellido: '',
-      nombre: '',
-      turnoDeTrabajo: '',
-      idUsuario: '',
-      idAdminCreador: '1',
-      contrasena: '',
-      confirmarContrasena: ''
-    });
-  };
 
-  useEffect(() => {
-    if (resetForm) {
-      resetForm.current = resetFormulario;
-    }
-  }, [resetForm]);
+
 
   const [placeholders, setPlaceholders] = useState({
     apellido: "Apellido",
@@ -45,8 +30,47 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
     nombre: false,
     turnoDeTrabajo: false,
     idUsuario: false,
+    contrasena: false,
     confirmarContrasena: false
   });
+  const [animationClass, setAnimationClass] = useState('');
+
+  const [backendMessage, setBackendMessage] = useState('');
+
+  const resetFormulario = () => {
+    setForm({
+      apellido: '',
+      nombre: '',
+      turnoDeTrabajo: '',
+      idUsuario: '',
+      idAdminCreador: '1',
+      contrasena: '',
+      confirmarContrasena: ''
+    });
+    setPlaceholders({
+      apellido: "Apellido",
+      nombre: "Nombre",
+      turnoDeTrabajo: "Turno de trabajo",
+      idUsuario: "Identificador de usuario",
+      contrasena: "Contraseña",
+      confirmarContrasena: "Confirmar contraseña"
+    })
+    setErrors({
+      apellido: false,
+      nombre: false,
+      turnoDeTrabajo: false,
+      idUsuario: false,
+      contrasena: false,
+      confirmarContrasena: false
+
+    });
+    setBackendMessage('');
+  };
+  useEffect(() => {
+    if (resetForm) {
+      resetForm.current = resetFormulario;
+    }
+  }, [resetForm]);
 
   const handleChange = (e) => {
     console.log({ ...form })
@@ -60,7 +84,7 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
     });
   };
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = { ...errors };
@@ -82,27 +106,9 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
       newErrors.idUsuario = true;
       setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
     }
-
-    // Resetear errores de contraseña
-    newErrors.contrasena = false;
-    newErrors.confirmarContrasena = false;
-
-    // Validaciones de la contraseña
-    if (form.contrasena.length < 8) {
+    if (!form.contrasena) {
       newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe tener al menos 8 caracteres." }));
-    }
-    if (!/[!@#$%^&*]/.test(form.contrasena)) {
-      newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un signo especial (@#$%&*)." }));
-    }
-    if (!/[A-Z]/.test(form.contrasena)) {
-      newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos una letra mayúscula." }));
-    }
-    if (!/\d/.test(form.contrasena)) {
-      newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe contener al menos un dígito." }));
+      setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contrasena." }));
     }
     if (form.contrasena !== form.confirmarContrasena) {
       newErrors.confirmarContrasena = true;
@@ -118,7 +124,7 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
       console.log(newErrors);
       return;
     }
-    
+
 
     try {
 
@@ -131,13 +137,28 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
       });
 
 
-      if (response.status === 200) {
-        console.log('Bedel creado exitosamente:', response.data);
-      } else {
-        console.log('Hubo un error al crear el Bedel');
+      const result = await response.text(); // Cambia según el tipo de respuesta del backend
+      console.log(result)
+      if (response.status === 200 && result == "Bedel creado exitosamente.") {
+
+        setBackendMessage("Bedel creado exitosamente.");
+
+        setAnimationClass('fade-in'); // Agregar clase de animación
+
+        setTimeout(() => {
+
+          setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
+
+          resetFormulario(); // Limpiar formulario
+
+        }, 2000); // Esperar 2 segundos antes de hacer fade out
+      }
+      else {
+        setBackendMessage(result); // Muestra mensaje del backend
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
+      setBackendMessage("Ocurrió un error en el servidor. Inténtalo de nuevo.");
     }
 
   }
@@ -194,14 +215,8 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
         onChange={handleChange}
         className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
       />
-      {errors.contrasena && (
-        <>
-          {form.contrasena.length < 8 && <span className="error-message">La contraseña debe tener al menos 8 caracteres.</span>}
-          {!/[!@#$%^&*]/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos un signo especial (@#$%&*).</span>}
-          {!/[A-Z]/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos una letra mayúscula.</span>}
-          {!/\d/.test(form.contrasena) && <span className="error-message">La contraseña debe contener al menos un dígito.</span>}
-        </>
-      )}
+      {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
+      {backendMessage != "Bedel creado exitosamente." && backendMessage && <div className="backend-message">{backendMessage}</div>}
 
       <input
         type="password"
@@ -217,6 +232,7 @@ const RegistrarBedel = ({ mostrar , resetForm}) => {
         <button className='botonRegBedel' type="submit">Registrar</button>
         <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
       </div>
+      {backendMessage == "Bedel creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
     </form>
   );
 };

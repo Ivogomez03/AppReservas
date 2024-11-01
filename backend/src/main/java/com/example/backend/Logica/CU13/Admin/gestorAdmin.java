@@ -30,25 +30,28 @@ public class gestorAdmin {
             }
         }
         
-        if(ControlarID(bedelDTO)){
+        if (ControlarID(bedelDTO)) {
             return "El ID del Bedel ya existe.";
         }
-        else if(contra.length() < 4) {
+        else if (contra.length() < 4) {
+            System.out.println(contra.length());
             return "La contraseña debe tener al menos 4 caracteres.";
         }
-        else if(contra.chars().anyMatch(Character::isDigit)){
+        else if (!contra.chars().anyMatch(Character::isDigit)) {
+            System.out.println("La contraseña no tiene números.");
             return "La contraseña debe tener al menos un número.";
         }
-        else if(contra.chars().anyMatch(Character::isUpperCase)){
+        else if (!contra.chars().anyMatch(Character::isUpperCase)) {
+            System.out.println("La contraseña no tiene mayúsculas.");
             return "La contraseña debe tener al menos una mayúscula.";
         }
-        else if(!caracteresEspeciales){
+        else if (!caracteresEspeciales) {
             return "La contraseña debe tener al menos un caracter especial.";
         }
         else {
             BedelDAO.guardarBedel(bedelDTO);
             return "Bedel creado exitosamente.";
-        }
+}
 
     }
 
