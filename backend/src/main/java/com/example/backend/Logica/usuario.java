@@ -14,6 +14,7 @@ public abstract class usuario {
     @Id 
     @Column(name = "idUsuario")
     private int idUsuario;
+     @Column(name = "contrasena")
     private String contrasena;
     
     public usuario() {
