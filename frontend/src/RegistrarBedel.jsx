@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react'
 import './RegistrarBedel.css';
+import Select from 'react-select';
+
 
 
 const RegistrarBedel = ({ mostrar, resetForm }) => {
+  const options = [
+    { value: 'Mañana', label: 'Mañana' },
+    { value: 'Tarde', label: 'Tarde' },
+    { value: 'Noche', label: 'Noche' },
+  ];
   const [form, setForm] = useState({
     apellido: '',
     nombre: '',
@@ -187,15 +194,18 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
       />
       {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
 
-      <input
-        type="text"
+      <select
         name="turnoDeTrabajo"
-        placeholder={placeholders.turnoDeTrabajo}
         value={form.turnoDeTrabajo}
         onChange={handleChange}
-        className={`inputRegBedel ${errors.turnoDeTrabajo ? 'input-error' : ''}`}
-      />
-      {errors.turnoDeTrabajo && <span className="error-message">Completa el turno de trabajo (máximo 10 caracteres).</span>}
+        className={`selectRegBedel ${errors.turnoDeTrabajo ? 'select-error' : ''}`}
+      >
+        <option value="" disabled>Selecciona un turno</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>{option.label}</option>
+        ))}
+      </select>
+      {errors.turnoDeTrabajo && <span className="error-message">Selecciona un turno de trabajo.</span>}
 
       <input
         type="text"
