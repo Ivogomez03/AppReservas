@@ -1,5 +1,7 @@
 package com.example.backend.Repositorio.Implementacion;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.backend.DTO.BedelDTO;
@@ -36,6 +38,12 @@ public class BedelDAOImpl implements BedelDAO {
         bedel.setIdAdminCreador(bedelDTO.getIdAdminCreador());
 
         entityManager.persist(bedel);
+    }
+
+    @Override
+    public List<BedelDTO> recuperarBedeles() {
+        String sql = "SELECT new com.example.backend.Logica.CU13.BedelDTO(b.nombre, b.apellido, b.idUsuario,b.contrasena, b.turnoDeTrabajo, b.idAdminCreador) FROM Bedel b";
+        return entityManager.createQuery(sql, BedelDTO.class).getResultList();
     }
 
 }
