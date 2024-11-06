@@ -5,11 +5,13 @@ import Select from 'react-select';
 
 
 const RegistrarBedel = ({ mostrar, resetForm }) => {
+
   const options = [
     { value: 'Mañana', label: 'Mañana' },
     { value: 'Tarde', label: 'Tarde' },
     { value: 'Noche', label: 'Noche' },
   ];
+
   const [form, setForm] = useState({
     apellido: '',
     nombre: '',
@@ -20,7 +22,10 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
     confirmarContrasena: ''
   });
 
-
+  const [backendErrors, setBackendErrors] = useState({
+    idUsuario: '',
+    contrasena: ''
+  });
 
 
   const [placeholders, setPlaceholders] = useState({
@@ -71,6 +76,10 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
       confirmarContrasena: false
 
     });
+    setBackendErrors({
+      idUsuario: '',
+      contrasena: ''
+    });
     setBackendMessage('');
   };
   useEffect(() => {
@@ -96,7 +105,7 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
     e.preventDefault();
     const newErrors = { ...errors };
 
-    // Validaciones
+    // Validaciones locales
     if (!form.apellido || form.apellido.length > 50) {
       newErrors.apellido = true;
       setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
@@ -105,9 +114,8 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
       newErrors.nombre = true;
       setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
     }
-    if (!form.turnoDeTrabajo || form.turnoDeTrabajo.length > 10) {
+    if (!form.turnoDeTrabajo) {
       newErrors.turnoDeTrabajo = true;
-      setPlaceholders(prev => ({ ...prev, turnoDeTrabajo: "Completa el turno de trabajo (máximo 10 caracteres)." }));
     }
     if (!form.idUsuario || form.idUsuario.length > 10) {
       newErrors.idUsuario = true;
@@ -115,7 +123,7 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
     }
     if (!form.contrasena) {
       newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contrasena." }));
+      setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
     }
     if (form.contrasena !== form.confirmarContrasena) {
       newErrors.confirmarContrasena = true;
@@ -128,14 +136,11 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
 
     // Si hay errores, detener el envío
     if (Object.values(newErrors).some(error => error)) {
-      console.log(newErrors);
       return;
     }
 
-
     try {
-
-      const response = await fetch('/admin/crear', {
+      const response = await fetch('/bedel/CU13', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,31 +148,36 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
         body: JSON.stringify(form),
       });
 
+      const result = await response.json(); // Usamos .json() para recibir la respuesta como objeto JSON
+      console.log(result); // Ver la estructura del objeto JSON en la consola
 
-      const result = await response.text(); // Cambia según el tipo de respuesta del backend
-      console.log(result)
-      if (response.status === 200 && result == "Bedel creado exitosamente.") {
+      const newBackendErrors = { ...backendErrors };
 
+      if (result.errorId !== "Id valida") {
+        newBackendErrors.idUsuario = result.errorId;
+      }
+      if (result.errorContrasena !== "Contraseña valida") {
+        newBackendErrors.contrasena = result.errorContrasena;
+      }
+
+      setBackendErrors(newBackendErrors);
+
+      // Si no hay errores en el backend, mostrar el mensaje de éxito
+      if (result.errorId === "Id valida" && result.errorContrasena === "Contraseña valida") {
         setBackendMessage("Bedel creado exitosamente.");
 
         setAnimationClass('fade-in'); // Agregar clase de animación
 
         setTimeout(() => {
-
           setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
-
           resetFormulario(); // Limpiar formulario
-
         }, 2000); // Esperar 2 segundos antes de hacer fade out
       }
-      else {
-        setBackendMessage(result); // Muestra mensaje del backend
-      }
+
     } catch (error) {
       console.error('Error en la solicitud:', error);
       setBackendMessage("Ocurrió un error en el servidor. Inténtalo de nuevo.");
     }
-
   }
 
   return (
@@ -215,7 +225,7 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
         onChange={handleChange}
         className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
       />
-      {errors.idUsuario && <span className="error-message">Completa el identificador (máximo 10 caracteres).</span>}
+      {backendErrors.idUsuario && <span className="error-message">{backendErrors.idUsuario}</span>}
 
       <input
         type="password"
@@ -226,7 +236,7 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
         className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
       />
       {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
-      {backendMessage != "Bedel creado exitosamente." && backendMessage && <div className="backend-message">{backendMessage}</div>}
+      {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
 
       <input
         type="password"
