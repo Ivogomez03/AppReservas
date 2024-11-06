@@ -42,7 +42,7 @@ public class BedelDAOImpl implements BedelDAO {
 
     @Override
     public List<BedelDTO> recuperarBedeles() {
-        String sql = "SELECT new com.example.backend.Logica.CU13.BedelDTO(b.nombre, b.apellido, b.idUsuario,b.contrasena, b.turnoDeTrabajo, b.idAdminCreador) FROM Bedel b";
+        String sql = "SELECT new com.example.backend.DTO.BedelDTO(b.idUsuario, b.nombre, b.apellido, b.contrasena, b.turnoDeTrabajo, b.idAdminCreador) FROM Bedel b";
         return entityManager.createQuery(sql, BedelDTO.class).getResultList();
     }
 
