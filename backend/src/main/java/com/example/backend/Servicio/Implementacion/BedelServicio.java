@@ -38,8 +38,8 @@ public class BedelServicio implements IBedelServicios {
             validacion++;
             errorId = "Id valida";
         }
-        if(!caracteresEspeciales || contra.chars().anyMatch(Character::isUpperCase) || contra.chars().anyMatch(Character::isDigit) || contra.length()<8 || contra.length()>16){
-            errorContrasena = "La contraseña debe tener menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
+        if(!caracteresEspeciales || !contra.chars().anyMatch(Character::isUpperCase) || !contra.chars().anyMatch(Character::isDigit) || contra.length()<8 || contra.length()>16){
+            errorContrasena = "La contraseña debe tener al menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
         }
         else {
             validacion++;

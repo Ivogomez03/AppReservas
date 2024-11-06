@@ -1,5 +1,7 @@
 package com.example.backend.Modelos;
 
 public enum TurnoDeTrabajo {
-    Mañana, Tarde, Noche
+    Mañana,
+    Tarde,
+    Noche;
 }
