@@ -1,12 +1,10 @@
 package com.example.backend.Servicio.Implementacion;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.Modelos.Bedel;
-import com.example.backend.Modelos.TurnoDetrabajo;
+import com.example.backend.DTO.BedelDTO;
+import com.example.backend.Modelos.CU13Salida;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
 
@@ -17,42 +15,47 @@ public class BedelServicio implements IBedelServicios {
     private BedelDAO bedelDAO;
 
     @Override
-    public List<Bedel> getBedeles() {
-        List<Bedel> bedeles = bedelDAO.findAll();
-        return bedeles;
-    }
-
-    @Override
-    public Bedel getBedelPorId(int id) {
+    public CU13Salida validarBedel(BedelDTO bedeldto) {
         
-        Bedel bedel = bedelDAO.findById(id).orElse(null);
-        return bedel;
-    }
+        CU13Salida salida = new CU13Salida();
+        String contra = bedeldto.getContrasena();
+        Boolean caracteresEspeciales = false;
+        String errorContrasena = "", errorId = "";
+        int validacion = 0;
 
-    @Override
-    public void guardarBedel(Bedel bedel) {
-        bedelDAO.save(bedel);
-    }
 
-    @Override
-    public void eliminarBedel(int id) {
-        bedelDAO.deleteById(id);
-    }
+        String specialChars = "@#$%&*";
+        for (char c : contra.toCharArray()) {
+            if (specialChars.contains(String.valueOf(c))) {
+                caracteresEspeciales = true;
+            }
+        }
 
-    @Override
-    public void modificarBedel(int idUsuarioVieja, int idUsuarioNueva, String nombre, String apellido, String contrasena, TurnoDeTrabajo turnoDeTrabajo, int idAdminCreador) {
+        if (bedelDAO.exiteBedelPorId(bedeldto.getIdUsuario())) {
+            errorId = "Id ya existente";
+        }
+        else {
+            validacion++;
+            errorId = "Id valida";
+        }
+        if(!caracteresEspeciales || contra.chars().anyMatch(Character::isUpperCase) || contra.chars().anyMatch(Character::isDigit) || contra.length()<8 || contra.length()>16){
+            errorContrasena = "La contraseña debe tener menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
+        }
+        else {
+            validacion++;
+            errorContrasena = "Contraseña valida";
+        }
+
+        if (validacion == 2) {
+            bedelDAO.guardarBedel(bedeldto);
+        }
+
+        salida.setErrorContrasena(errorContrasena);
+        salida.setErrorId(errorId);
+
+        return salida;
         
-        Bedel bedel = this.getBedelPorId(idUsuarioVieja);
-        bedel.setIdUsuario(idUsuarioNueva);
-        bedel.setNombre(nombre);
-        bedel.setApellido(apellido);
-        bedel.setContrasena(contrasena);
-        bedel.setTurnoDeTrabajo(turnoDeTrabajo);
-        bedel.setIdAdminCreador(idAdminCreador);
-        this.guardarBedel(bedel);
-
     }
 
-    
 
 }

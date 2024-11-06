@@ -1,4 +1,4 @@
-package package com.example.backend.Controlador;
+package com.example.backend.Controlador;
 
 public class AdministradorControlador {
 

@@ -1,9 +1,8 @@
-package com.example.backend.Repositorio.Implementacion;
+package com.example.backend.Repositorio;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.backend.DTO.BedelDTO;
 
-import com.example.backend.Modelos.Bedel;
-
-public interface BedelDAO extends JpaRepository<Bedel, Integer> {
-
+public interface BedelDAO{
+    public Boolean exiteBedelPorId(int idUsuario);
+    public void guardarBedel(BedelDTO bedeldto);
 }

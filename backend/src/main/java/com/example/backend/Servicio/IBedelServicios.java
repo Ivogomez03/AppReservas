@@ -1,23 +1,11 @@
 package com.example.backend.Servicio;
-import java.util.List;
 
-import com.example.backend.Modelos.Bedel;
-import com.example.backend.Modelos.TurnoDeTrabajo;
+import com.example.backend.DTO.BedelDTO;
+import com.example.backend.Modelos.CU13Salida;
 
 public interface IBedelServicios {
+    //CU13
+    public CU13Salida validarBedel(BedelDTO bedeldto);
 
-    //Obetener todos los bedeles
-    public List<Bedel> getBedeles();
 
-    //Obtener un bedel por su id
-    public Bedel getBedelPorId(int id);
-
-    //Guardar un bedel
-    public void guardarBedel(Bedel bedel);
-
-    //Eliminar un bedel
-    public void eliminarBedel(int id);
-
-    //modificar un bedel
-    public void modificarBedel(int idUsuarioVieja, int idUsuarioNueva, String nombre, String apellido, String contrasena, TurnoDeTrabajo turnoDeTrabajo, int idAdminCreador);
 }
