@@ -1,35 +1,33 @@
-import React, { useState, useRef } from 'react';
-import './App.css';
-import RegistrarBedel from './RegistrarBedel';
-import ModalConfirmacion from './CancelarBedel';
+import React from 'react';
+import './App.css'
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 
 const App = () => {
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const formRef = useRef(null); // Referencia para resetear el formulario
+    const navigate = useNavigate();
 
-  const mostrarCancelarBedel = () => setMostrarModal(true);
-  const ocultarModal = () => setMostrarModal(false);
+    const goToLogin = () => {
+        navigate('/login');
+    };
 
-  const confirmarCancelacion = () => {
-    setMostrarModal(false);
-    if (formRef.current) formRef.current(); // Llama a la función de reset del formulario, si existe
-  };
+    return (
+        <div>
+            <h1>Bienvenido al Sistema de Gestión de Reservas</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <h3>Inicie sesión para continuar</h3>
+                <button onClick={goToLogin}>Iniciar Sesión</button>
+            </div>
+        </div>
+    );
+}
 
-  return (
-    <div className="container">
-      <div className="seccion-bienvenida">
-        <h1>Por favor</h1>
-        <p>Ingrese los datos solicitados</p>
-      </div>
-      <div className="seccion-form">
-        <RegistrarBedel mostrar={mostrarCancelarBedel} resetForm={formRef} />
-      </div>
-      
-      {mostrarModal && (
-        <ModalConfirmacion onCancel={ocultarModal} onConfirm={confirmarCancelacion} />
-      )}
-    </div>
-  );
-};
-
-export default App;
+const MainApp = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<App />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </Router>
+    );
+}
+export default MainApp;

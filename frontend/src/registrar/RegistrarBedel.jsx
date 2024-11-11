@@ -6,6 +6,17 @@ import Select from 'react-select';
 
 const RegistrarBedel = ({ mostrar, resetForm }) => {
 
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const formRef = useRef(null); // Referencia para resetear el formulario
+
+  const mostrarCancelarBedel = () => setMostrarModal(true);
+  const ocultarModal = () => setMostrarModal(false);
+
+  const confirmarCancelacion = () => {
+    setMostrarModal(false);
+    if (formRef.current) formRef.current(); // Llama a la función de reset del formulario, si existe
+  };
+
   const options = [
     { value: 'Mañana', label: 'Mañana' },
     { value: 'Tarde', label: 'Tarde' },
@@ -181,6 +192,7 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
   }
 
   return (
+
     <form onSubmit={handleSubmit} className='formulario'>
       <h2>Registrar Bedel</h2>
 
@@ -254,6 +266,9 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
       </div>
       {backendMessage == "Bedel creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
     </form>
+
+
+
   );
 };
 
