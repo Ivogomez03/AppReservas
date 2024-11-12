@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-
+import Login from './login/Login'
 const App = () => {
     const navigate = useNavigate();
 
@@ -10,12 +10,23 @@ const App = () => {
     };
 
     return (
-        <div>
-            <h1>Bienvenido al Sistema de Gestión de Reservas</h1>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h3>Inicie sesión para continuar</h3>
-                <button onClick={goToLogin}>Iniciar Sesión</button>
-            </div>
+        <div className='conteiner-App'>
+            <header>
+                <h1>Bienvenido al Sistema de Gestión de Reservas</h1>
+
+            </header>
+            <section className='seccion-App'>
+                <p>Este sistema permite gestionar reservas de aulas de forma rápida y eficiente.</p>
+                <div>
+                    <img src="./src/assets/person.svg" />
+                    <h3>Inicie sesión para acceder a nuevas funcionalidades</h3>
+                    <button className='boton-seccion' onClick={goToLogin}>Iniciar Sesión</button>
+                </div>
+
+            </section>
+            <footer>
+                <h3>Conocenos en nuestras redes sociales:</h3>
+            </footer>
         </div>
     );
 }

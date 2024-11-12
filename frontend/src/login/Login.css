@@ -1,0 +1,115 @@
+html,
+body {
+    /* Asegura que el body ocupe todo el alto de la pantalla */
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    margin: 0;
+
+
+}
+
+.conteiner {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: -webkit-linear-gradient(270deg, #f7a544, #fa9544 100%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+}
+
+
+.sub-conteiner {
+    width: 50%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 10px white;
+    background: rgba(255, 255, 255, .2);
+    border-radius: 30px;
+
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.shape {
+    position: absolute;
+    width: 275px;
+    top: -10px;
+    left: 15%;
+    transform: rotate(-45deg);
+    filter: invert(100%);
+}
+
+.conteiner h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.inputLogin {
+    width: 40%;
+    padding: 8px 5px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+
+    background-color: #ffffff;
+}
+
+.inputLogin::placeholder {
+    color: gray;
+    opacity: 1;
+}
+
+.inputLogin:focus::placeholder {
+    color: #aaa;
+    outline: none;
+}
+
+.input-error {
+    background-color: #ffe5e5;
+    /* Rojo claro */
+    border: 1px solid #ff6666;
+    /* Borde rojo suave para errores */
+}
+
+
+
+.error-message {
+    color: red;
+    /* Color del texto del mensaje de error */
+    font-size: 14px;
+    /* Tamaño de fuente para los mensajes de error */
+    margin-top: 5px;
+    /* Espacio entre el campo y el mensaje de error */
+    font-weight: bold;
+    /* Hacer el texto en negrita */
+}
+
+.botonLogin {
+    width: 20%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Roboto';
+    font-weight: 400;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+
+.botonLogin {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
