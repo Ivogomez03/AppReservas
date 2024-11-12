@@ -2,9 +2,9 @@ package com.example.backend.Servicio.Implementacion;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.backend.DTO.BedelDTO;
-import com.example.backend.Modelos.CU13Salida;
+import com.example.backend.DTO.ValidarContrasenaDTO;
+import com.example.backend.Modelos.Bedel;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
 
@@ -13,41 +13,29 @@ public class BedelServicio implements IBedelServicios {
 
     @Autowired
     private BedelDAO bedelDAO;
+    @Autowired
+    private ValidarBedelServicio validarBedelServicio;
 
     @Override
-    public CU13Salida validarBedel(BedelDTO bedeldto) {
+    public ValidarContrasenaDTO validarBedel(BedelDTO bedelDTO) {
         
-        CU13Salida salida = new CU13Salida();
-        String contra = bedeldto.getContrasena();
-        Boolean caracteresEspeciales = false;
-        String errorContrasena = "", errorId = "";
-        int validacion = 0;
+        ValidarContrasenaDTO salida = new ValidarContrasenaDTO();
+        String contra = bedelDTO.getContrasena();
 
+        String errorContrasena = validarBedelServicio.validatePassword(contra);
+        String errorId = validarBedelServicio.validarId(bedelDTO.getIdUsuario());
 
-        String specialChars = "@#$%&*";
-        for (char c : contra.toCharArray()) {
-            if (specialChars.contains(String.valueOf(c))) {
-                caracteresEspeciales = true;
-            }
-        }
+        if (errorContrasena.equals("Contraseña valida") && errorId.equals("Id valida")) {
 
-        if (bedelDAO.exiteBedelPorId(bedeldto.getIdUsuario())) {
-            errorId = "Id ya existente";
-        }
-        else {
-            validacion++;
-            errorId = "Id valida";
-        }
-        if(!caracteresEspeciales || !contra.chars().anyMatch(Character::isUpperCase) || !contra.chars().anyMatch(Character::isDigit) || contra.length()<8 || contra.length()>16){
-            errorContrasena = "La contraseña debe tener al menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
-        }
-        else {
-            validacion++;
-            errorContrasena = "Contraseña valida";
-        }
+            Bedel bedel = new Bedel();
+            bedel.setNombre(bedelDTO.getNombre());
+            bedel.setApellido(bedelDTO.getApellido());
+            bedel.setIdUsuario(bedelDTO.getIdUsuario());
+            bedel.setContrasena(bedelDTO.getContrasena());
+            bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
+            bedel.setAdminCreador(bedelDTO.getAdminCreador());
 
-        if (validacion == 2) {
-            bedelDAO.guardarBedel(bedeldto);
+            bedelDAO.save(bedel);
         }
 
         salida.setErrorContrasena(errorContrasena);
@@ -56,6 +44,5 @@ public class BedelServicio implements IBedelServicios {
         return salida;
         
     }
-
-
+    
 }

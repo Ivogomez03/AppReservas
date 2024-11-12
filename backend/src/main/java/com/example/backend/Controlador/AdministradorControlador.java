@@ -1,5 +1,7 @@
 package com.example.backend.Controlador;
 
-public class AdministradorControlador {
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+public class AdministradorControlador {
 }

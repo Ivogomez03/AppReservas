@@ -1,11 +1,7 @@
 package com.example.backend.Repositorio;
 
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
+import com.example.backend.Modelos.Bedel;
 
-import com.example.backend.DTO.BedelDTO;
-
-public interface BedelDAO{
-    public Boolean exiteBedelPorId(int idUsuario);
-    public void guardarBedel(BedelDTO bedeldto);
-    public List<BedelDTO> recuperarBedeles();
+public interface BedelDAO extends CrudRepository<Bedel, Integer> {
 }

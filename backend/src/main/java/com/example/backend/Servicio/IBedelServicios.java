@@ -1,11 +1,8 @@
 package com.example.backend.Servicio;
 
 import com.example.backend.DTO.BedelDTO;
-import com.example.backend.Modelos.CU13Salida;
+import com.example.backend.DTO.ValidarContrasenaDTO;
 
 public interface IBedelServicios {
-    //CU13
-    public CU13Salida validarBedel(BedelDTO bedeldto);
-
-
+    public ValidarContrasenaDTO validarBedel(BedelDTO bedeldto);
 }
