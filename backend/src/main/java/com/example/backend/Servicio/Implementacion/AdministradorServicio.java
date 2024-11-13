@@ -1,5 +1,7 @@
 package com.example.backend.Servicio.Implementacion;
 
-public class AdministradorServicio {
+import org.springframework.stereotype.Service;
 
+@Service
+public class AdministradorServicio {
 }
