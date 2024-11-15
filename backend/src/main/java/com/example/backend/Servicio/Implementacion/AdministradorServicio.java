@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.Repositorio.AdministradorDAO;
 import com.example.backend.Modelos.Administrador;
+import com.example.backend.Servicio.IAdministradorServicio;
 
 @Service
-public class AdministradorServicio {
+public class AdministradorServicio implements  IAdministradorServicio{
     @Autowired
     private AdministradorDAO adminDAO;
 
