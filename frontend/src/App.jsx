@@ -21,11 +21,11 @@ const App = () => {
             <section className='seccion-App'>
                 <div className="seccion-App-cols">
                     <h2>Gestión de horarios</h2>
-                    <img src="./src/assets/schedule.png" alt="Gestion de horarios" />
+                    <img src="/schedule.png" alt="Gestion de horarios" />
                 </div>
                 <div className="seccion-App-cols">
                     <h2>Organización eficiente</h2>
-                    <img src="./src/assets/diagram.png" alt="Organización" />
+                    <img src="/diagram.png" alt="Organización" />
                 </div>
                 <div className="seccion-App-cols">
                     <h2>Reserva de aula</h2>
