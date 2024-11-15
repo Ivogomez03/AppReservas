@@ -7,10 +7,11 @@ import com.example.backend.DTO.ValidarContrasenaDTO;
 import com.example.backend.Modelos.Bedel;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
-
+import com.example.backend.Servicio.Implementacion.AdministradorServicio;
 @Service
 public class BedelServicio implements IBedelServicios {
-
+    @Autowired 
+    private AdministradorServicio gestorAdmin;
     @Autowired
     private BedelDAO bedelDAO;
     @Autowired
@@ -33,7 +34,7 @@ public class BedelServicio implements IBedelServicios {
             bedel.setIdUsuario(bedelDTO.getIdUsuario());
             bedel.setContrasena(bedelDTO.getContrasena());
             bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
-            bedel.setAdminCreador(bedelDTO.getAdminCreador());
+            bedel.setAdminCreador(gestorAdmin.buscarAdministrador(bedelDTO.getIdAdminCreador()));
 
             bedelDAO.save(bedel);
         }

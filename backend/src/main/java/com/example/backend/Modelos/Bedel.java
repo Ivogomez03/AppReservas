@@ -21,4 +21,5 @@ public class Bedel extends Usuario{
     @JoinColumn(name = "idAdminCreador", referencedColumnName = "idUsuario")
     Administrador AdminCreador;
 
+
 }

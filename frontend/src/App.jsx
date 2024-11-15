@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css'
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+
 import Login from './login/Login'
+import RegistrarBedel from './registrar/RegistrarBedel'
 const App = () => {
     const navigate = useNavigate();
 
@@ -82,6 +84,7 @@ const MainApp = () => {
             <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/bedel/CU13" element={<RegistrarBedel />} />
             </Routes>
         </Router>
     );

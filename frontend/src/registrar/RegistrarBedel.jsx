@@ -1,13 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { HashRouter, useNavigate } from 'react-router-dom';
 import './RegistrarBedel.css';
+import CancelarBedel from './../cancelar/CancelarBedel'
 import Select from 'react-select';
 
 
 
-const RegistrarBedel = ({ mostrar, resetForm }) => {
-  const formRef = useRef(null); // Referencia para resetear el formulario
+const RegistrarBedel = ({ resetForm }) => {
 
+  const navigate = useNavigate();
 
+  const goToLogin = () => {
+    navigate('/login');
+  };
+  const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
+  const mostrar = () => {
+    setShowModal(true);
+  }
+
+  const handleCancel = () => {
+    setShowModal(false);  // Cierra el modal sin hacer nada
+  };
+
+  // Función cuando se confirma la cancelación
+  const handleConfirmCancel = () => {
+    setShowModal(false);  // Cierra el modal
+    resetFormulario();
+    goToLogin();
+
+    console.log("Formulario cancelado");
+  };
 
   const options = [
     { value: 'Mañana', label: 'Mañana' },
@@ -184,81 +206,91 @@ const RegistrarBedel = ({ mostrar, resetForm }) => {
   }
 
   return (
-
-    <form onSubmit={handleSubmit} className='formulario'>
-      <h2>Registrar Bedel</h2>
-
-      <input
-        type="text"
-        name="apellido"
-        placeholder={placeholders.apellido}
-        value={form.apellido}
-        onChange={handleChange}
-        className={`inputRegBedel ${errors.apellido ? 'input-error' : ''}`}
-      />
-      {errors.apellido && <span className="error-message">Completa el apellido (máximo 50 caracteres).</span>}
-
-      <input
-        type="text"
-        name="nombre"
-        placeholder={placeholders.nombre}
-        value={form.nombre}
-        onChange={handleChange}
-        className={`inputRegBedel ${errors.nombre ? 'input-error' : ''}`}
-      />
-      {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
-
-      <select
-        name="turnoDeTrabajo"
-        value={form.turnoDeTrabajo}
-        onChange={handleChange}
-        className={`selectRegBedel ${errors.turnoDeTrabajo ? 'select-error' : ''}`}
-      >
-        <option value="" disabled>Selecciona un turno</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
-      {errors.turnoDeTrabajo && <span className="error-message">Selecciona un turno de trabajo.</span>}
-
-      <input
-        type="text"
-        name="idUsuario"
-        placeholder={placeholders.idUsuario}
-        value={form.idUsuario}
-        onChange={handleChange}
-        className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
-      />
-      {backendErrors.idUsuario && <span className="error-message">{backendErrors.idUsuario}</span>}
-
-      <input
-        type="password"
-        name="contrasena"
-        placeholder={placeholders.contrasena}
-        value={form.contrasena}
-        onChange={handleChange}
-        className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
-      />
-      {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
-      {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
-
-      <input
-        type="password"
-        name="confirmarContrasena"
-        placeholder={placeholders.confirmarContrasena}
-        value={form.confirmarContrasena}
-        onChange={handleChange}
-        className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
-      />
-      {errors.confirmarContrasena && <span className="error-message">Las contraseñas no coinciden.</span>}
-
-      <div className='BotonesBedel'>
-        <button className='botonRegBedel' type="submit">Registrar</button>
-        <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
+    <div className='conteiner-reg-bedel'>
+      <div className='panel-izquierdo'>
+        <h1>Por favor</h1>
+        <h2>Ingrese los datos solicitados</h2>
       </div>
-      {backendMessage == "Bedel creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
-    </form>
+      <form onSubmit={handleSubmit} className='formulario'>
+        <h2>Registrar Bedel</h2>
 
+        <input
+          type="text"
+          name="apellido"
+          placeholder={placeholders.apellido}
+          value={form.apellido}
+          onChange={handleChange}
+          className={`inputRegBedel ${errors.apellido ? 'input-error' : ''}`}
+        />
+        {errors.apellido && <span className="error-message">Completa el apellido (máximo 50 caracteres).</span>}
+
+        <input
+          type="text"
+          name="nombre"
+          placeholder={placeholders.nombre}
+          value={form.nombre}
+          onChange={handleChange}
+          className={`inputRegBedel ${errors.nombre ? 'input-error' : ''}`}
+        />
+        {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
+
+        <select
+          name="turnoDeTrabajo"
+          value={form.turnoDeTrabajo}
+          onChange={handleChange}
+          className={`selectRegBedel ${errors.turnoDeTrabajo ? 'select-error' : ''}`}
+        >
+          <option value="" disabled>Selecciona un turno</option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+        {errors.turnoDeTrabajo && <span className="error-message">Selecciona un turno de trabajo.</span>}
+
+        <input
+          type="text"
+          name="idUsuario"
+          placeholder={placeholders.idUsuario}
+          value={form.idUsuario}
+          onChange={handleChange}
+          className={`inputRegBedel ${errors.idUsuario ? 'input-error' : ''}`}
+        />
+        {backendErrors.idUsuario && <span className="error-message">{backendErrors.idUsuario}</span>}
+
+        <input
+          type="password"
+          name="contrasena"
+          placeholder={placeholders.contrasena}
+          value={form.contrasena}
+          onChange={handleChange}
+          className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
+        />
+        {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
+        {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
+
+        <input
+          type="password"
+          name="confirmarContrasena"
+          placeholder={placeholders.confirmarContrasena}
+          value={form.confirmarContrasena}
+          onChange={handleChange}
+          className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
+        />
+        {errors.confirmarContrasena && <span className="error-message">Las contraseñas no coinciden.</span>}
+
+        <div className='BotonesBedel'>
+          <button className='botonRegBedel' type="submit">Registrar</button>
+          <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
+        </div>
+        {backendMessage == "Bedel creado exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
+      </form>
+      {showModal && (
+        <CancelarBedel
+          onCancel={handleCancel}
+          onConfirm={handleConfirmCancel}
+        />
+      )}
+    </div>
 
 
   );

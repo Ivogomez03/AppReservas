@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Login.css'
 const Login = ({ resetForm }) => {
+
     const navigate = useNavigate();
+    const goToRegBedel = () => {
+        navigate('/bedel/CU13');
+    }
     const [form, setForm] = useState({
         nombre: '',
         contrasena: ''
@@ -153,7 +157,7 @@ const Login = ({ resetForm }) => {
                 />
                 {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
                 {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
-                <button className='botonLogin' onClick={handleSubmit}>Iniciar sesión</button>
+                <button className='botonLogin' onClick={goToRegBedel}>Iniciar sesión</button>
             </div>
 
         </div>

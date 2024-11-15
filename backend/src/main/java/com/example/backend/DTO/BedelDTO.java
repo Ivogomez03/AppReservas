@@ -19,6 +19,7 @@ public class BedelDTO {
     private String apellido;
     private String contrasena;
     private TurnoDeTrabajo turnoDeTrabajo;
+    private int idAdminCreador;
     Administrador AdminCreador;   
 
 }
