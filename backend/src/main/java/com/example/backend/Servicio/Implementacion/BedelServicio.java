@@ -45,5 +45,9 @@ public class BedelServicio implements IBedelServicios {
         return salida;
         
     }
+    public Bedel buscarBedel(int id){
+        return bedelDAO.findById(id).orElse(null);
+
+    }
     
 }

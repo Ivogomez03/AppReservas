@@ -12,7 +12,7 @@ import lombok.Setter;
 public class LoginDTO {
 
     @Id
-    private String idUsuario;
+    private int idUsuario;
     private String contrasena;
 
 }
