@@ -12,7 +12,7 @@ public class AdministradorServicio implements  IAdministradorServicio{
     private AdministradorDAO adminDAO;
 
     public Administrador buscarAdministrador(int id){
-        return adminDAO.findById(id).orElseThrow(() -> new RuntimeException("Administrador no encontrado"));
+        return adminDAO.findById(id).orElse(null);
 
     }
 }

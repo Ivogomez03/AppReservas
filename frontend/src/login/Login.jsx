@@ -4,52 +4,55 @@ import './Login.css'
 const Login = ({ resetForm }) => {
 
     const navigate = useNavigate();
+
     const goToRegBedel = () => {
         navigate('/bedel/CU13');
     }
+
+    const goToBienvenidoBedel = () => {
+        navigate('/login/bienvenidoBedel');
+    }
+
+    const goToBienvenidoAdmin = () => {
+        navigate('/login/bienvenidoAdmin');
+    }
+
     const [form, setForm] = useState({
-        nombre: '',
+        usuario: '',
         contrasena: ''
     });
 
-    const [backendErrors, setBackendErrors] = useState({
-        nombre: '',
-        contrasena: ''
+    const [backend, setBackendErrors] = useState({
+        admin: false,
+        bedel: false
     });
 
 
     const [placeholders, setPlaceholders] = useState({
-        nombre: "Nombre",
+        usuario: "usuario",
         contrasena: "Contraseña",
     });
 
     const [errors, setErrors] = useState({
-        nombre: false,
+        usuario: false,
         contrasena: false,
     });
 
-
-    const [backendMessage, setBackendMessage] = useState('');
-
     const resetFormulario = () => {
         setForm({
-            nombre: '',
+            usuario: '',
             contrasena: '',
 
         });
         setPlaceholders({
-            nombre: "Nombre",
+            usuario: "usuario",
             contrasena: "Contraseña",
         })
         setErrors({
-            nombre: false,
+            usuario: false,
             contrasena: false,
         });
-        setBackendErrors({
-            nombre: '',
-            contrasena: ''
-        });
-        setBackendMessage('');
+
     };
     useEffect(() => {
         if (resetForm) {
@@ -76,9 +79,9 @@ const Login = ({ resetForm }) => {
 
         // Validaciones locales
 
-        if (!form.nombre || form.nombre.length > 50) {
-            newErrors.nombre = true;
-            setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
+        if (!form.usuario) {
+            newErrors.usuario = true;
+            setPlaceholders(prev => ({ ...prev, usuario: "Completa el nombre de usuario" }));
         }
         if (!form.contrasena) {
             newErrors.contrasena = true;
@@ -105,29 +108,22 @@ const Login = ({ resetForm }) => {
             const result = await response.json(); // Usamos .json() para recibir la respuesta como objeto JSON
             console.log(result); // Ver la estructura del objeto JSON en la consola
 
-            const newBackendErrors = { ...backendErrors };
-
-            if (result.errorNombre !== "Id valida") {
-                newBackendErrors.nombre = result.errorNombre;
+            if (result.bedel == true) {
+                goToBienvenidoBedel;
+                resetFormulario;
             }
-            if (result.errorContrasena !== "Contraseña valida") {
-                newBackendErrors.contrasena = result.errorContrasena;
+            else if (result.admin == true) {
+
+                goToBienvenidoAdmin;
+                resetFormulario;
+
             }
+            else {
 
-            setBackendErrors(newBackendErrors);
-
-            // Si no hay errores en el backend, mostrar el mensaje de éxito
-            if (result.errorNombre === "Nombre valido" && result.errorContrasena === "Contraseña valida") {
-
-                setTimeout(() => {
-
-                    resetFormulario(); // Limpiar formulario
-                }, 2000); // Esperar 2 segundos antes de hacer fade out
             }
 
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            setBackendMessage("Ocurrió un error en el servidor. Inténtalo de nuevo.");
         }
     }
     return (
@@ -139,14 +135,14 @@ const Login = ({ resetForm }) => {
                     Inicie sesión
                 </h1>
                 <input
-                    type="text"
-                    name="nombre"
-                    placeholder={placeholders.nombre}
-                    value={form.nombre}
+                    type="number"
+                    name="usuario"
+                    placeholder={placeholders.usuario}
+                    value={form.usuario}
                     onChange={handleChange}
-                    className={`inputLogin ${errors.nombre ? 'input-error' : ''}`}
+                    className={`inputLogin ${errors.usuario ? 'input-error' : ''}`}
                 />
-                {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
+
                 <input
                     type="password"
                     name="contrasena"
@@ -155,9 +151,7 @@ const Login = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`inputLogin ${errors.contrasena ? 'input-error' : ''}`}
                 />
-                {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
-                {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
-                <button className='botonLogin' onClick={goToRegBedel}>Iniciar sesión</button>
+                <button className='botonLogin' onClick={handleSubmit}>Iniciar sesión</button>
             </div>
 
         </div>
