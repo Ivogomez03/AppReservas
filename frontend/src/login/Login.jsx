@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { HashRouter, useNavigate } from 'react-router-dom';
 import './Login.css'
 const Login = ({ resetForm }) => {
 
     const navigate = useNavigate();
-
-    const goToRegBedel = () => {
-        navigate('/bedel/CU13');
-    }
 
     const goToBienvenidoBedel = () => {
         navigate('/login/bienvenidoBedel');
@@ -20,11 +16,6 @@ const Login = ({ resetForm }) => {
     const [form, setForm] = useState({
         usuario: '',
         contrasena: ''
-    });
-
-    const [backend, setBackendErrors] = useState({
-        admin: false,
-        bedel: false
     });
 
 
@@ -97,7 +88,7 @@ const Login = ({ resetForm }) => {
         }
 
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('http://localhost:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,17 +100,20 @@ const Login = ({ resetForm }) => {
             console.log(result); // Ver la estructura del objeto JSON en la consola
 
             if (result.bedel == true) {
-                goToBienvenidoBedel;
-                resetFormulario;
+                goToBienvenidoBedel();
+                resetFormulario();
             }
             else if (result.admin == true) {
 
-                goToBienvenidoAdmin;
-                resetFormulario;
+                goToBienvenidoAdmin();
+                resetFormulario();
 
             }
             else {
-
+                setErrors({
+                    usuario: true,
+                    contrasena: true,
+                });
             }
 
         } catch (error) {

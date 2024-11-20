@@ -4,6 +4,8 @@ import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-d
 
 import Login from './login/Login'
 import RegistrarBedel from './registrar/RegistrarBedel'
+import BienvenidoBedel from './bienvenido/bienvenidoBedel'
+import BienvenidoAdmin from './bienvenido/bienvenidoAdmin'
 const App = () => {
     const navigate = useNavigate();
 
@@ -85,6 +87,8 @@ const MainApp = () => {
                 <Route path="/" element={<App />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/bedel/CU13" element={<RegistrarBedel />} />
+                <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
+                <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
             </Routes>
         </Router>
     );

@@ -10,8 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDTO {
-
-    @Id
     private int idUsuario;
     private String contrasena;
 

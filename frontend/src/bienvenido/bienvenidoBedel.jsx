@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 const BienvenidoBedel = () => {
     return (
         <div>
@@ -25,3 +27,5 @@ const BienvenidoBedel = () => {
         </div>
     )
 }
+
+export default BienvenidoBedel;

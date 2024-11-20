@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 const BienvenidoAdmin = () => {
     return (
         <div>
@@ -19,3 +21,4 @@ const BienvenidoAdmin = () => {
         </div>
     )
 }
+export default BienvenidoAdmin;
