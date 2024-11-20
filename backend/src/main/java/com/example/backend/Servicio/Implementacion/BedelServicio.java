@@ -49,5 +49,22 @@ public class BedelServicio implements IBedelServicios {
         return bedelDAO.findById(id).orElse(null);
 
     }
+    public boolean validarBedel(int id, String contrasena) {
+        // Busca el bedel por ID
+        Bedel bedel = buscarBedel(id);
+        
+        // Verifica si el bedel existe
+        if (bedel == null) {
+            throw new IllegalArgumentException("El bedel con ID " + id + " no existe");
+        }
+
+        // Compara la contraseña
+        if (!bedel.getContrasena().equals(contrasena)) {
+            throw new IllegalArgumentException("Contraseña incorrecta para el bedel con ID " + id);
+        }
+
+        // Si todo es correcto, devuelve true
+        return true;
+    }
     
 }

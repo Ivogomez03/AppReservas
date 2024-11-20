@@ -17,10 +17,10 @@ public class LoginServicio implements ILoginServicio {
     @Override
     public int validarUsuario(LoginDTO loginDTO) {
 
-        if(gestorAdmin.buscarAdministrador(loginDTO.getIdUsuario()).getContrasena() == loginDTO.getContrasena() ){
+        if(gestorAdmin.validarAdministrador(loginDTO.getIdUsuario(),loginDTO.getContrasena())){
             return 1;
         }
-        else if(gestorBedel.buscarBedel(loginDTO.getIdUsuario()).getContrasena() == loginDTO.getContrasena()){
+        else if(gestorBedel.validarBedel(loginDTO.getIdUsuario(),loginDTO.getContrasena())){
             return 2;
         }else{
             return 0;

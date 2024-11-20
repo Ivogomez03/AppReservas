@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalidaLoginDTO {
-
+    private boolean admin;
     private boolean bedel;
-    private boolean administrador;
-
+   
+   
 }

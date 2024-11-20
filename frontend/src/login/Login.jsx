@@ -14,33 +14,33 @@ const Login = ({ resetForm }) => {
     }
 
     const [form, setForm] = useState({
-        usuario: '',
+        idUsuario: '',
         contrasena: ''
     });
 
 
     const [placeholders, setPlaceholders] = useState({
-        usuario: "usuario",
+        idUsuario: "idUsuario",
         contrasena: "Contraseña",
     });
 
     const [errors, setErrors] = useState({
-        usuario: false,
+        idUsuario: false,
         contrasena: false,
     });
 
     const resetFormulario = () => {
         setForm({
-            usuario: '',
+            idUsuario: '',
             contrasena: '',
 
         });
         setPlaceholders({
-            usuario: "usuario",
+            idUsuario: "idUsuario",
             contrasena: "Contraseña",
         })
         setErrors({
-            usuario: false,
+            idUsuario: false,
             contrasena: false,
         });
 
@@ -70,9 +70,9 @@ const Login = ({ resetForm }) => {
 
         // Validaciones locales
 
-        if (!form.usuario) {
-            newErrors.usuario = true;
-            setPlaceholders(prev => ({ ...prev, usuario: "Completa el nombre de usuario" }));
+        if (!form.idUsuario) {
+            newErrors.idUsuario = true;
+            setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el nombre de idUsuario" }));
         }
         if (!form.contrasena) {
             newErrors.contrasena = true;
@@ -111,7 +111,7 @@ const Login = ({ resetForm }) => {
             }
             else {
                 setErrors({
-                    usuario: true,
+                    idUsuario: true,
                     contrasena: true,
                 });
             }
@@ -130,11 +130,11 @@ const Login = ({ resetForm }) => {
                 </h1>
                 <input
                     type="number"
-                    name="usuario"
-                    placeholder={placeholders.usuario}
-                    value={form.usuario}
+                    name="idUsuario"
+                    placeholder={placeholders.idUsuario}
+                    value={form.idUsuario}
                     onChange={handleChange}
-                    className={`inputLogin ${errors.usuario ? 'input-error' : ''}`}
+                    className={`inputLogin ${errors.idUsuario ? 'input-error' : ''}`}
                 />
 
                 <input
