@@ -1,0 +1,90 @@
+html,
+body {
+    /* Asegura que el body ocupe todo el alto de la pantalla */
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    margin: 0;
+
+
+}
+
+.conteiner-bienvenido-bedel {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: -webkit-linear-gradient(270deg, #f7a544, #fa9544 100%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+}
+
+.ventanaTransparenteBedel {
+    width: 50%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 10px white;
+    background: rgba(255, 255, 255, .2);
+    border-radius: 30px;
+
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(50deg);
+}
+
+.seccion-bienvenido-bedel h1 {
+    text-align: center;
+    color: #fff;
+}
+
+.seccion-principal h2 {
+    font-size: 24px;
+    text-align: center;
+    color: #fff;
+}
+
+.seccion-principal {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.botones-principal {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.botones-principal-arriba,
+.botones-principal-abajo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.botones-principal button {
+    width: 25%;
+    height: 30%;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 12px;
+    font-family: 'Roboto';
+    font-weight: 500;
+}
