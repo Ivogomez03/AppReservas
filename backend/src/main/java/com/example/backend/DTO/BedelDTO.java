@@ -21,5 +21,6 @@ public class BedelDTO {
     private TurnoDeTrabajo turnoDeTrabajo;
     private int idAdminCreador;
     Administrador AdminCreador;   
+    private boolean activo;
 
 }
