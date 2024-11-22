@@ -6,6 +6,9 @@ import Login from './login/Login'
 import RegistrarBedel from './registrar/RegistrarBedel'
 import BienvenidoBedel from './bienvenido/bienvenidoBedel'
 import BienvenidoAdmin from './bienvenido/bienvenidoAdmin'
+import TipoDeReserva from './registrar/TipoDeReserva'
+import RegistrarReservaP from './registrar/RegistrarReservaP';
+
 const App = () => {
     const navigate = useNavigate();
 
@@ -89,6 +92,8 @@ const MainApp = () => {
                 <Route path="/bedel/CU13" element={<RegistrarBedel />} />
                 <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
+                <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />
+                <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
             </Routes>
         </Router>
     );

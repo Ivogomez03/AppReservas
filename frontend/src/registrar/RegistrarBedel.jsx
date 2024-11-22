@@ -13,6 +13,7 @@ const RegistrarBedel = ({ resetForm }) => {
   const goToLogin = () => {
     navigate('/login');
   };
+
   const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
   const mostrar = () => {
     setShowModal(true);

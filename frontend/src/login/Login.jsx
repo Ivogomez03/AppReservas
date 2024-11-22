@@ -121,10 +121,10 @@ const Login = ({ resetForm }) => {
         }
     }
     return (
-        <div className='conteiner'>
+        <div className='conteiner-login'>
 
-            <img src="/reserved.png" alt="" className='shape' />
-            <div className='sub-conteiner'>
+            <img src="/reserved.png" alt="" className='shape-login' />
+            <div className='sub-conteiner-login'>
                 <h1>
                     Inicie sesión
                 </h1>
@@ -134,7 +134,7 @@ const Login = ({ resetForm }) => {
                     placeholder={placeholders.idUsuario}
                     value={form.idUsuario}
                     onChange={handleChange}
-                    className={`inputLogin ${errors.idUsuario ? 'input-error' : ''}`}
+                    className={`inputLogin${errors.idUsuario ? 'input-error-login' : ''}`}
                 />
 
                 <input
@@ -143,9 +143,9 @@ const Login = ({ resetForm }) => {
                     placeholder={placeholders.contrasena}
                     value={form.contrasena}
                     onChange={handleChange}
-                    className={`inputLogin ${errors.contrasena ? 'input-error' : ''}`}
+                    className={`inputLogin ${errors.contrasena ? 'input-error-login' : ''}`}
                 />
-                <button className='botonLogin' onClick={handleSubmit}>Iniciar sesión</button>
+                <button className='botonLogin' onClick={goToBienvenidoBedel}>Iniciar sesión</button>
             </div>
 
         </div>

@@ -1,18 +1,23 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { HashRouter, useNavigate } from 'react-router-dom';
 import './bienvenidoBedel.css'
 const BienvenidoBedel = () => {
+    const navigate = useNavigate();
+
+    const goToTipoReserva = () => {
+        navigate('/login/bienvenidoBedel/TipoReserva');
+    }
     return (
         <div className='conteiner-bienvenido-bedel'>
-            <div className='ventanaTransparenteBedel'>
+            <div className='ventanaTransparente-bienvenido-bedel'>
                 <div className="seccion-bienvenido-bedel">
                     <h1>Bienvenido Bedel</h1>
                 </div>
-                <div className='seccion-principal'>
+                <div className='seccion-principal-bienvenido-bedel'>
                     <h1>¿Que desea realizar?</h1>
-                    <div className='botones-principal'>
+                    <div className='botones-principal-bienvenido-bedel'>
                         <div className="botones-principal-arriba">
-                            <button>
+                            <button onClick={goToTipoReserva}>
                                 Registrar Reserva
                             </button>
                             <button>

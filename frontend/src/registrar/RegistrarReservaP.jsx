@@ -1,10 +1,32 @@
-import { useState, useEffect } from 'react'
-import './Registrarreserva.css';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Select from 'react-select';
+import './RegistrarReservaP.css'
+
+import CancelarBedel from './../cancelar/CancelarBedel'
+const RegistrarReservaP = ({ resetForm }) => {
 
 
+    const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
+    const mostrar = () => {
+        setShowModal(true);
+    }
 
-const RegistrarReserva = ({ mostrar, resetForm }) => {
+    const handleCancel = () => {
+        setShowModal(false);  // Cierra el modal sin hacer nada
+    };
+
+    // Función cuando se confirma la cancelación
+    const handleConfirmCancel = () => {
+        setShowModal(false);  // Cierra el modal
+        resetFormulario();
+
+        console.log("Formulario cancelado");
+    };
+
+    const location = useLocation();
+    const tipoReserva = location.state?.tipoReserva || 'Ninguno';
+
 
     const options = [
         { value: 'Multimedio', label: 'Multimedio' },
@@ -167,81 +189,98 @@ const RegistrarReserva = ({ mostrar, resetForm }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className='formulario'>
-            <h2>Registrar Reserva</h2>
-            <input
-                type="text"
-                name="cantidadAlumnos"
-                placeholder={placeholders.cantidadAlumnos}
-                value={form.cantidadAlumnos}
-                onChange={handleChange}
-                className={`inputRegReserva ${errors.cantidadAlumnos ? 'input-error' : ''}`}
-            />
-            {errors.cantidadAlumnos && <span className="error-message">Completa la cantidad de alumnos.</span>}
-            <select
-                name="tipoAula"
-                value={form.tipoAula}
-                onChange={handleChange}
-                className={`selectRegReserva ${errors.tipoAula ? 'select-error' : ''}`}
-            >
-                <option value="" disabled>Selecciona un Aula</option>
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-            </select>
-            {errors.tipoAula && <span className="error-message">Selecciona un Aula.</span>}
-
-            <input
-                type="text"
-                name="nombre"
-                placeholder={placeholders.nombre}
-                value={form.nombre}
-                onChange={handleChange}
-                className={`inputRegReserva ${errors.nombre ? 'input-error' : ''}`}
-            />
-            {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
-
-            <input
-                type="text"
-                name="apellido"
-                placeholder={placeholders.apellido}
-                value={form.apellido}
-                onChange={handleChange}
-                className={`inputRegReserva ${errors.apellido ? 'input-error' : ''}`}
-            />
-            {errors.apellido && <span className="error-message">Completa el apellido (máximo 50 caracteres).</span>}
-
-            <input
-                type="text"
-                name="nombreCatedra"
-                placeholder={placeholders.nombreCatedra}
-                value={form.nombreCatedra}
-                onChange={handleChange}
-                className={`inputRegReserva ${errors.nombreCatedra ? 'input-error' : ''}`}
-            />
-            {errors.nombreCatedra && <span className="error-message">Completa el nombre de la catedra, seminario o curso.</span>}
-
-            <input
-                type="email"
-                name="email"
-                placeholder={placeholders.email}
-                value={form.email}
-                onChange={handleChange}
-                className={`inputRegreserva ${errors.email ? 'input-error' : ''}`}
-            />
-            {errors.email && <span className="error-message">Completa el correo electrónico.</span>}
-
-
-            <div className='BotonesReserva'>
-                <button className='botonRegReserva' type="submit">Registrar</button>
-                <button className='botonCancelar' onClick={mostrar}>Cancelar</button>
+        <div className='conteiner-principal-RRP'>
+            <div className='panel-izquierdo-RRP'>
+                <div className='panel-izquierdo-arriba-RRP'>
+                    <h1>Período</h1>
+                    <h4>Ingrese los datos solicitados</h4>
+                </div>
+                <div className='panel-izquierdo-abajo-RRP'>
+                    <h1>{tipoReserva}</h1>
+                    <button className='botonRRP'>Agregar Día</button>
+                </div>
             </div>
-            {backendMessage == "Reserva creada exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
-        </form>
+            <form onSubmit={handleSubmit} className='formulario-RRP'>
+                <h2>Registrar Reserva</h2>
+                <input
+                    type="text"
+                    name="cantidadAlumnos"
+                    placeholder={placeholders.cantidadAlumnos}
+                    value={form.cantidadAlumnos}
+                    onChange={handleChange}
+                    className={`input-RRP ${errors.cantidadAlumnos ? 'input-error-RRP' : ''}`}
+                />
+                {errors.cantidadAlumnos && <span className="error-message-RRP">Completa la cantidad de alumnos.</span>}
+                <select
+                    name="tipoAula"
+                    value={form.tipoAula}
+                    onChange={handleChange}
+                    className={`select-RRP ${errors.tipoAula ? 'select-error-RRP' : ''}`}
+                >
+                    <option value="" disabled>Selecciona un Aula</option>
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                </select>
+                {errors.tipoAula && <span className="error-message-RRP">Selecciona un Aula.</span>}
 
+                <input
+                    type="text"
+                    name="nombre"
+                    placeholder={placeholders.nombre}
+                    value={form.nombre}
+                    onChange={handleChange}
+                    className={`input-RRP ${errors.nombre ? 'input-error-RRP' : ''}`}
+                />
+                {errors.nombre && <span className="error-message-RRP">Completa el nombre (máximo 50 caracteres).</span>}
+
+                <input
+                    type="text"
+                    name="apellido"
+                    placeholder={placeholders.apellido}
+                    value={form.apellido}
+                    onChange={handleChange}
+                    className={`input-RRP ${errors.apellido ? 'input-error-RRP' : ''}`}
+                />
+                {errors.apellido && <span className="error-message-RRP">Completa el apellido (máximo 50 caracteres).</span>}
+
+                <input
+                    type="text"
+                    name="nombreCatedra"
+                    placeholder={placeholders.nombreCatedra}
+                    value={form.nombreCatedra}
+                    onChange={handleChange}
+                    className={`input-RRP ${errors.nombreCatedra ? 'input-error-RRP' : ''}`}
+                />
+                {errors.nombreCatedra && <span className="error-message-RRP">Completa el nombre de la catedra, seminario o curso.</span>}
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder={placeholders.email}
+                    value={form.email}
+                    onChange={handleChange}
+                    className={`input-RRP ${errors.email ? 'input-error-RRP' : ''}`}
+                />
+                {errors.email && <span className="error-message">Completa el correo electrónico.</span>}
+
+
+                <div className='botones-RRP'>
+                    <button className='botonRRP' type="submit">Registrar</button>
+                    <button className='botonCancelar-RRP' onClick={mostrar}>Cancelar</button>
+                </div>
+                {backendMessage == "Reserva creada exitosamente." && <div className={`backend-message-exito ${animationClass}`}>{backendMessage}</div>}
+            </form>
+            {showModal && (
+                <CancelarBedel
+                    onCancel={handleCancel}
+                    onConfirm={handleConfirmCancel}
+                />
+            )}
+        </div>
 
 
     );
 };
 
-export default RegistrarReserva;
+export default RegistrarReservaP;
