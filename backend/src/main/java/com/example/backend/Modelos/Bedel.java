@@ -15,11 +15,11 @@ public class Bedel extends Usuario{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "turnoDeTrabajo")
-    TurnoDeTrabajo turnoDeTrabajo;
+    private TurnoDeTrabajo turnoDeTrabajo;
     // Relación con la entidad Administrador
     @ManyToOne
     @JoinColumn(name = "idAdminCreador", referencedColumnName = "idUsuario")
-    Administrador AdminCreador;
+    private Administrador AdminCreador;
 
 
 }

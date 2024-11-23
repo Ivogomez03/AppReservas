@@ -7,7 +7,6 @@ import com.example.backend.DTO.ValidarContrasenaDTO;
 import com.example.backend.Modelos.Bedel;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
-import com.example.backend.Servicio.Implementacion.AdministradorServicio;
 @Service
 public class BedelServicio implements IBedelServicios {
     @Autowired 
