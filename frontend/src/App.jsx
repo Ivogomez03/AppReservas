@@ -8,7 +8,7 @@ import BienvenidoBedel from './bienvenido/bienvenidoBedel'
 import BienvenidoAdmin from './bienvenido/bienvenidoAdmin'
 import TipoDeReserva from './registrar/TipoDeReserva'
 import RegistrarReservaP from './registrar/RegistrarReservaP';
-
+import ReservaClaseP from './reserva/ReservaClaseP';
 const App = () => {
     const navigate = useNavigate();
 
@@ -94,6 +94,7 @@ const MainApp = () => {
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
                 <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />
                 <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
+                <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
             </Routes>
         </Router>
     );

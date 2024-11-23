@@ -1,0 +1,198 @@
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import Select from 'react-select';
+import './ReservaClaseP.css'
+
+import CancelarBedel from './../cancelar/CancelarBedel'
+const ReservaClaseP = ({ resetForm, agregarReserva }) => {
+
+
+    const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
+    const mostrar = () => {
+        setShowModal(true);
+    }
+
+    const handleCancel = () => {
+        setShowModal(false);  // Cierra el modal sin hacer nada
+    };
+
+    // Función cuando se confirma la cancelación
+    const handleConfirmCancel = () => {
+        setShowModal(false);  // Cierra el modal
+        resetFormulario();
+
+        console.log("Formulario cancelado");
+    };
+
+    const location = useLocation();
+    const tipoReserva = location.state?.tipoReserva || 'Ninguno';
+
+
+    const options = [
+        { value: 'Lunes', label: 'Lunes' },
+        { value: 'Martes', label: 'Martes' },
+        { value: 'Miercoles', label: 'Miercoles' },
+        { value: 'Jueves', label: 'Jueves' },
+        { value: 'Viernes', label: 'Viernes' },
+    ];
+
+    const [form, setForm] = useState({
+        horasMinutos: '',
+        diaSemana: '',
+        duracion: '',
+    });
+
+    const [backendErrors, setBackendErrors] = useState({
+        idUsuario: '',
+        contrasena: ''
+    });
+
+
+    const [placeholders, setPlaceholders] = useState({
+        horasMinutos: "Hora:minutos",
+        diaSemana: "Dia de la semana",
+        duracion: "Duración",
+    });
+
+    const [errors, setErrors] = useState({
+        horasMinutos: false,
+        duracion: false,
+        diaSemana: false,
+    });
+    const [animationClass, setAnimationClass] = useState('');
+
+    const [backendMessage, setBackendMessage] = useState('');
+
+    const resetFormulario = () => {
+        setForm({
+            horasMinutos: '',
+            diaSemana: '',
+            duracion: '',
+        });
+        setPlaceholders({
+            horasMinutos: "Hora:minutos",
+            diaSemana: "Dia de la semana",
+            duracion: "Duración",
+
+        })
+        setErrors({
+            horasMinutos: false,
+            duracion: false,
+            diaSemana: false,
+        });
+        setBackendMessage('');
+    };
+    useEffect(() => {
+        if (resetForm) {
+            resetForm.current = resetFormulario;
+        }
+    }, [resetForm]);
+
+    const handleChange = (e) => {
+        console.log({ ...form })
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
+        setErrors({
+            ...errors,
+            [e.target.name]: false // Resetea el estado de error al cambiar el input
+        });
+    };
+
+
+    const handleSiguiente = async (e) => {
+        e.preventDefault();
+        const newErrors = { ...errors };
+
+        // Validaciones locales
+        if (!form.horasMinutos) {
+            newErrors.horasMinutos = true;
+            setPlaceholders(prev => ({ ...prev, horasMinutos: "Completa Hora:minutos." }));
+        }
+        if (!form.diaSemana) {
+            newErrors.diaSemana = true;
+        }
+        if (!form.duracion || form.duracion.length > 6) {
+            newErrors.duracion = true;
+            setPlaceholders(prev => ({ ...prev, duracion: "Completa el duracion (máximo 6 caracteres)." }));
+        }
+        // Actualizar el estado de errores
+        setErrors(newErrors);
+
+        // Si hay errores, detener el envío
+        if (Object.values(newErrors).some(error => error)) {
+            return;
+        }
+
+
+        // Validaciones omitidas para brevedad...
+        // Agregar la reserva al padre
+        agregarReserva(form);
+        setForm({
+            horasMinutos: '',
+            diaSemana: '',
+            duracion: '',
+        });
+
+    }
+
+    return (
+        <div className='conteiner-principal-RCP'>
+            <div className='panel-izquierdo-RCP'>
+                <h1>Reserva de clase</h1>
+                <h4>Seleccione el día, el horario de la reserva y la duración de la misma</h4>
+            </div>
+            <form onSubmit={handleSubmit} className='formulario-RCP'>
+                <h1>Período</h1>
+                <select
+                    name="diaSemana"
+                    value={form.diaSemana}
+                    onChange={handleChange}
+                    className={`select-RCP ${errors.diaSemana ? 'select-error-RCP' : ''}`}
+                >
+                    <option value="" disabled>Dia de la semana</option>
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                </select>
+                {errors.diaSemana && <span className="error-message-RCP">Dia de la semana</span>}
+                <input
+                    type="time"
+                    name="horasMinutos"
+                    placeholder={placeholders.horasMinutos}
+                    value={form.horasMinutos}
+                    onChange={handleChange}
+                    className={`input-RCP ${errors.horasMinutos ? 'input-error-RCP' : ''}`}
+                />
+                {errors.horasMinutos && <span className="error-message-RCP">Completa horas y minutos</span>}
+
+                <input
+                    type="text"
+                    name="duracion"
+                    placeholder={placeholders.duracion}
+                    value={form.duracion}
+                    onChange={handleChange}
+                    className={`input-RCP ${errors.duracion ? 'input-error-RCP' : ''}`}
+                />
+                {errors.duracion && <span className="error-message-RCP">Completa la duracion (máximo 6 caracteres).</span>}
+
+                <div className='botones-RCP'>
+                    <button className='botonRCP' type="button" onClick={handleSiguiente}>Siguiente</button>
+                    <button className='botonCancelar-RCP' onClick={mostrar}>Cancelar</button>
+                </div>
+
+            </form>
+            {showModal && (
+                <CancelarBedel
+                    onCancel={handleCancel}
+                    onConfirm={handleConfirmCancel}
+                />
+            )}
+        </div>
+
+
+    );
+};
+
+export default ReservaClaseP;

@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { HashRouter, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import './RegistrarReservaP.css'
 
 import CancelarBedel from './../cancelar/CancelarBedel'
 const RegistrarReservaP = ({ resetForm }) => {
+    const navigate = useNavigate();
 
+    const goToReservaClaseP = () => {
+        navigate('/login/ReservaClaseP');
+    }
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
     const mostrar = () => {
@@ -197,7 +202,7 @@ const RegistrarReservaP = ({ resetForm }) => {
                 </div>
                 <div className='panel-izquierdo-abajo-RRP'>
                     <h1>{tipoReserva}</h1>
-                    <button className='botonRRP'>Agregar Día</button>
+                    <button className='botonRRP' onClick={goToReservaClaseP}>Agregar Día</button>
                 </div>
             </div>
             <form onSubmit={handleSubmit} className='formulario-RRP'>
