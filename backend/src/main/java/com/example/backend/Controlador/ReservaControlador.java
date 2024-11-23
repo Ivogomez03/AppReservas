@@ -1,17 +1,21 @@
 package com.example.backend.Controlador;
 
+import java.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.backend.DTO.PeriodicaDTO;
+import com.example.backend.Servicio.Implementacion.PeriodicaServicio;
 import com.example.backend.Servicio.Implementacion.ReservaServicio;
 
 @RestController
 public class ReservaControlador {
 
     @Autowired
-    private ReservaServicio reservaServicio;
+    private PeriodicaServicio reservaServicio;
 
-    private void reservar() {
+    @GetMapping("/reservar/periodica")
+    private void reservar(PeriodicaDTO reservaPeriodica){ {
         
     }
 
