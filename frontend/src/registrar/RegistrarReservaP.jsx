@@ -121,7 +121,12 @@ const RegistrarReservaP = ({ resetForm }) => {
         });
     };
 
+    const [reservas, setReservas] = useState([]); // Estado compartido
 
+    // Función para agregar una nueva reserva
+    const agregarReserva = (reserva) => {
+        setReservas([...reservas, reserva]);
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = { ...errors };
@@ -203,6 +208,7 @@ const RegistrarReservaP = ({ resetForm }) => {
                 <div className='panel-izquierdo-abajo-RRP'>
                     <h1>{tipoReserva}</h1>
                     <button className='botonRRP' onClick={goToReservaClaseP}>Agregar Día</button>
+
                 </div>
             </div>
             <form onSubmit={handleSubmit} className='formulario-RRP'>
