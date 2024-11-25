@@ -4,14 +4,38 @@ import { HashRouter, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import './RegistrarReservaP.css'
 
+
 import CancelarBedel from './../cancelar/CancelarBedel'
 const RegistrarReservaP = ({ resetForm }) => {
+
+
     const navigate = useNavigate();
+    const location = useLocation();
+    const [diasRegistrados, setDiasRegistrados] = useState(location.state?.diasRegistrados || []);
 
-    const goToReservaClaseP = () => {
-        navigate('/login/ReservaClaseP');
-    }
+    const [tipoReserva, setTipoReserva] = useState(location.state?.tipoReserva || 'Ninguno');
 
+
+
+    useEffect(() => {
+        if (location.state?.tipoReserva) {
+            console.log("Useeffect", location.state)
+            setTipoReserva(location.state.tipoReserva); // Actualiza tipoReserva cuando cambie el estado
+        }
+    }, [location.state]);
+
+
+
+
+
+    console.log('Días recibidos:', diasRegistrados);
+    const agregarDia = () => {
+        navigate('/login/ReservaClaseP', { state: { diasRegistrados, tipoReserva } });
+    };
+    const handleDeleteDia = (index) => {
+        const updatedDias = diasRegistrados.filter((_, i) => i !== index);  // Elimina el elemento del arreglo
+        setDiasRegistrados(updatedDias);  // Actualiza el estado
+    };
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
     const mostrar = () => {
         setShowModal(true);
@@ -29,8 +53,6 @@ const RegistrarReservaP = ({ resetForm }) => {
         console.log("Formulario cancelado");
     };
 
-    const location = useLocation();
-    const tipoReserva = location.state?.tipoReserva || 'Ninguno';
 
 
     const options = [
@@ -121,12 +143,7 @@ const RegistrarReservaP = ({ resetForm }) => {
         });
     };
 
-    const [reservas, setReservas] = useState([]); // Estado compartido
 
-    // Función para agregar una nueva reserva
-    const agregarReserva = (reserva) => {
-        setReservas([...reservas, reserva]);
-    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = { ...errors };
@@ -155,6 +172,9 @@ const RegistrarReservaP = ({ resetForm }) => {
         if (!form.nombreCatedra || form.nombreCatedra.length > 100) {
             newErrors.nombreCatedra = true;
             setPlaceholders(prev => ({ ...prev, nombreCatedra: "Completa el nombre de la catedra, seminario o curso (máximo 100 caracteres)." }));
+        }
+        if (!diasRegistrados) {
+            //logica
         }
         // Actualizar el estado de errores
         setErrors(newErrors);
@@ -207,7 +227,20 @@ const RegistrarReservaP = ({ resetForm }) => {
                 </div>
                 <div className='panel-izquierdo-abajo-RRP'>
                     <h1>{tipoReserva}</h1>
-                    <button className='botonRRP' onClick={goToReservaClaseP}>Agregar Día</button>
+                    <button className='botonRRP' onClick={agregarDia}>Agregar Día</button>
+                    <div className="dias-registrados">
+                        {diasRegistrados.map((dia, index) => (
+                            <div key={index} className="dia-registrado">
+                                <div className='dias-registrados-info'>{dia.diaSemana}-{dia.horasMinutos}-{dia.duracion}min</div>
+                                <button
+                                    className="boton-eliminar"
+                                    onClick={() => handleDeleteDia(index)}
+                                >
+                                    <img src="/eliminar.png" alt="Eliminar" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
 
                 </div>
             </div>
