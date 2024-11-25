@@ -1,5 +1,8 @@
 package com.example.backend.Controlador;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,18 +17,26 @@ public class LoginControlador {
     private LoginServicio loginServicio;
 
     @PostMapping("/login")
-    public SalidaLoginDTO validarLogin(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<SalidaLoginDTO> validarLogin(@RequestBody LoginDTO loginDTO) {
         // Llamar al servicio para validar usuario
         int esValido = loginServicio.validarUsuario(loginDTO);
 
-        // Retornar la respuesta según la validación
+        // Crear la respuesta basada en la validación
+        SalidaLoginDTO salida;
+        HttpStatus status;
+
         if (esValido == 1) {
-            return new SalidaLoginDTO(true, false);
-        } else if(esValido == 2){
-            return new SalidaLoginDTO(false, true);
+            salida = new SalidaLoginDTO(true, false);
+            status = HttpStatus.OK; // Usuario válido
+        } else if (esValido == 2) {
+            salida = new SalidaLoginDTO(false, true);
+            status = HttpStatus.UNAUTHORIZED; // Contraseña incorrecta
+        } else {
+            salida = new SalidaLoginDTO(false, false);
+            status = HttpStatus.NOT_FOUND; // Usuario no encontrado
         }
-        else{
-            return new SalidaLoginDTO(false,false);
-        }
+
+        // Retornar la respuesta con el código de estado HTTP
+        return new ResponseEntity<>(salida, status);
     }
 }
