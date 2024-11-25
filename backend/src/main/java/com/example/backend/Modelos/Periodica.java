@@ -15,6 +15,7 @@ public class Periodica extends Reserva{
 
     private Date fechaInicio;
     private Date fechaFin;
+    //periodo es el que tiene la fecha de inicio y la de fin
     @ManyToOne
     private Periodo periodo;
     @OneToMany

@@ -17,4 +17,5 @@ public class FechaEspecifica {
     private LocalTime horaFin;
     @Id
     private int idFechaEspecifica;
+    //falta el id del aula
 }

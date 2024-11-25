@@ -1,11 +1,9 @@
 package com.example.backend.Modelos;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-@Entity
 public class AulaInformatica extends Aula{
     private int cantidadDeComputadoras;
     private boolean proyector;

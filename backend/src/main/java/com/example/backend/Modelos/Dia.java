@@ -19,4 +19,5 @@ public class Dia {
     private int idDia;
     @ManyToOne
     private Periodica periodica;
+    private Aula aula;
 }

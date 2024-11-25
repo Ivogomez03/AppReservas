@@ -1,10 +1,12 @@
 package com.example.backend.Modelos;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
+@Entity
 public abstract class Aula {
 
     private String tipoPizarron;

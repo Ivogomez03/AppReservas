@@ -1,11 +1,9 @@
 package com.example.backend.Modelos;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-@Entity
 public class AulaMultimedio extends Aula{
 
     private boolean televisor;
