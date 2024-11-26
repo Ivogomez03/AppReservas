@@ -36,34 +36,27 @@ public class BedelControlador {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("/bedel/CU16/buscarPorApellido")
-    public ResponseEntity<List<BedelDTO>> buscarPorApellido(@RequestParam String apellido) {
+    @GetMapping("/bedel/CU16")
+    public ResponseEntity<List<BedelDTO>> buscarPorTurnoyApellido(@RequestParam(required = false) String apellido,@RequestParam(required = false) TurnoDeTrabajo turno) {
         try {
-            List<BedelDTO> resultado = bedelServicio.buscarBedelesPorApellido(apellido);
-            return ResponseEntity.ok(resultado);
+            // Llama al servicio para buscar los bedeles
+            List<BedelDTO> resultado = bedelServicio.buscarBedelesPorTurnoyApellido(turno, apellido);
+            return ResponseEntity.ok(resultado); // Devuelve 200 OK con la lista de resultados
         } catch (IllegalArgumentException e) {
+            // Devuelve 400 Bad Request con una lista vacía si ocurre una excepción
             return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
 
-    @GetMapping("/bedel/CU16/buscarPorTurno")
-    public ResponseEntity<List<BedelDTO>> buscarPorTurno(@RequestParam TurnoDeTrabajo turno) {
+    @PostMapping("/bedel/CU14/obtenerDatos")
+    public ResponseEntity<BedelDTO> obtenerDatosBedel(@RequestBody BedelDTO bedelDTO) {
         try {
-            List<BedelDTO> resultado = bedelServicio.buscarBedelesPorTurno(turno);
-            return ResponseEntity.ok(resultado);
+            BedelDTO datosCompletos = bedelServicio.obtenerDatosBedel(bedelDTO);
+            return ResponseEntity.ok(datosCompletos);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Collections.emptyList());
+            return ResponseEntity.badRequest().body(null);
         }
     }
-    @PostMapping("/bedel/CU14/obtenerDatos")
-public ResponseEntity<BedelDTO> obtenerDatosBedel(@RequestBody BedelDTO bedelDTO) {
-    try {
-        BedelDTO datosCompletos = bedelServicio.obtenerDatosBedel(bedelDTO);
-        return ResponseEntity.ok(datosCompletos);
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body(null);
-    }
-}
 @PostMapping("/bedel/CU14/modificarBedel")
     public ResponseEntity<BedelDTO> modificarBedel(@RequestBody BedelDTO bedelModificado) {
         try {

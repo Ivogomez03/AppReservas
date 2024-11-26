@@ -9,6 +9,9 @@ import BienvenidoAdmin from './bienvenido/bienvenidoAdmin'
 import TipoDeReserva from './registrar/TipoDeReserva'
 import RegistrarReservaP from './registrar/RegistrarReservaP';
 import ReservaClaseP from './reserva/ReservaClaseP';
+import RegistrarReservaE from './registrar/RegistrarReservaE';
+import ReservaClaseE from './reserva/ReservaClaseE';
+import BuscarBedel from './buscar/BuscarBedel';
 const App = () => {
     const navigate = useNavigate();
 
@@ -89,12 +92,15 @@ const MainApp = () => {
             <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/bedel/CU13" element={<RegistrarBedel />} />
+                <Route path="/login/bienvenidoAdmin/RegistrarBedel" element={<RegistrarBedel />} />
+                <Route path="/login/bienvenidoAdmin/BuscarBedel" element={<BuscarBedel />} />
                 <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
                 <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />
                 <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
                 <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
+                <Route path="/login/RegistrarReservaEsporadica" element={<RegistrarReservaE />} />
+                <Route path="/login/ReservaClaseE" element={<ReservaClaseE />} />
             </Routes>
         </Router>
     );

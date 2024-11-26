@@ -11,4 +11,6 @@ public interface BedelDAO extends CrudRepository<Bedel, Integer> {
     List<Bedel> findByApellidoAndHabilitadoTrue(String apellido);
 
     List<Bedel> findByTurnoDeTrabajoAndHabilitadoTrue(TurnoDeTrabajo turno);
+
+    List<Bedel> findByApellidoAndTurnoDeTrabajoAndHabilitadoTrue(String apellido,TurnoDeTrabajo turno);
 }

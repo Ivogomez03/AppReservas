@@ -69,27 +69,27 @@ public class BedelServicio implements IBedelServicios {
         // Si todo es correcto, devuelve true
         return true;
     }
-     public void eliminarBedel(BedelDTO bedelSeleccionado) {
-    // Recuperar el ID del objeto BedelDTO recibido
-    int id = bedelSeleccionado.getIdUsuario();
+    public void eliminarBedel(BedelDTO bedelSeleccionado) {
+        // Recuperar el ID del objeto BedelDTO recibido
+        int id = bedelSeleccionado.getIdUsuario();
 
-    // Buscar el Bedel en la base de datos para confirmar que existe y está habilitado
-    Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
-        new IllegalArgumentException("El bedel con ID " + id + " no existe o ya fue eliminado."));
+        // Buscar el Bedel en la base de datos para confirmar que existe y está habilitado
+        Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
+            new IllegalArgumentException("El bedel con ID " + id + " no existe o ya fue eliminado."));
 
-    // Verificar si el bedel ya está deshabilitado
-    if (!bedel.isHabilitado()) {
-        throw new IllegalArgumentException("El bedel con ID " + id + " ya está deshabilitado.");
+        // Verificar si el bedel ya está deshabilitado
+        if (!bedel.isHabilitado()) {
+            throw new IllegalArgumentException("El bedel con ID " + id + " ya está deshabilitado.");
+        }
+
+        // Cambiar el atributo habilitado a false
+        bedel.setHabilitado(false);
+
+        // Guardar el Bedel actualizado en la base de datos
+        bedelDAO.save(bedel);
     }
 
-    // Cambiar el atributo habilitado a false
-    bedel.setHabilitado(false);
-
-    // Guardar el Bedel actualizado en la base de datos
-    bedelDAO.save(bedel);
-}
-
- public List<BedelDTO> buscarBedelesPorApellido(String apellido) {
+    public List<BedelDTO> buscarBedelesPorApellido(String apellido) {
         List<Bedel> bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
 
         if (bedeles.isEmpty()) {
@@ -112,7 +112,37 @@ public class BedelServicio implements IBedelServicios {
                 .map(this::convertirABedelDTO)
                 .collect(Collectors.toList());
     }
+    public List<BedelDTO> buscarBedelesPorTurnoyApellido(TurnoDeTrabajo turno, String apellido) {
 
+        List<Bedel> bedeles;
+
+        // Si no hay apellido y hay turno
+        if ((apellido == null || apellido.isEmpty()) && turno != null) {
+            bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
+        }
+        // Si hay apellido y no hay turno
+        else if (turno == null && (apellido != null && !apellido.isEmpty())) {
+            bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
+        }
+        // Si hay ambos criterios
+        else if (turno != null && (apellido != null && !apellido.isEmpty())) {
+            bedeles = bedelDAO.findByApellidoAndTurnoDeTrabajoAndHabilitadoTrue(apellido, turno);
+        }
+        // Si no hay ningún criterio, lanza una excepción o maneja el caso
+        else {
+            throw new IllegalArgumentException("Debe proporcionar al menos un criterio de búsqueda.");
+        }
+
+        // Si no se encuentran bedeles, lanza una excepción
+        if (bedeles.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron bedeles con los criterios proporcionados.");
+        }
+
+        // Convierte la lista de Bedel a BedelDTO
+        return bedeles.stream()
+                .map(this::convertirABedelDTO)
+                .collect(Collectors.toList());
+    }
     private BedelDTO convertirABedelDTO(Bedel bedel) {
         BedelDTO dto = new BedelDTO();
         dto.setIdUsuario(bedel.getIdUsuario());
@@ -122,36 +152,36 @@ public class BedelServicio implements IBedelServicios {
         return dto;
     }
     public BedelDTO modificarBedel(BedelDTO bedelModificado) {
-    // Recuperar el ID del BedelDTO recibido
-    int id = bedelModificado.getIdUsuario();
+        // Recuperar el ID del BedelDTO recibido
+        int id = bedelModificado.getIdUsuario();
 
-    // Buscar el Bedel en la base de datos
-    Bedel bedelExistente = bedelDAO.findById(id).orElseThrow(() -> 
-        new IllegalArgumentException("El bedel con ID " + id + " no existe."));
+        // Buscar el Bedel en la base de datos
+        Bedel bedelExistente = bedelDAO.findById(id).orElseThrow(() -> 
+            new IllegalArgumentException("El bedel con ID " + id + " no existe."));
 
-//FALTAN LAS VALIDACIONES ANTES DE GUARDAR
-    // Actualizar los datos del bedel
-    bedelExistente.setApellido(bedelModificado.getApellido());
-    bedelExistente.setNombre(bedelModificado.getNombre());
-    bedelExistente.setTurnoDeTrabajo(bedelModificado.getTurnoDeTrabajo());
-    bedelExistente.setContrasena(bedelModificado.getContrasena());
+    //FALTAN LAS VALIDACIONES ANTES DE GUARDAR
+        // Actualizar los datos del bedel
+        bedelExistente.setApellido(bedelModificado.getApellido());
+        bedelExistente.setNombre(bedelModificado.getNombre());
+        bedelExistente.setTurnoDeTrabajo(bedelModificado.getTurnoDeTrabajo());
+        bedelExistente.setContrasena(bedelModificado.getContrasena());
 
-    // Guardar los cambios en la base de datos
-    bedelDAO.save(bedelExistente);
+        // Guardar los cambios en la base de datos
+        bedelDAO.save(bedelExistente);
 
-    // Convertir el Bedel actualizado a DTO y devolverlo
-    return convertirABedelDTO(bedelExistente);
-}
-public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
-    // Recuperar el ID del BedelDTO
-    int id = bedelDTO.getIdUsuario();
+        // Convertir el Bedel actualizado a DTO y devolverlo
+        return convertirABedelDTO(bedelExistente);
+    }
+    public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
+        // Recuperar el ID del BedelDTO
+        int id = bedelDTO.getIdUsuario();
 
-    // Buscar el Bedel en la base de datos
-    Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
-        new IllegalArgumentException("El bedel con ID " + id + " no existe."));
+        // Buscar el Bedel en la base de datos
+        Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
+            new IllegalArgumentException("El bedel con ID " + id + " no existe."));
 
-    // Convertir el Bedel a DTO
-    return convertirABedelDTO(bedel);
-}
+        // Convertir el Bedel a DTO
+        return convertirABedelDTO(bedel);
+    }
 }
     

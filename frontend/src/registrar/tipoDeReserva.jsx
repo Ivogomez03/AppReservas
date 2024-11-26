@@ -8,6 +8,9 @@ const TipoDeReserva = () => {
     const goToRegReservaPeriodica = (tipoReserva) => {
         navigate('/login/RegistrarReservaPeriodica', { state: { tipoReserva } });
     }
+    const goToRegReservaEsporadica = () => {
+        navigate('/login/RegistrarReservaEsporadica');
+    }
     return (
         <div className='conteiner-principal-tipo-reserva'>
             <div className="seccion-bienvenida-tipo-reserva">
@@ -30,7 +33,7 @@ const TipoDeReserva = () => {
                 </div>
                 <h1>Esporádicas</h1>
                 <div className="botones-esporadica-tipo-reserva">
-                    <button className='button-tipo-reserva'>Esporádica</button>
+                    <button className='button-tipo-reserva' onClick={() => goToRegReservaEsporadica()}>Esporádica</button>
                 </div>
 
             </div>
