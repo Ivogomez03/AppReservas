@@ -17,7 +17,32 @@ public class BedelServicio implements IBedelServicios {
     @Autowired
     private BedelDAO bedelDAO;
     @Autowired
-    private ValidarBedelServicio validarBedelServicio;
+
+
+    private static final Pattern PASSWORD_PATTERN = 
+        Pattern.compile("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%&*]).{8,16}$");
+
+
+
+    public String validatePassword(String contra) {
+        if (!PASSWORD_PATTERN.matcher(contra).matches()) {
+            return "La contraseña debe tener al menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
+        }
+        return "Contraseña valida";
+    }
+
+
+    public String validarId(int id) {
+
+        if(bedelDAO.findById(id).isPresent()){
+            return "Id ya existente";
+        }
+        else{
+            return "Id valida";
+        }
+    
+    }
+
 
     @Override
     public ValidarContrasenaDTO validarBedel(BedelDTO bedelDTO) {
@@ -25,8 +50,8 @@ public class BedelServicio implements IBedelServicios {
         ValidarContrasenaDTO salida = new ValidarContrasenaDTO();
         String contra = bedelDTO.getContrasena();
 
-        String errorContrasena = validarBedelServicio.validatePassword(contra);
-        String errorId = validarBedelServicio.validarId(bedelDTO.getIdUsuario());
+        String errorContrasena = this.validatePassword(contra);
+        String errorId = this.validarId(bedelDTO.getIdUsuario());
 
         if (errorContrasena.equals("Contraseña valida") && errorId.equals("Id valida")) {
 
@@ -70,17 +95,8 @@ public class BedelServicio implements IBedelServicios {
         return true;
     }
     public void eliminarBedel(BedelDTO bedelSeleccionado) {
-        // Recuperar el ID del objeto BedelDTO recibido
-        int id = bedelSeleccionado.getIdUsuario();
-
-        // Buscar el Bedel en la base de datos para confirmar que existe y está habilitado
-        Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
-            new IllegalArgumentException("El bedel con ID " + id + " no existe o ya fue eliminado."));
-
-        // Verificar si el bedel ya está deshabilitado
-        if (!bedel.isHabilitado()) {
-            throw new IllegalArgumentException("El bedel con ID " + id + " ya está deshabilitado.");
-        }
+        // Buscar el Bedel en la base de datos;
+        Bedel bedel = bedelDAO.findById(bedelSeleccionado.getIdUsuario());
 
         // Cambiar el atributo habilitado a false
         bedel.setHabilitado(false);
@@ -88,30 +104,7 @@ public class BedelServicio implements IBedelServicios {
         // Guardar el Bedel actualizado en la base de datos
         bedelDAO.save(bedel);
     }
-
-    public List<BedelDTO> buscarBedelesPorApellido(String apellido) {
-        List<Bedel> bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
-
-        if (bedeles.isEmpty()) {
-            throw new IllegalArgumentException("No existen bedeles habilitados con el apellido proporcionado.");
-        }
-
-        return bedeles.stream()
-                .map(this::convertirABedelDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<BedelDTO> buscarBedelesPorTurno(TurnoDeTrabajo turno) {
-        List<Bedel> bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
-
-        if (bedeles.isEmpty()) {
-            throw new IllegalArgumentException("No existen bedeles habilitados con el turno proporcionado.");
-        }
-
-        return bedeles.stream()
-                .map(this::convertirABedelDTO)
-                .collect(Collectors.toList());
-    }
+    
     public List<BedelDTO> buscarBedelesPorTurnoyApellido(TurnoDeTrabajo turno, String apellido) {
 
         List<Bedel> bedeles;
@@ -151,27 +144,29 @@ public class BedelServicio implements IBedelServicios {
         dto.setTurnoDeTrabajo(bedel.getTurnoDeTrabajo());
         return dto;
     }
-    public BedelDTO modificarBedel(BedelDTO bedelModificado) {
-        // Recuperar el ID del BedelDTO recibido
-        int id = bedelModificado.getIdUsuario();
 
-        // Buscar el Bedel en la base de datos
-        Bedel bedelExistente = bedelDAO.findById(id).orElseThrow(() -> 
-            new IllegalArgumentException("El bedel con ID " + id + " no existe."));
+    
+    public String modificarBedel(BedelDTO bedelModificado) {
 
-    //FALTAN LAS VALIDACIONES ANTES DE GUARDAR
-        // Actualizar los datos del bedel
-        bedelExistente.setApellido(bedelModificado.getApellido());
-        bedelExistente.setNombre(bedelModificado.getNombre());
-        bedelExistente.setTurnoDeTrabajo(bedelModificado.getTurnoDeTrabajo());
-        bedelExistente.setContrasena(bedelModificado.getContrasena());
+        String contraValida = this.validatePassword(bedelModificado);
 
-        // Guardar los cambios en la base de datos
-        bedelDAO.save(bedelExistente);
 
-        // Convertir el Bedel actualizado a DTO y devolverlo
-        return convertirABedelDTO(bedelExistente);
+        if(contraValida.equals("Contraseña valida")){
+            //datos nulos o caracteres maximos se valida en front
+
+            // Guardar los cambios en la base de datos
+            bedelDAO.save(bedelModificado);
+
+            // Convertir el Bedel actualizado a DTO y devolverlo
+            return "Bedel ha sido modificado correctamente";
+        }
+        else{
+            return contraValida;
+        }
     }
+
+
+
     public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
         // Recuperar el ID del BedelDTO
         int id = bedelDTO.getIdUsuario();
@@ -183,5 +178,32 @@ public class BedelServicio implements IBedelServicios {
         // Convertir el Bedel a DTO
         return convertirABedelDTO(bedel);
     }
+
+
+
+    /*
+    public List<BedelDTO> buscarBedelesPorApellido(String apellido) {
+        List<Bedel> bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
+
+        if (bedeles.isEmpty()) {
+            throw new IllegalArgumentException("No existen bedeles habilitados con el apellido proporcionado.");
+        }
+
+        return bedeles.stream()
+                .map(this::convertirABedelDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<BedelDTO> buscarBedelesPorTurno(TurnoDeTrabajo turno) {
+        List<Bedel> bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
+
+        if (bedeles.isEmpty()) {
+            throw new IllegalArgumentException("No existen bedeles habilitados con el turno proporcionado.");
+        }
+
+        return bedeles.stream()
+                .map(this::convertirABedelDTO)
+                .collect(Collectors.toList());
+    }*/
 }
     

@@ -57,11 +57,11 @@ public class BedelControlador {
             return ResponseEntity.badRequest().body(null);
         }
     }
-@PostMapping("/bedel/CU14/modificarBedel")
-    public ResponseEntity<BedelDTO> modificarBedel(@RequestBody BedelDTO bedelModificado) {
+    @PostMapping("/bedel/CU14/modificarBedel")
+    public ResponseEntity<String> modificarBedel(@RequestBody BedelDTO bedelModificado) {
         try {
-            BedelDTO bedelActualizado = bedelServicio.modificarBedel(bedelModificado);
-            return ResponseEntity.ok(bedelActualizado);
+            String salidaModificar = bedelServicio.modificarBedel(bedelModificado);
+            return ResponseEntity.ok(salidaModificar);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
