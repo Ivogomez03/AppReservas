@@ -12,7 +12,6 @@ import com.example.backend.DTO.SalidaCU9DTO;
 import com.example.backend.DTO.BuscarAulaDTO;
 import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.Servicio.Implementacion.AulaServicio;
-import com.example.backend.Modelos.Aula;
 import com.example.backend.Excepciones.ValidationException;
 import java.util.Collections;
 import java.util.List;

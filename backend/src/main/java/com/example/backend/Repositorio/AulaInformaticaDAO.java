@@ -11,11 +11,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 public interface AulaInformaticaDAO extends CrudRepository<AulaInformatica, Integer>{
-    @Query("SELECT a FROM AulaInformatica a WHERE " +
-           "(:numeroAula IS NULL OR a.nroAula = :numeroAula) AND " +
-           "(:capacidadMinima IS NULL OR a.capacidad >= :capacidadMinima)")
-    List<AulaInformatica> buscarPorCriterio(@Param("numeroAula") Integer numeroAula, 
-                                           @Param("capacidadMinima") Integer capacidadMinima);
+     @Query("SELECT a FROM AulaInformatica a WHERE (:numeroAula IS NULL OR a.numeroDeAula = :numeroAula) AND (:capacidadMinima IS NULL OR a.capacidad >= :capacidadMinima)")
+    List<AulaInformatica> buscarPorCriterio(@Param("numeroAula") Integer numeroAula, @Param("capacidadMinima") Integer capacidadMinima);
+
 
 
 }

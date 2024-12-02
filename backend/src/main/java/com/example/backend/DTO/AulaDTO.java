@@ -16,7 +16,7 @@ public class AulaDTO {
     private boolean habilitado;
     private int cantidadDeComputadoras;
     private boolean televisor;
-    private boolean proyector;
+    private boolean canion;
     private boolean computadora;
     private boolean ventilador;
     private boolean AulaInformatica;

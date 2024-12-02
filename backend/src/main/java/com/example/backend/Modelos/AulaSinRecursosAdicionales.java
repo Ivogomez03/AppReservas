@@ -1,9 +1,11 @@
 package com.example.backend.Modelos;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
+@Entity
 public class AulaSinRecursosAdicionales extends Aula{
     private boolean ventilador;
 
