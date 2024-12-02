@@ -104,6 +104,8 @@ public class BedelServicio implements IBedelServicios {
     public List<BedelDTO> buscarBedelesPorTurnoyApellido(TurnoDeTrabajo turno, String apellido) {
 
         List<Bedel> bedeles;
+        System.out.println("El turno es " + turno);
+        System.out.println("El apellido es " + apellido);
 
         // Si no hay apellido y hay turno
         if ((apellido == null || apellido.isEmpty()) && turno != null) {
@@ -164,6 +166,7 @@ public class BedelServicio implements IBedelServicios {
         else{
             return contraValida;
         }
+        
     }
     public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
         // Recuperar el ID del BedelDTO

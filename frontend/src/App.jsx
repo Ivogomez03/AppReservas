@@ -12,6 +12,8 @@ import ReservaClaseP from './reserva/ReservaClaseP';
 import RegistrarReservaE from './registrar/RegistrarReservaE';
 import ReservaClaseE from './reserva/ReservaClaseE';
 import BuscarBedel from './buscar/BuscarBedel';
+import ModificarBedel from './modificar/ModificarBedel';
+import ListaBedeles from './buscar/ListaBedeles';
 const App = () => {
     const navigate = useNavigate();
 
@@ -94,6 +96,8 @@ const MainApp = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/login/bienvenidoAdmin/RegistrarBedel" element={<RegistrarBedel />} />
                 <Route path="/login/bienvenidoAdmin/BuscarBedel" element={<BuscarBedel />} />
+                <Route path="/login/bienvenidoAdmin/BuscarBedel/ModificarBedel" element={<ModificarBedel />} />
+                <Route path="/login/bienvenidoAdmin/BuscarBedel/ListaBedeles" element={<ListaBedeles />} />
                 <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
                 <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />

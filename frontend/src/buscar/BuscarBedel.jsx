@@ -122,6 +122,15 @@ const BuscarBedel = ({ resetForm }) => {
                 }
             });
             console.log(response)
+            if (response.ok) {
+                const data = await response.json();
+                // Redirigir a la lista de bedeles y pasar los datos con `state`
+                navigate("/login/bienvenidoAdmin/BuscarBedel/ListaBedeles", { state: { bedeles: data } });
+                resetFormulario();
+            } else {
+                console.error('Error en la respuesta:', response.status);
+                setBackendMessage("No se pudieron cargar los bedeles.");
+            }
 
         } catch (error) {
             console.error('Error en la solicitud:', error);
