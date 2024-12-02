@@ -85,7 +85,7 @@ public class ReservaServicio implements IReservaServicio {
     @Override
     public boolean validarDatos(ReservaDTO reserva) {
         
-        if(this.valdiarNombre(reserva.getNombreProfesor()) && this.valdiarApellido(reserva.getApellidoProfesor()) && this.validarCorreo(reserva.getCorreo()) && this.validarNombreCatedra(reserva.getNombreCatedra())){
+        if(this.validarNombre(reserva.getNombreProfesor()) && this.valdiarApellido(reserva.getApellidoProfesor()) && this.validarCorreo(reserva.getCorreo()) && this.validarNombreCatedra(reserva.getNombreCatedra())){
             return true;
         }
         else{
@@ -96,7 +96,7 @@ public class ReservaServicio implements IReservaServicio {
     //Validar nombre
     private static final String NOMBRE_PROFESOR_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"; // Expresión regular para validar el nombre del profesor (solo letras y espacios)
     @Override
-    public boolean valdiarNombre(String nombre) {
+    public boolean validarNombre(String nombre) {
 
         Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
 

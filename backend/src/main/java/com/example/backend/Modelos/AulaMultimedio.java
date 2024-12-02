@@ -20,4 +20,8 @@ public class AulaMultimedio extends Aula{
         this.computadora = computadora;
         this.ventilador = ventilador;
     }
+    @Override
+    public String getTipoAula() {
+        return "Multimedio";
+    }
 }

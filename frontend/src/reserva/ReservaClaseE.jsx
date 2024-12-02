@@ -120,20 +120,34 @@ const ReservaClaseE = ({ resetForm }) => {
         if (Object.values(newErrors).some(error => error)) {
             return;
         }
+        try {
+            const response = await fetch("/verificarReserva", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+            if (response.status === 409) {
+                const conflictos = await response.json();
+                navigate('/login/CoincidenDyH', { state: { conflictos, tipo } }); // Redirige al componente CoincidenDyH
+            } else if (response.ok) {
+                // Si no hay conflictos, continúa con la navegación normal
+                setDiasRegistrados(prevDias => {
+                    const nuevoDia = { ...form };
+                    console.log("Nuevo dia", nuevoDia)
+                    console.log("PrevDias", ...prevDias)
+                    return [...prevDias, nuevoDia];  // Agregar el nuevo día al arreglo
+                });
+                // Esperamos a que el estado se actualice
+                setTimeout(() => {
+                    // Ahora, hacemos la navegación pasando los días actualizados a la siguiente pantalla
+                    navigate('/login/RegistrarReservaEsporadica', { state: { diasRegistrados: [...diasRegistrados, form] } });
+                }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
+                console.log('Actualizados días:', diasRegistrados);
+            }
+        } catch (error) {
+            console.error("Error al verificar la reserva:", error);
+        }
 
-
-        setDiasRegistrados(prevDias => {
-            const nuevoDia = { ...form };
-            console.log("Nuevo dia", nuevoDia)
-            console.log("PrevDias", ...prevDias)
-            return [...prevDias, nuevoDia];  // Agregar el nuevo día al arreglo
-        });
-        // Esperamos a que el estado se actualice
-        setTimeout(() => {
-            // Ahora, hacemos la navegación pasando los días actualizados a la siguiente pantalla
-            navigate('/login/RegistrarReservaEsporadica', { state: { diasRegistrados: [...diasRegistrados, form] } });
-        }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
-        console.log('Actualizados días:', diasRegistrados);
 
         setForm({
             horasMinutos: '',

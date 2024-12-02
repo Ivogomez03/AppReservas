@@ -23,4 +23,8 @@ public class AulaInformatica extends Aula{
         }
         return false;
     }
+    @Override
+    public String getTipoAula() {
+        return "Informatica";
+    }
 }

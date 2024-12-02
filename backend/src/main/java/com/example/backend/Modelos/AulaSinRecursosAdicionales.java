@@ -23,4 +23,8 @@ public class AulaSinRecursosAdicionales extends Aula{
             return true;
         }
     }
+    @Override
+    public String getTipoAula() {
+        return "SinRecursosAdicionales";
+    }
 }
