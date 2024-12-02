@@ -10,6 +10,7 @@ import com.example.backend.Servicio.IBedelServicios;
 import com.example.backend.Modelos.TurnoDeTrabajo;
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.regex.Pattern;
 @Service
 public class BedelServicio implements IBedelServicios {
     @Autowired 
@@ -30,8 +31,6 @@ public class BedelServicio implements IBedelServicios {
         }
         return "Contraseña valida";
     }
-
-
     public String validarId(int id) {
 
         if(bedelDAO.findById(id).isPresent()){
@@ -42,8 +41,6 @@ public class BedelServicio implements IBedelServicios {
         }
     
     }
-
-
     @Override
     public ValidarContrasenaDTO validarBedel(BedelDTO bedelDTO) {
         
@@ -96,7 +93,7 @@ public class BedelServicio implements IBedelServicios {
     }
     public void eliminarBedel(BedelDTO bedelSeleccionado) {
         // Buscar el Bedel en la base de datos;
-        Bedel bedel = bedelDAO.findById(bedelSeleccionado.getIdUsuario());
+        Bedel bedel = bedelDAO.findById(bedelSeleccionado.getIdUsuario()).get();
 
         // Cambiar el atributo habilitado a false
         bedel.setHabilitado(false);
@@ -104,7 +101,6 @@ public class BedelServicio implements IBedelServicios {
         // Guardar el Bedel actualizado en la base de datos
         bedelDAO.save(bedel);
     }
-    
     public List<BedelDTO> buscarBedelesPorTurnoyApellido(TurnoDeTrabajo turno, String apellido) {
 
         List<Bedel> bedeles;
@@ -144,18 +140,23 @@ public class BedelServicio implements IBedelServicios {
         dto.setTurnoDeTrabajo(bedel.getTurnoDeTrabajo());
         return dto;
     }
+    public String modificarBedel(BedelDTO bedelDTO) {
 
-    
-    public String modificarBedel(BedelDTO bedelModificado) {
-
-        String contraValida = this.validatePassword(bedelModificado);
-
+        String contraValida = this.validatePassword(bedelDTO.getContrasena());
 
         if(contraValida.equals("Contraseña valida")){
             //datos nulos o caracteres maximos se valida en front
+            Bedel bedel = new Bedel();
+            bedel.setNombre(bedelDTO.getNombre());
+            bedel.setApellido(bedelDTO.getApellido());
+            bedel.setIdUsuario(bedelDTO.getIdUsuario());
+            bedel.setContrasena(bedelDTO.getContrasena());
+            bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
+            bedel.setHabilitado(true);
+            bedel.setAdminCreador(gestorAdmin.buscarAdministrador(bedelDTO.getIdAdminCreador()));
 
             // Guardar los cambios en la base de datos
-            bedelDAO.save(bedelModificado);
+            bedelDAO.save(bedel);
 
             // Convertir el Bedel actualizado a DTO y devolverlo
             return "Bedel ha sido modificado correctamente";
@@ -164,9 +165,6 @@ public class BedelServicio implements IBedelServicios {
             return contraValida;
         }
     }
-
-
-
     public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
         // Recuperar el ID del BedelDTO
         int id = bedelDTO.getIdUsuario();

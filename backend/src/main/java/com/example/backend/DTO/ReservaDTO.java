@@ -13,5 +13,9 @@ public class ReservaDTO {
     private String nombreCatedra; 
     private String idProfesor;
     private String idCatedra;
+    private boolean esporadica;
+    private boolean periodicaAnual;
+    private boolean periodicaPrimerCuatrimestre;
+    private boolean periodicaSegundoCuatrimestre;
     
 }
