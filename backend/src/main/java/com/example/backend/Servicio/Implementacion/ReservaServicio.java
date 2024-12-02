@@ -157,7 +157,7 @@ public class ReservaServicio implements IReservaServicio {
 
     public void guardarReserva(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
         if(reserva.isEsporadica()){
-
+            this.guardarReservaEsporadica(reserva, aulaDTO);
         }
         else if(reserva.isPeriodicaAnual()){
 
@@ -243,6 +243,7 @@ public List<Aula> calcularAulasMenorSuperposicion(List<Dia> diasOcupados, LocalT
     public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
 
         Esporadica esporadica = new Esporadica();
+
         esporadica.setIdReserva(reserva.getIdReserva());
         esporadica.setNombreCatedra(reserva.getNombreProfesor());
         esporadica.setApellidoProfesor(reserva.getApellidoProfesor());
@@ -250,7 +251,6 @@ public List<Aula> calcularAulasMenorSuperposicion(List<Dia> diasOcupados, LocalT
         esporadica.setNombreCatedra(reserva.getNombreCatedra());
         esporadica.setIdProfesor(reserva.getIdProfesor());
         esporadica.setIdCatedra(reserva.getIdCatedra());
-
-        fechaEspecificaServicio.crearFechaEspecifica(reserva, aulaDTO)
+        esporadica.setFechaEspecifica(fechaEspecificaServicio.crearFechaEspecifica(reserva, aulaDTO));
 
 }
