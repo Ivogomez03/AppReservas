@@ -23,7 +23,7 @@ public interface IReservaServicio {
     public boolean validarDatos(ReservaDTO reserva);   
     
     //Validar nombre
-    public boolean valdiarNombre(String nombre);
+    //public boolean valdiarNombre(String nombre);
 
     //Validar apellido
     public boolean valdiarApellido(String nombre);

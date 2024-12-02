@@ -2,7 +2,10 @@ package com.example.backend.Repositorio;
 
 import org.springframework.data.repository.CrudRepository;
 import com.example.backend.Modelos.AulaSinRecursosAdicionales;
-public interface AulaSRADAO extends CrudRepository<Administrador, Integer>{
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+public interface AulaSRADAO extends CrudRepository<AulaSinRecursosAdicionales, Integer>{
     @Query("SELECT a FROM AulaSinRecursosAdicionales a WHERE " +
            "(:numeroAula IS NULL OR a.nroAula = :numeroAula) AND " +
            "(:capacidadMinima IS NULL OR a.capacidad >= :capacidadMinima)")

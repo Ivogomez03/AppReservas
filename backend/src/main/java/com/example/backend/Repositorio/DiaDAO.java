@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 @Repository
-public interface DiaRepository extends CrudRepository<Dia, Integer> {
+public interface DiaDAO extends CrudRepository<Dia, Integer> {
 
     List<Dia> findByPeriodo_IdPeriodoAndDiaSemana(int idPeriodo, String diaSemana);
 }

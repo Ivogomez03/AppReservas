@@ -10,18 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import java.util.stream.Collectors;
 import com.example.backend.DTO.AulaDTO;
+import com.example.backend.Repositorio.AulaDAO;
 import com.example.backend.DTO.PeriodosDTO;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.DTO.ReservaSingularDTO;
 import com.example.backend.Excepciones.ValidationException;
+
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
+import com.example.backend.Modelos.Periodica;
+
+import com.example.backend.Repositorio.ReservaDAO;
 import com.example.backend.Servicio.IReservaServicio;
+
 
 public class ReservaServicio implements IReservaServicio {
 
-    @Autowired
-    private FechaEspecificaServicio fechaEspecificaServicio;
+  @Autowired
+    private ReservaDAO reservaDAO;
+
 
     //Registrar una reserva
     @Override
@@ -96,7 +103,6 @@ public class ReservaServicio implements IReservaServicio {
     
     //Validar nombre
     private static final String NOMBRE_PROFESOR_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"; // Expresión regular para validar el nombre del profesor (solo letras y espacios)
-    @Override
     public boolean validarNombre(String nombre) {
 
         Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
@@ -174,83 +180,18 @@ public class ReservaServicio implements IReservaServicio {
         }
     
     }
-     public List<Aula> obtenerAulasDisponiblesPeriodicasConPeriodo(DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, Periodo periodo) {
-    // Recuperar aulas ocupadas con el periodo actual
-    List<Aula> aulasOcupadas = AulaDAO.findAulasOcupadasPeriodicasConPeriodo(diaSemana.name(), horaInicio, horaFin, periodo.getIdPeriodo());
-
-    // Recuperar todas las aulas
-    List<Aula> todasLasAulas = AulaDAO.findAll();
-    // Filtrar disponibles
-    List<Aula> aulasDisponibles = todasLasAulas.stream()
-            .filter(aula -> !aulasOcupadas.contains(aula))
-            .collect(Collectors.toList());
-
-    // Verificar si la lista de aulas disponibles está vacía
-    if (aulasDisponibles.isEmpty()) {
-        System.out.println("No hay aulas disponibles para la fecha especificada.");
-        List<Dia> diasOcupados = DiaDAO.findByPeriodo_IdPeriodoAndDiaSemana(periodo.getIdPeriodo(), diaSemana.name());
-        return calcularAulasMenorSuperposicion(diasOcupados, horaInicio, horaFin);
-    } else {
-        return aulasDisponibles;
-    }
-}
-    public List<Aula> obtenerAulasDisponiblesEsporadicas(LocalDate fecha) {
-    // Recuperar aulas ocupadas en la fecha específica
-    List<Aula> aulasOcupadas = AulaDAO.findAulasOcupadasEsporadicas(fecha);
-
-    // Recuperar todas las aulas
-    List<Aula> todasLasAulas = AulaDAO.findAll();
-    List<Aula> aulasDisponibles = todasLasAulas.stream()
-            .filter(aula -> !aulasOcupadas.contains(aula))
-            .collect(Collectors.toList());
-
-    // Verificar si la lista de aulas disponibles está vacía
-    if (aulasDisponibles.isEmpty()) {
-        System.out.println("No hay aulas disponibles para la fecha especificada.");
-        List<Dia> diasOcupados = DiaDAO.findByFecha(fecha);
-        return calcularAulasMenorSuperposicion(diasOcupados, horaInicio, horaFin);
-    } else {
-        return aulasDisponibles;
-    }
-}
-
-
-public List<Aula> calcularAulasMenorSuperposicion(List<Dia> diasOcupados, LocalTime horaInicio, LocalTime horaFin) {
-    Map<Aula, Long> aulasConSuperposicion = new HashMap<>();
-
-    for (Dia dia : diasOcupados) {
-        // Calcular el tiempo de superposición
-        long tiempoInicio = Math.max(dia.getHoraInicio().toNanoOfDay(), horaInicio.toNanoOfDay());
-        long tiempoFin = Math.min(dia.getHoraFin().toNanoOfDay(), horaFin.toNanoOfDay());
-
-        if (tiempoInicio < tiempoFin) { // Existe superposición
-            long tiempoSuperpuesto = tiempoFin - tiempoInicio;
-            aulasConSuperposicion.put(dia.getAula(), tiempoSuperpuesto);
-        }
+    public List<Periodica> obtenerReservasPorPeriodo(int idPeriodo) {
+        return reservaDAO.obtenerReservasPorPeriodo(idPeriodo);
     }
 
-    // Ordenar el mapa por el tiempo de superposición y obtener las tres primeras aulas
-    List<Aula> tresAulasConMenorSuperposicion = aulasConSuperposicion.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue())
-            .limit(3)
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
+    public List<Esporadica> obtenerReservasPorFecha(LocalDate fecha) {
+        return reservaDAO.obtenerReservasPorFecha(fecha);
+    }
 
-    return tresAulasConMenorSuperposicion;
-}
-    //Guardar reserva Esporadica
     @Override
     public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
-
-        Esporadica esporadica = new Esporadica();
-
-        esporadica.setIdReserva(reserva.getIdReserva());
-        esporadica.setNombreCatedra(reserva.getNombreProfesor());
-        esporadica.setApellidoProfesor(reserva.getApellidoProfesor());
-        esporadica.setCorreo(reserva.getCorreo());
-        esporadica.setNombreCatedra(reserva.getNombreCatedra());
-        esporadica.setIdProfesor(reserva.getIdProfesor());
-        esporadica.setIdCatedra(reserva.getIdCatedra());
-        esporadica.setFechaEspecifica(fechaEspecificaServicio.crearFechaEspecifica(reserva, aulaDTO));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
+ 

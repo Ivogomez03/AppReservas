@@ -1,10 +1,11 @@
 package com.example.backend.Modelos;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import jakarta.persistence.Entity;
+
+import jakarta.persistence.*;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+
+import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,12 @@ public class FechaEspecifica {
 
     @Column(nullable = false)
     private LocalDate fecha;
-
+    
+    @Column(nullable = false)
+    private LocalTime HoraInicio;
+    
+    @Column(nullable = false)
+    private LocalTime HoraFin;
     @ManyToOne
     @JoinColumn(name = "idReservaEsporadica", nullable = false)
     private Esporadica esporadica;

@@ -4,6 +4,7 @@ import com.example.backend.DTO.BuscarAulaDTO;
 import com.example.backend.DTO.SalidaCU9DTODTO;
 import com.example.backend.DTO.AulaDTO;
 import com.example.backend.Modelos.Aula;
+import java.util.List;
 public interface IAulaServicio {
     public List<SalidaCU9DTO> buscarAulas(BuscarAulaDTO buscarAulaDTO);
     public Aula crearAula(AulaDTO aulaDTO);
