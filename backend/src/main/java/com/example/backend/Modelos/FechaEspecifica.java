@@ -1,10 +1,10 @@
 package com.example.backend.Modelos;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +12,12 @@ import lombok.Setter;
 @Entity
 public class FechaEspecifica {
 
-    private Date fecha;
+    private LocalDate fecha;
     private LocalTime horaInicio;
     private LocalTime horaFin;
     @Id
     private int idFechaEspecifica;
+    @OneToOne
+    private Aula aula;
     //falta el id del aula
 }

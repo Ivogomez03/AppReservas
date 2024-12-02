@@ -1,13 +1,10 @@
 package com.example.backend.DTO;
 
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter@Setter
-public class ReservaDTO {
-    
+@Getter @Setter
+public class ReservaSingularDTO {
     private int idReserva;
     private String nombreProfesor;
     private String apellidoProfesor;
@@ -19,7 +16,6 @@ public class ReservaDTO {
     private boolean periodicaAnual;
     private boolean periodicaPrimerCuatrimestre;
     private boolean periodicaSegundoCuatrimestre;
-    private List<PeriodosDTO> periodos;
-    private List<LocalDate> fechas;
-    
+    private PeriodosDTO periodo;
+    private FechaDTO fechaEspecifica;
 }
