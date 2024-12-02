@@ -1,7 +1,8 @@
 package com.example.backend.Servicio;
 
 import com.example.backend.DTO.BuscarAulaDTO;
-import com.example.backend.DTO.SalidaCU9DTODTO;
+import com.example.backend.DTO.ModificarAulaDTO;
+import com.example.backend.DTO.SalidaCU9DTO;
 import com.example.backend.DTO.AulaDTO;
 import com.example.backend.Modelos.Aula;
 import java.util.List;

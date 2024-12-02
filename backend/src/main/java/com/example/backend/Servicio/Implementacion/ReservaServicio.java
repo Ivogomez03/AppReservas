@@ -7,10 +7,9 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.*;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.DTO.AulaDTO;
-import com.example.backend.Repositorio.AulaDAO;
 import com.example.backend.DTO.PeriodosDTO;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.DTO.ReservaSingularDTO;
@@ -23,7 +22,7 @@ import com.example.backend.Modelos.Periodica;
 import com.example.backend.Repositorio.ReservaDAO;
 import com.example.backend.Servicio.IReservaServicio;
 
-
+@Service
 public class ReservaServicio implements IReservaServicio {
 
   @Autowired

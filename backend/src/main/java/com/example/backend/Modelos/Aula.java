@@ -39,5 +39,8 @@ public abstract class Aula {
         }
         return false;
     }
+
+    
+
     public abstract String getTipoAula();
 }

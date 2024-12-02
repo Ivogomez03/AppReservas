@@ -1,9 +1,10 @@
 package com.example.backend.Servicio.Implementacion;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 
 import com.example.backend.DTO.BuscarAulaDTO;
+import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.DTO.SalidaCU9DTO;
 import com.example.backend.Modelos.Aula;
 import com.example.backend.Modelos.AulaInformatica;
@@ -13,6 +14,7 @@ import com.example.backend.Repositorio.AulaInformaticaDAO;
 import com.example.backend.Repositorio.AulaMultimedioDAO;
 import com.example.backend.Repositorio.AulaSRADAO;
 import com.example.backend.Repositorio.ReservaDAO;
+import com.example.backend.Servicio.IAulaServicio;
 import com.example.backend.DTO.AulaDTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.Dia;
@@ -32,16 +34,23 @@ import java.util.stream.Collectors;
 
 
 
-
+@Service
 public class AulaServicio implements IAulaServicio {
 
     @Autowired
-    private final AulaInformaticaDAO aulaInformaticaDAO;
-    private final AulaSRADAO aulaSinRecursosAdicionalesDAO;
-    private final AulaMultimedioDAO aulaMultimedioDAO;
+    private  AulaInformaticaDAO aulaInformaticaDAO;
+    private  AulaSRADAO aulaSRADAO;
+    private  AulaMultimedioDAO aulaMultimedioDAO;
 
     @Autowired
     private AulaServicio aulaServicio;
+
+    
+
+    public Aula findByNumeroDeAula(int numeroDeAula) {
+        return aulaDAO.findByNumeroDeAula(numeroDeAula);
+    }
+
     public String modificarAula(ModificarAulaDTO dto){
 
         Aula aula = findByNumeroDeAula(dto.getNumeroDeAula());
@@ -52,19 +61,19 @@ public class AulaServicio implements IAulaServicio {
             
         }
         else if(dto.getCapacidad() < 0){
-            throw new IllegalArgumentException("La capacidad debe ser mayor a 0")
+            throw new IllegalArgumentException("La capacidad debe ser mayor a 0");
         }
         else{
         
             
                 if (aula instanceof AulaInformatica) {
-                    modificarAulaInformatica(dto,aula);
+                    modificarAulaInformatica(dto,(AulaInformatica)aula);
                 } 
                 else if (aula instanceof AulaMultimedio) {
-                    modificarAulaMultimedio(dto,aula);
+                    modificarAulaMultimedio(dto,(AulaMultimedio)aula);
                 } 
                 else if (aula instanceof AulaSinRecursosAdicionales) {
-                    modificarAulaSinRecursosAdicionales(dto,aula);
+                    modificarAulaSinRecursosAdicionales(dto,(AulaSinRecursosAdicionales)aula);
                 }
                 return "El aula ha sido modificada correctamente";
             
@@ -72,14 +81,14 @@ public class AulaServicio implements IAulaServicio {
       
         
     }
-    public void modificarAulaInformatica(ModificarAulaDTO aulaDTO,Aula aula){
+    public void modificarAulaInformatica(ModificarAulaDTO aulaDTO,AulaInformatica aula){
         
 
-        if (aulaDTO.getCantidadPCs() <= 0) {
+        if (aulaDTO.getCantidadDeComputadoras() <= 0) {
             throw new IllegalArgumentException("La cantidad de PCs debe ser mayor a cero");
         }
 
-        if (aulaDTO.getCantidadPCs() > aulaDTO.getCapacidad()) {
+        if (aulaDTO.getCantidadDeComputadoras() > aulaDTO.getCapacidad()) {
             throw new IllegalArgumentException("La cantidad de PCs no puede ser mayor a la capacidad");
         }
 
@@ -87,8 +96,8 @@ public class AulaServicio implements IAulaServicio {
         aula.setCapacidad(aulaDTO.getCapacidad());
         aula.setCantidadDeComputadoras(aulaDTO.getCantidadDeComputadoras());
         aula.setTipoPizarron(aulaDTO.getTipoPizarron());
-        aula.setCanion(aulaDTO.getCanion());
-        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+        aula.setCanion(aulaDTO.isCanion());
+        aula.setAireAcondicionado(aulaDTO.isAireAcondicionado());
 
         // 5. Guardar los cambios en la base de datos
         aulaInformaticaDAO.save(aula);
@@ -96,31 +105,31 @@ public class AulaServicio implements IAulaServicio {
 
     }
 
-    public void modificarAulaMultimedio(ModificarAulaDTO aulaDTO,Aula aula){
+    public void modificarAulaMultimedio(ModificarAulaDTO aulaDTO,AulaMultimedio aula){
 
         // 4. Modificar los datos del aula multimedio
         aula.setCapacidad(aulaDTO.getCapacidad());
         aula.setTipoPizarron(aulaDTO.getTipoPizarron());
-        aula.setCanion(aulaDTO.getCanion());
-        aula.setTelevisor(aulaDTO.getTelevisor());
-        aula.setVentilador(aulaDTO.getVentilador());
-        aula.setComputadora(aulaDTO.getComputadora());
-        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+        aula.setCanion(aulaDTO.isCanion());
+        aula.setTelevisor(aulaDTO.isTelevisor());
+        aula.setVentilador(aulaDTO.isVentilador());
+        aula.setComputadora(aulaDTO.isComputadora());
+        aula.setAireAcondicionado(aulaDTO.isAireAcondicionado());
 
         // 5. Guardar los cambios en la base de datos
         aulaMultimedioDAO.save(aula);
     }
 
-    public void modificarAulaSinRecursosAdicionales(ModificarAulaDTO aulaDTO,Aula aula){
-        if (aulaDTO.getAireAcondicionado() && aulaDTO.getVentilador()) {
+    public void modificarAulaSinRecursosAdicionales(ModificarAulaDTO aulaDTO,AulaSinRecursosAdicionales aula){
+        if (aulaDTO.isAireAcondicionado() && aulaDTO.isVentilador()) {
             throw new IllegalArgumentException("Si el aula posee aire acondicionado no puede poseer ventiladores y viceversa.");
         }
         // 4. Modificar los datos del aula sin recursos
         aula.setCapacidad(aulaDTO.getCapacidad());
         aula.setTipoPizarron(aulaDTO.getTipoPizarron());
   
-        aula.setVentilador(aulaDTO.getVentilador());
-        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+        aula.setVentilador(aulaDTO.isVentilador());
+        aula.setAireAcondicionado(aulaDTO.isAireAcondicionado());
 
         // 5. Guardar los cambios en la base de datos
         aulaSRADAO.save(aula);
@@ -132,24 +141,25 @@ public class AulaServicio implements IAulaServicio {
     @Autowired 
     private ReservaDAO reservaDAO;
 
-    public List<SalidaCU9DTO> buscarAulas(BuscarAulaDTO buscarAulaDTO) {
-        List<Aula> aulas = new ArrayList<>();
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public ArrayList buscarAulas(BuscarAulaDTO buscarAulaDTO) {
+        ArrayList<Aula> aulas = new ArrayList<>();
 
         // Consultar cada DAO según el criterio
         if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Informatica")) {
-            aulas.addAll(aulaInformaticaDAO.buscarAulasPorCriterio(buscarAulaDTO));
+            aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
         if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Multimedio")) {
-            aulas.addAll(aulaMultimedioDAO.buscarAulasPorCriterio(buscarAulaDTO));
+            aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
         if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("SinRecursosAdicionales")) {
-            aulas.addAll(aulaSinRecursosAdicionalesDAO.buscarAulasPorCriterio(buscarAulaDTO));
+            aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
         if (aulas.isEmpty()){
             throw new ValidationException("No se encontro ningún aula con los criterios especificados");
         }
 
-        return aulas.stream()
+        return (ArrayList) aulas.stream()
                 .map(this::convertirASalidaCU9DTO)
                 .collect(Collectors.toList());
         
@@ -160,7 +170,7 @@ public class AulaServicio implements IAulaServicio {
         dto.setCapacidad(aula.getCapacidad());
         dto.setTipoAula(aula.getTipoAula());
         dto.setPiso(aula.getPiso());
-        dto.setHabilitado(aula.getHabilitado());
+        dto.setHabilitado(aula.isHabilitado());
         return dto;
     }
     
@@ -169,7 +179,7 @@ public class AulaServicio implements IAulaServicio {
         if(aulaDTO.isAulaMultimedia()){
             AulaMultimedio aula = new AulaMultimedio();
             aula.setTelevisor(aulaDTO.isTelevisor());
-            aula.setProyector(aulaDTO.isProyector());
+            aula.setCanion(aulaDTO.isProyector());
             aula.setComputadora(aulaDTO.isComputadora());
             aula.setVentilador(aulaDTO.isVentilador());
 
@@ -187,7 +197,7 @@ public class AulaServicio implements IAulaServicio {
         else if(aulaDTO.isAulaInformatica()){
             AulaInformatica aula = new AulaInformatica();
             aula.setCantidadDeComputadoras(aulaDTO.getCantidadDeComputadoras());
-            aula.setProyector(aulaDTO.isProyector());
+            aula.setCanion(aulaDTO.isProyector());
             
             aula.setTipoPizarron(aulaDTO.getTipoPizarron());
             aula.setNumeroDeAula(aulaDTO.getNumeroDeAula());
