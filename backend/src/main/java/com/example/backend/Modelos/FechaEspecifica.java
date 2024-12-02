@@ -12,12 +12,18 @@ import lombok.Setter;
 @Entity
 public class FechaEspecifica {
 
-    private LocalDate fecha;
-    private LocalTime horaInicio;
-    private LocalTime horaFin;
-    @Id
+      @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFechaEspecifica;
-    @OneToOne
+
+    @Column(nullable = false)
+    private LocalDate fecha;
+
+    @ManyToOne
+    @JoinColumn(name = "idReservaEsporadica", nullable = false)
+    private Esporadica esporadica;
+
+    @ManyToOne
+    @JoinColumn(name = "idAula", nullable = false)
     private Aula aula;
-    //falta el id del aula
 }

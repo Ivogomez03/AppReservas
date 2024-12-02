@@ -12,12 +12,24 @@ import lombok.Setter;
 @Getter @Setter
 public class Dia {
 
-    private DiaSemana diaSemana;
-    private LocalTime horaInicio;
-    private LocalTime horaFin;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idDia;
+
+    @Enumerated(EnumType.STRING)
+    private DiaSemana diaSemana;
+
+    @Column(nullable = false)
+    private LocalTime horaInicio;
+
+    @Column(nullable = false)
+    private LocalTime horaFin;
+
     @ManyToOne
+    @JoinColumn(name = "idPeriodica")
     private Periodica periodica;
+
+    @ManyToOne
+    @JoinColumn(name = "idAula", nullable = false)
     private Aula aula;
 }

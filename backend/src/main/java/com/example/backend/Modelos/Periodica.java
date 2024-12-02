@@ -13,11 +13,10 @@ import lombok.Setter;
 @Entity
 public class Periodica extends Reserva{
 
-    private Date fechaInicio;
-    private Date fechaFin;
-    //periodo es el que tiene la fecha de inicio y la de fin
-    @ManyToOne
-    private Periodo periodo;
-    @OneToMany
+ @OneToMany(mappedBy = "periodica", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dia> dias;
+
+    @ManyToOne
+    @JoinColumn(name = "idPeriodo", nullable = false)
+    private Periodo periodo;
 }

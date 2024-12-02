@@ -7,5 +7,6 @@ import lombok.Setter;
 @Entity
 @Getter@Setter
 public class Esporadica extends Reserva{
-
+@OneToMany(mappedBy = "esporadica", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FechaEspecifica> fechas;
 }

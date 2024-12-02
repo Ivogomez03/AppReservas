@@ -173,7 +173,71 @@ public class ReservaServicio implements IReservaServicio {
         }
     
     }
+     public List<Aula> obtenerAulasDisponiblesPeriodicasConPeriodo(DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, Periodo periodo) {
+    // Recuperar aulas ocupadas con el periodo actual
+    List<Aula> aulasOcupadas = AulaDAO.findAulasOcupadasPeriodicasConPeriodo(diaSemana.name(), horaInicio, horaFin, periodo.getIdPeriodo());
 
+    // Recuperar todas las aulas
+    List<Aula> todasLasAulas = AulaDAO.findAll();
+    // Filtrar disponibles
+    List<Aula> aulasDisponibles = todasLasAulas.stream()
+            .filter(aula -> !aulasOcupadas.contains(aula))
+            .collect(Collectors.toList());
+
+    // Verificar si la lista de aulas disponibles está vacía
+    if (aulasDisponibles.isEmpty()) {
+        System.out.println("No hay aulas disponibles para la fecha especificada.");
+        List<Dia> diasOcupados = DiaDAO.findByPeriodo_IdPeriodoAndDiaSemana(periodo.getIdPeriodo(), diaSemana.name());
+        return calcularAulasMenorSuperposicion(diasOcupados, horaInicio, horaFin);
+    } else {
+        return aulasDisponibles;
+    }
+}
+    public List<Aula> obtenerAulasDisponiblesEsporadicas(LocalDate fecha) {
+    // Recuperar aulas ocupadas en la fecha específica
+    List<Aula> aulasOcupadas = AulaDAO.findAulasOcupadasEsporadicas(fecha);
+
+    // Recuperar todas las aulas
+    List<Aula> todasLasAulas = AulaDAO.findAll();
+    List<Aula> aulasDisponibles = todasLasAulas.stream()
+            .filter(aula -> !aulasOcupadas.contains(aula))
+            .collect(Collectors.toList());
+
+    // Verificar si la lista de aulas disponibles está vacía
+    if (aulasDisponibles.isEmpty()) {
+        System.out.println("No hay aulas disponibles para la fecha especificada.");
+        List<Dia> diasOcupados = DiaDAO.findByFecha(fecha);
+        return calcularAulasMenorSuperposicion(diasOcupados, horaInicio, horaFin);
+    } else {
+        return aulasDisponibles;
+    }
+}
+   import java.util.*;
+import java.util.stream.Collectors;
+
+public List<Aula> calcularAulasMenorSuperposicion(List<Dia> diasOcupados, LocalTime horaInicio, LocalTime horaFin) {
+    Map<Aula, Long> aulasConSuperposicion = new HashMap<>();
+
+    for (Dia dia : diasOcupados) {
+        // Calcular el tiempo de superposición
+        long tiempoInicio = Math.max(dia.getHoraInicio().toNanoOfDay(), horaInicio.toNanoOfDay());
+        long tiempoFin = Math.min(dia.getHoraFin().toNanoOfDay(), horaFin.toNanoOfDay());
+
+        if (tiempoInicio < tiempoFin) { // Existe superposición
+            long tiempoSuperpuesto = tiempoFin - tiempoInicio;
+            aulasConSuperposicion.put(dia.getAula(), tiempoSuperpuesto);
+        }
+    }
+
+    // Ordenar el mapa por el tiempo de superposición y obtener las tres primeras aulas
+    List<Aula> tresAulasConMenorSuperposicion = aulasConSuperposicion.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .limit(3)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+
+    return tresAulasConMenorSuperposicion;
+}
     //Guardar reserva Esporadica
     @Override
     public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
