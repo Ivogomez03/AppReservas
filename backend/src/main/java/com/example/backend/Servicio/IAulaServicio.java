@@ -7,4 +7,5 @@ import com.example.backend.Modelos.Aula;
 public interface IAulaServicio {
     public List<SalidaCU9DTO> buscarAulas(BuscarAulaDTO buscarAulaDTO);
     public Aula crearAula(AulaDTO aulaDTO);
+    public String modificarAula(ModificarAulaDTO dto);
 }
