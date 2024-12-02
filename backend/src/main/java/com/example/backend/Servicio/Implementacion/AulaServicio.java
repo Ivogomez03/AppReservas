@@ -36,12 +36,97 @@ import java.util.stream.Collectors;
 public class AulaServicio implements IAulaServicio {
 
     @Autowired
-    private AulaInformaticaDAO aulaInformaticaDAO;
-    private AulaSRADAO aulaSinRecursosAdicionalesDAO;
-    private AulaMultimedioDAO aulaMultimedioDAO;
+    private final AulaInformaticaDAO aulaInformaticaDAO;
+    private final AulaSRADAO aulaSinRecursosAdicionalesDAO;
+    private final AulaMultimedioDAO aulaMultimedioDAO;
 
     @Autowired
     private AulaServicio aulaServicio;
+    public String modificarAula(ModificarAulaDTO dto){
+
+        Aula aula = findByNumeroDeAula(dto.getNumeroDeAula());
+        
+        // Validación del tipo de aula
+        if (aula == null) {
+            throw new IllegalArgumentException("Este numero de aula no existe");
+            
+        }
+        else if(dto.getCapacidad() < 0){
+            throw new IllegalArgumentException("La capacidad debe ser mayor a 0")
+        }
+        else{
+        
+            
+                if (aula instanceof AulaInformatica) {
+                    modificarAulaInformatica(dto,aula);
+                } 
+                else if (aula instanceof AulaMultimedio) {
+                    modificarAulaMultimedio(dto,aula);
+                } 
+                else if (aula instanceof AulaSinRecursosAdicionales) {
+                    modificarAulaSinRecursosAdicionales(dto,aula);
+                }
+                return "El aula ha sido modificada correctamente";
+            
+        }
+      
+        
+    }
+    public void modificarAulaInformatica(ModificarAulaDTO aulaDTO,Aula aula){
+        
+
+        if (aulaDTO.getCantidadPCs() <= 0) {
+            throw new IllegalArgumentException("La cantidad de PCs debe ser mayor a cero");
+        }
+
+        if (aulaDTO.getCantidadPCs() > aulaDTO.getCapacidad()) {
+            throw new IllegalArgumentException("La cantidad de PCs no puede ser mayor a la capacidad");
+        }
+
+        // 4. Modificar los datos del aula informática
+        aula.setCapacidad(aulaDTO.getCapacidad());
+        aula.setCantidadDeComputadoras(aulaDTO.getCantidadDeComputadoras());
+        aula.setTipoPizarron(aulaDTO.getTipoPizarron());
+        aula.setCanion(aulaDTO.getCanion());
+        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+
+        // 5. Guardar los cambios en la base de datos
+        aulaInformaticaDAO.save(aula);
+
+
+    }
+
+    public void modificarAulaMultimedio(ModificarAulaDTO aulaDTO,Aula aula){
+
+        // 4. Modificar los datos del aula multimedio
+        aula.setCapacidad(aulaDTO.getCapacidad());
+        aula.setTipoPizarron(aulaDTO.getTipoPizarron());
+        aula.setCanion(aulaDTO.getCanion());
+        aula.setTelevisor(aulaDTO.getTelevisor());
+        aula.setVentilador(aulaDTO.getVentilador());
+        aula.setComputadora(aulaDTO.getComputadora());
+        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+
+        // 5. Guardar los cambios en la base de datos
+        aulaMultimedioDAO.save(aula);
+    }
+
+    public void modificarAulaSinRecursosAdicionales(ModificarAulaDTO aulaDTO,Aula aula){
+        if (aulaDTO.getAireAcondicionado() && aulaDTO.getVentilador()) {
+            throw new IllegalArgumentException("Si el aula posee aire acondicionado no puede poseer ventiladores y viceversa.");
+        }
+        // 4. Modificar los datos del aula sin recursos
+        aula.setCapacidad(aulaDTO.getCapacidad());
+        aula.setTipoPizarron(aulaDTO.getTipoPizarron());
+  
+        aula.setVentilador(aulaDTO.getVentilador());
+        aula.setAireAcondicionado(aulaDTO.getAireAcondicionado());
+
+        // 5. Guardar los cambios en la base de datos
+        aulaSRADAO.save(aula);
+
+
+    }
     @Autowired 
     private AulaDAO aulaDAO;
     @Autowired 
@@ -71,7 +156,7 @@ public class AulaServicio implements IAulaServicio {
     }
     private SalidaCU9DTO convertirASalidaCU9DTO(Aula aula) {
         SalidaCU9DTO dto = new SalidaCU9DTO();
-        dto.setNroAula(aula.getNroAula());
+        dto.setNumeroDeAula(aula.getNumeroDeAula());
         dto.setCapacidad(aula.getCapacidad());
         dto.setTipoAula(aula.getTipoAula());
         dto.setPiso(aula.getPiso());

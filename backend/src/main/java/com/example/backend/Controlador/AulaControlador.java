@@ -40,5 +40,14 @@ public class AulaControlador {
                                  .body(Collections.singletonList(new SalidaCU9DTO(e.getMessage())));
         }
     }
+    @PostMapping("/modificarAula")
+    public ResponseEntity<String> modificarAula(@RequestBody ModificarAulaDTO dto){
+        try {
+            String salida = aulaServicio.modificarAula(dto);
+            return ResponseEntity.ok(salida);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }
