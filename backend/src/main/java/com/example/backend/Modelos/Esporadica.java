@@ -7,5 +7,5 @@ import lombok.Setter;
 @Entity
 @Getter@Setter
 public class Esporadica extends Reserva{
-
+    private FechaEspecifica fechaEspecifica;
 }
