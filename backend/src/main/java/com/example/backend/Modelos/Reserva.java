@@ -11,11 +11,11 @@ public abstract class Reserva {
 
     @Id
     private int idReserva;
-    private String nomrbeProfesor;
+    private String nombreProfesor;
     private String apellidoProfesor;
     private String correo; // validar con exprecion regular
     private String nombreCatedra; 
-    private String idProfesor;
-    private String idCatedra;
+    private int idProfesor;
+    private int idCatedra;
     
 }

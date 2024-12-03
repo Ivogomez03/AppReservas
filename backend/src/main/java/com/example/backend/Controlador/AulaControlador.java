@@ -1,5 +1,6 @@
 package com.example.backend.Controlador;
 
+import com.example.backend.DTO.AulaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,13 @@ import com.example.backend.DTO.BuscarAulaDTO;
 import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.Servicio.Implementacion.AulaServicio;
 import com.example.backend.Excepciones.ValidationException;
+import com.example.backend.Modelos.Aula;
+import com.example.backend.Modelos.DiaSemana;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 public class AulaControlador {
@@ -48,5 +54,27 @@ public class AulaControlador {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+@GetMapping("/disponibles-periodicas")
+public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo(
+        @RequestParam Class<? extends Aula> tipoClase,
+        @RequestParam int periodo,
+        @RequestParam DiaSemana diaSemana,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
+    List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(tipoClase, periodo, diaSemana, horaInicio, horaFin);
+    return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
+}
+
+
+    @GetMapping("/disponibles-esporadicas")
+    public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesEsporadicas(
+            @RequestParam Class<? extends Aula> tipoClase,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
+        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesEsporadicas(tipoClase, fecha, horaInicio, horaFin);
+        return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
+    }
+
 
 }

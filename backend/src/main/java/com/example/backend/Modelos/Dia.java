@@ -26,7 +26,7 @@ public class Dia {
     private LocalTime horaFin;
 
     @ManyToOne
-    @JoinColumn(name = "idPeriodica")
+    @JoinColumn(name = "idReserva")
     private Periodica periodica;
 
     @ManyToOne
