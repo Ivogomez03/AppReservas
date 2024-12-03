@@ -8,7 +8,7 @@ const ModificarBedel = ({ resetForm }) => {
     const location = useLocation();
 
     const bedel = location.state?.bedel;
-
+    console.log(bedel);
     const [form, setForm] = useState({
         apellido: '',
         nombre: '',
@@ -27,32 +27,19 @@ const ModificarBedel = ({ resetForm }) => {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        // Si el ID del bedel está disponible, hacer una solicitud para obtener los datos
         if (bedel) {
-            // Aquí simulas una llamada a la API para obtener los datos del bedel
-            const fetchBedelData = async () => {
-                try {
-                    const response = await fetch(`/bedel/CU14/modificarBedel`);  // Cambia esto por la URL de tu API
-                    const data = await response.json();
-
-                    // Llenar el formulario con los datos del bedel
-                    setForm({
-                        apellido: data.apellido,
-                        nombre: data.nombre,
-                        turnoDeTrabajo: data.turnoDeTrabajo,
-                        idUsuario: data.idUsuario,
-                        idAdminCreador: data.idAdminCreador,
-                        contrasena: '',
-                        confirmarContrasena: ''
-                    });
-                } catch (error) {
-                    console.error('Error al obtener datos del bedel:', error);
-                }
-            };
-
-            fetchBedelData();
+            setForm({
+                apellido: bedel.apellido || '',
+                nombre: bedel.nombre || '',
+                turnoDeTrabajo: bedel.turnoDeTrabajo || '',
+                idUsuario: bedel.idUsuario || '',
+                idAdminCreador: bedel.idAdminCreador || '1',
+                contrasena: '',
+                confirmarContrasena: '',
+            });
         }
     }, [bedel]);
+
 
     const handleChange = (e) => {
         setForm({
@@ -67,19 +54,29 @@ const ModificarBedel = ({ resetForm }) => {
         // Validaciones y lógica de envío del formulario...
 
         try {
-            const response = await fetch(`/bedel/${bedelId}`, {
-                method: 'PUT',  // Usar PUT para actualizar los datos
+            const response = await fetch(`/bedel/CU14/modificarBedel`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(form),
             });
 
-            const result = await response.json();
-            // Procesa la respuesta del backend...
+            if (!response.ok) {
+                // Procesar mensaje de error del backend
+                const errorMessage = await response.text();
+                setBackendErrors({ general: errorMessage });
+                console.error('Error del servidor:', errorMessage);
+                return;
+            }
+
+            const result = await response.text(); // Mensaje de éxito
+            console.log('Éxito:', result);
+            alert(result); // O redirigir si es necesario
 
         } catch (error) {
-            console.error('Error al actualizar los datos:', error);
+            console.error('Error al enviar el formulario:', error);
+            setBackendErrors({ general: 'Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.' });
         }
     };
 

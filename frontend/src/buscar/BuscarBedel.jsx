@@ -36,7 +36,7 @@ const BuscarBedel = ({ resetForm }) => {
 
     const [form, setForm] = useState({
         apellido: '',
-        turnoDeTrabajo: ''
+        turno: ''
     });
 
     const [placeholders, setPlaceholders] = useState({
@@ -47,14 +47,14 @@ const BuscarBedel = ({ resetForm }) => {
     const [errors, setErrors] = useState({
         apellido: false,
 
-        turnoDeTrabajo: false
+        turno: false
     });
 
 
     const resetFormulario = () => {
         setForm({
             apellido: '',
-            turnoDeTrabajo: ''
+            turno: ''
         });
         setPlaceholders({
             apellido: "Apellido",
@@ -62,7 +62,7 @@ const BuscarBedel = ({ resetForm }) => {
         })
         setErrors({
             apellido: false,
-            turnoDeTrabajo: false
+            turno: false
 
         });
 
@@ -96,8 +96,8 @@ const BuscarBedel = ({ resetForm }) => {
             setPlaceholders(prev => ({ ...prev, apellido: "Máximo 50 caracteres" }));
         }
 
-        if (!form.turnoDeTrabajo) {
-            newErrors.turnoDeTrabajo = true;
+        if (!form.turno) {
+            newErrors.turno = true;
         }
 
         // Actualizar el estado de errores
@@ -112,8 +112,9 @@ const BuscarBedel = ({ resetForm }) => {
             // Construir los parámetros para la URL
             const queryParams = new URLSearchParams({
                 apellido: form.apellido || "",
-                turnoDeTrabajo: form.turnoDeTrabajo
+                turno: form.turno
             }).toString();
+            console.log("URL construida:", `/bedel/CU16?${queryParams}`);
 
             const response = await fetch(`/bedel/CU16?${queryParams}`, {
                 method: 'GET',
@@ -157,17 +158,17 @@ const BuscarBedel = ({ resetForm }) => {
                     />
                     {errors.apellido && <span className="error-message-BB">Completa el apellido (máximo 50 caracteres).</span>}
                     <select
-                        name="turnoDeTrabajo"
-                        value={form.turnoDeTrabajo}
+                        name="turno"
+                        value={form.turno}
                         onChange={handleChange}
-                        className={`selectTurnBedel ${errors.turnoDeTrabajo ? 'select-error' : ''}`}
+                        className={`selectTurnBedel ${errors.turno ? 'select-error' : ''}`}
                     >
                         <option value="" disabled>Selecciona un turno</option>
                         {options.map((option) => (
                             <option key={option.value} value={option.value}>{option.label}</option>
                         ))}
                     </select>
-                    {errors.turnoDeTrabajo && <span className="error-message-BB">Selecciona un turno de trabajo.</span>}
+                    {errors.turno && <span className="error-message-BB">Selecciona un turno de trabajo.</span>}
 
                     <div className='BotonesBusquedaBedel'>
                         <button className='botonBusquedaBedel' type="submit">Buscar</button>

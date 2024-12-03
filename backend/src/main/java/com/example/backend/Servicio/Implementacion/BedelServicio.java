@@ -117,7 +117,7 @@ public class BedelServicio implements IBedelServicios {
         }
         // Si hay ambos criterios
         else if (turno != null && (apellido != null && !apellido.isEmpty())) {
-            bedeles = bedelDAO.findByApellidoAndTurnoDeTrabajoAndHabilitadoTrue(apellido, turno);
+            bedeles = bedelDAO.buscarPorApellidoYTurno(apellido, turno);
         }
         // Si no hay ningún criterio, lanza una excepción o maneja el caso
         else {
@@ -148,7 +148,7 @@ public class BedelServicio implements IBedelServicios {
 
         if(contraValida.equals("Contraseña valida")){
             //datos nulos o caracteres maximos se valida en front
-            Bedel bedel = new Bedel();
+            Bedel bedel = bedelDAO.findById(bedelDTO.getIdUsuario()).get();
             bedel.setNombre(bedelDTO.getNombre());
             bedel.setApellido(bedelDTO.getApellido());
             bedel.setIdUsuario(bedelDTO.getIdUsuario());

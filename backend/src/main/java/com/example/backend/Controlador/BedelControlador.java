@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +38,8 @@ public class BedelControlador {
     @GetMapping("/bedel/CU16")
     public ResponseEntity<List<BedelDTO>> buscarPorTurnoyApellido(@RequestParam(required = false) String apellido,@RequestParam(required = false) TurnoDeTrabajo turno) {
         try {
+            System.out.println("Apellido recibido: " + apellido);
+            System.out.println("Turno recibido: " + turno);
             // Llama al servicio para buscar los bedeles
             List<BedelDTO> resultado = bedelServicio.buscarBedelesPorTurnoyApellido(turno, apellido);
             return ResponseEntity.ok(resultado); // Devuelve 200 OK con la lista de resultados
@@ -55,13 +58,13 @@ public class BedelControlador {
             return ResponseEntity.badRequest().body(null);
         }
     }
-    @PostMapping("/bedel/CU14/modificarBedel")
+    @PutMapping("/bedel/CU14/modificarBedel")
     public ResponseEntity<String> modificarBedel(@RequestBody BedelDTO bedelModificado) {
         try {
             String salidaModificar = bedelServicio.modificarBedel(bedelModificado);
             return ResponseEntity.ok(salidaModificar);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("Error al modificar el bedel: " + e.getMessage());
         }
     }
 
