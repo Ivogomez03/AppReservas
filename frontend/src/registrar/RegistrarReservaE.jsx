@@ -8,6 +8,9 @@ import CancelarBedel from './../cancelar/CancelarBedel';
 
 const RegistrarReservaE = ({ resetForm }) => {
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -211,6 +214,20 @@ const RegistrarReservaE = ({ resetForm }) => {
         <div className='conteiner-principal-RRP'>
             <div className='panel-izquierdo-RRP'>
                 <div className='panel-izquierdo-arriba-RRP'>
+                    <button className="back-button" onClick={goBack}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            width="32" 
+                            height="32"
+                        >
+                        <path
+                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                        />
+                        </svg>
+                    </button>
+
                     <h1>Esporádica</h1>
                     <h4>Ingrese los datos solicitados</h4>
                 </div>

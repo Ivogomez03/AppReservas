@@ -9,6 +9,10 @@ const ReservaClaseP = ({ resetForm }) => {
 
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
+
     const location = useLocation();
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
@@ -153,6 +157,20 @@ const ReservaClaseP = ({ resetForm }) => {
     return (
         <div className='conteiner-principal-RCP'>
             <div className='panel-izquierdo-RCP'>
+                <button className="back-button" onClick={goBack}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="32" 
+                    height="32"
+                >
+                <path
+                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                />
+                </svg>
+                </button>
+
                 <h1>Reserva de clase</h1>
                 <h4>Seleccione el día, el horario de la reserva y la duración de la misma</h4>
             </div>

@@ -7,7 +7,7 @@ import './RegistrarReservaP.css'
 
 import CancelarBedel from './../cancelar/CancelarBedel'
 const RegistrarReservaP = ({ resetForm }) => {
-
+    
 
     const navigate = useNavigate();
     const goBack = () => {

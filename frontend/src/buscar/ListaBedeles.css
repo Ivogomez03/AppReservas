@@ -8,6 +8,29 @@
     box-shadow: 0 4px 8px #000000; 
 }
 
+.back-button {
+    position: fixed;
+    top: 35px;
+    left: 45px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .back-button:hover {
+    color: #ffffff; /* Cambia el color al pasar el mouse */
+  }
+  
+  svg {
+    stroke-width: 2; /* Hace la flecha más gruesa */
+    stroke: currentColor; /* Asegura que tome el color actual */
+  }
+
 /* Título */
 .titulo {
     font-size: 1.8rem;
