@@ -42,7 +42,9 @@ public class AulaServicio implements IAulaServicio {
 
     @Autowired
     private  AulaInformaticaDAO aulaInformaticaDAO;
+    @Autowired
     private  AulaSRADAO aulaSRADAO;
+    @Autowired
     private  AulaMultimedioDAO aulaMultimedioDAO;
     
     private static final Logger logger = (Logger) LoggerFactory.getLogger(AulaServicio.class);
@@ -144,16 +146,19 @@ public class AulaServicio implements IAulaServicio {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList buscarAulas(BuscarAulaDTO buscarAulaDTO) {
         ArrayList<Aula> aulas = new ArrayList<>();
-
+        System.out.println("El DTO es: " + buscarAulaDTO);
         // Consultar cada DAO según el criterio
         if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Informatica")) {
             aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
         if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Multimedio")) {
-            aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+            aulas.addAll(aulaMultimedioDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
-        if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("SinRecursosAdicionales")) {
-            aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+        if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Sin Recursos Adicionales")) {
+            aulas.addAll(aulaSRADAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+        }
+        if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Todas")) {
+            aulas.addAll(aulaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
         }
         if (aulas.isEmpty()){
             throw new ValidationException("No se encontro ningún aula con los criterios especificados");

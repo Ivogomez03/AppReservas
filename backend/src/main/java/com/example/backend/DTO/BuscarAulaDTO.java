@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter@Setter
 public class BuscarAulaDTO {
 
-    private int numeroDeAula;
-    private int capacidad;
+    private Integer numeroDeAula;
+    private Integer capacidad;
     private String tipoAula;
 }

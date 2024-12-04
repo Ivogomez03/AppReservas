@@ -4,11 +4,9 @@ body {
     font-family: 'Roboto', sans-serif;
     height: 100vh;
     margin: 0;
-
-
 }
 
-.seccion-bienvenida-busqueda-DE {
+.seccion-bienvenida-busqueda-BA {
     width: 40%;
     height: 100vh;
     background-color: #f7a544;
@@ -18,19 +16,18 @@ body {
     flex-direction: column;
     color: white;
     border-radius: 0% 8% 8% 0%;
-
     animation: slideIn 1s ease-out forwards;
 }
 
-.seccion-bienvenida-busqueda-DE h1 {
+.seccion-bienvenida-busqueda-BA h1 {
     font-size: 48px;
 }
 
-.seccion-bienvenida-busqueda-DE p {
+.seccion-bienvenida-busqueda-BA p {
     font-size: 20px;
 }
 
-.conteiner-principal-busqueda-DE {
+.conteiner-principal-busqueda-BA {
     display: flex;
     width: 100%;
     height: 100vh;
@@ -50,7 +47,7 @@ body {
     }
 }
 
-.conteiner-busqueda-DE {
+.conteiner-busqueda-BA {
     width: 60%;
     height: 80%;
     display: flex;
@@ -59,11 +56,11 @@ body {
     flex-direction: column;
 }
 
-.conteiner-busqueda-DE h1 {
+.conteiner-busqueda-BA h1 {
     font-size: 36px;
 }
 
-.form-busqueda-DE {
+.form-busqueda-BA {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -72,9 +69,7 @@ body {
     width: 50%;
 }
 
-
-
-.input-DE {
+.input-BA {
     width: 100%;
     padding: 10px 5px;
     border: 1px solid #ccc;
@@ -83,25 +78,23 @@ body {
     background-color: #f3f3f3;
 }
 
-.input-DE::placeholder {
+.input-BA::placeholder {
     color: gray;
     opacity: 1;
 }
 
-.input-DE:focus::placeholder {
+.input-BA:focus::placeholder {
     color: #aaa;
 }
 
-.input-error-DE {
+.input-error-BA {
     background-color: #ffe5e5;
     /* Rojo claro */
     border: 1px solid #ff6666;
-    /* BoDE rojo suave para errores */
+    /* BoBA rojo suave para errores */
 }
 
-
-
-.error-message-DE {
+.error-message-BA {
     color: red;
     /* Color del texto del mensaje de error */
     font-size: 14px;
@@ -112,7 +105,7 @@ body {
     /* Hacer el texto en negrita */
 }
 
-.BotonesBusquedaDE {
+.BotonesBusquedaBA {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -120,7 +113,7 @@ body {
 }
 
 .botonCancelarBusq,
-.botonBusquedaDE {
+.botonBusquedaBA {
     width: 40%;
     padding: 12px;
     margin-top: 20px;
@@ -141,7 +134,7 @@ body {
 }
 
 .botonCancelarBusq:hover,
-.botonBusquedaDE:hover {
+.botonBusquedaBA:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
 }

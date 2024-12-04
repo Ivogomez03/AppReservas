@@ -29,13 +29,16 @@ public class AulaControlador {
     private AulaServicio aulaServicio;
     
     @GetMapping("/buscarAula")
-    public ResponseEntity<List<SalidaCU9DTO>> buscarAula(@RequestParam(required = false) int nroAula,@RequestParam(required = false) String tipo,@RequestParam(required = false) int capacidad) {
+    public ResponseEntity<List<SalidaCU9DTO>> buscarAula(@RequestParam(required = false) Integer numeroDeAula,@RequestParam(required = false) String tipoAula,@RequestParam(required = false) Integer capacidad) {
         try {
         // Construir el DTO con los parámetros
         BuscarAulaDTO buscarAulaDTO = new BuscarAulaDTO();
-        buscarAulaDTO.setNumeroDeAula(nroAula);
-        buscarAulaDTO.setTipoAula(tipo);
-        buscarAulaDTO.setCapacidad(capacidad);
+        Integer numeroDeAulaLimpio = (numeroDeAula != null && numeroDeAula > 0) ? numeroDeAula : null;
+        Integer capacidadLimpia = (capacidad != null && capacidad > 0) ? capacidad : null;
+        String tipoAulaLimpio = (tipoAula != null && !tipoAula.trim().isEmpty()) ? tipoAula : null;
+        buscarAulaDTO.setNumeroDeAula(numeroDeAulaLimpio);
+        buscarAulaDTO.setTipoAula(tipoAulaLimpio);
+        buscarAulaDTO.setCapacidad(capacidadLimpia);
 
         // Pasar el DTO al servicio
         List<SalidaCU9DTO> listaAulas = aulaServicio.buscarAulas(buscarAulaDTO);

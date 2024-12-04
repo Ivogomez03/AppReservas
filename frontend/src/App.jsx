@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css'
 import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-
 import Login from './login/Login'
 import RegistrarBedel from './registrar/RegistrarBedel'
 import BienvenidoBedel from './bienvenido/bienvenidoBedel'
@@ -17,6 +16,9 @@ import ListaBedeles from './buscar/ListaBedeles';
 import CoincidenDyH from './reserva/CoincidenDyH';
 import BuscarReservasDE from './buscar/BuscarReservasDE';
 import BuscarReservasPC from './buscar/BuscarReservasPC';
+import BuscarAulas from './buscar/BuscarAulas';
+import ListaAulas from './buscar/ListaAulas';
+
 const App = () => {
     const navigate = useNavigate();
 
@@ -106,6 +108,8 @@ const MainApp = () => {
                 <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />
                 <Route path="/login/bienvenidoBedel/BuscarReservasDE" element={<BuscarReservasDE />} />
                 <Route path="/login/bienvenidoBedel/BuscarReservasPC" element={<BuscarReservasPC />} />
+                <Route path="/login/bienvenidoBedel/BuscarAulas" element={<BuscarAulas />} />
+                <Route path="/login/bienvenidoBedel/BuscarAulas/ListaAulas" element={<ListaAulas />} />
                 <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
                 <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
                 <Route path="/login/RegistrarReservaEsporadica" element={<RegistrarReservaE />} />
