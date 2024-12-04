@@ -87,77 +87,77 @@ const ModificarBedel = ({ resetForm }) => {
                 <h2>Ingrese los datos solicitados</h2>
             </div>
             <form onSubmit={handleSubmit} className="formulario">
-    <h2>Modificar Bedel</h2>
+                <h2>Modificar Bedel</h2>
 
-    <input
-        type="text"
-        name="apellido"
-        placeholder="Apellido"
-        value={form.apellido}
-        onChange={handleChange}
-        className="inputModBedel" /* Clase correcta */
-    />
-    <input
-        type="text"
-        name="nombre"
-        placeholder="Nombre"
-        value={form.nombre}
-        onChange={handleChange}
-        className="inputModBedel" /* Clase correcta */
-    />
-    <select
-        name="turnoDeTrabajo"
-        value={form.turnoDeTrabajo}
-        onChange={handleChange}
-        className="selectModBedel" /* Clase correcta */
-    >
-        <option value="Mañana">Mañana</option>
-        <option value="Tarde">Tarde</option>
-        <option value="Noche">Noche</option>
-    </select>
+                <input
+                    type="text"
+                    name="apellido"
+                    placeholder="Apellido"
+                    value={form.apellido}
+                    onChange={handleChange}
+                    className="inputModBedel" /* Clase correcta */
+                />
+                <input
+                    type="text"
+                    name="nombre"
+                    placeholder="Nombre"
+                    value={form.nombre}
+                    onChange={handleChange}
+                    className="inputModBedel" /* Clase correcta */
+                />
+                <select
+                    name="turnoDeTrabajo"
+                    value={form.turnoDeTrabajo}
+                    onChange={handleChange}
+                    className="selectModBedel" /* Clase correcta */
+                >
+                    <option value="Mañana">Mañana</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noche">Noche</option>
+                </select>
 
-    <input
-        type="text"
-        name="idUsuario"
-        placeholder="Identificador de usuario"
-        value={form.idUsuario}
-        onChange={handleChange}
-        className="inputModBedel" /* Clase correcta */
-    />
+                <input
+                    type="text"
+                    name="idUsuario"
+                    placeholder="Identificador de usuario"
+                    value={form.idUsuario}
+                    onChange={handleChange}
+                    className="inputModBedel" /* Clase correcta */
+                />
 
-    <input
-        type="password"
-        name="contrasena"
-        placeholder="Contraseña"
-        value={form.contrasena}
-        onChange={handleChange}
-        className="inputModBedel" /* Clase correcta */
-    />
+                <input
+                    type="password"
+                    name="contrasena"
+                    placeholder="Contraseña"
+                    value={form.contrasena}
+                    onChange={handleChange}
+                    className="inputModBedel" /* Clase correcta */
+                />
 
-    <input
-        type="password"
-        name="confirmarContrasena"
-        placeholder="Confirmar contraseña"
-        value={form.confirmarContrasena}
-        onChange={handleChange}
-        className="inputModBedel" /* Clase correcta */
-    />
+                <input
+                    type="password"
+                    name="confirmarContrasena"
+                    placeholder="Confirmar contraseña"
+                    value={form.confirmarContrasena}
+                    onChange={handleChange}
+                    className="inputModBedel" /* Clase correcta */
+                />
 
-    <div className="BotonesBedel">
-        <button type="submit" className="botonModBedel">Modificar</button>
-        <button
-            type="button"
-            onClick={() => setShowModal(true)}
-            className="botonCancelar"
-        >
-            Cancelar
-        </button>
-    </div>
-</form>
+                <div className="BotonesBedel">
+                    <button type="submit" className="botonModBedel">Modificar</button>
+                    <button
+                        type="button"
+                        onClick={() => setShowModal(true)}
+                        className="botonCancelar"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            </form>
             {showModal && (
                 <CancelarBedel
                     onCancel={() => setShowModal(false)}
-                    onConfirm={() => navigate('/')}
+                    onConfirm={() => navigate('/login/bienvenidoAdmin/BuscarBedel/ListaBedeles')}
                 />
             )}
         </div>

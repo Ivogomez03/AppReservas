@@ -145,7 +145,7 @@ const Login = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`inputLogin ${errors.contrasena ? 'input-error-login' : ''}`}
                 />
-                <button className='botonLogin' onClick={goToBienvenidoAdmin}>Iniciar sesión</button>
+                <button className='botonLogin' onClick={goToBienvenidoBedel}>Iniciar sesión</button>
             </div>
 
         </div>

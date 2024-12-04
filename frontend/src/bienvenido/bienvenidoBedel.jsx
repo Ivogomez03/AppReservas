@@ -7,6 +7,12 @@ const BienvenidoBedel = () => {
     const goToTipoReserva = () => {
         navigate('/login/bienvenidoBedel/TipoReserva');
     }
+    const goToBuscarReservaDE = () => {
+        navigate('/login/bienvenidoBedel/BuscarReservaDE');
+    }
+    const goToBuscarReservaPC = () => {
+        navigate('/login/bienvenidoBedel/BuscarReservaPC');
+    }
     return (
         <div className='conteiner-bienvenido-bedel'>
             <div className='ventanaTransparente-bienvenido-bedel'>
@@ -25,10 +31,10 @@ const BienvenidoBedel = () => {
                             </button>
                         </div>
                         <div className="botones-principal-abajo">
-                            <button>
+                            <button onClick={goToBuscarReservaDE}>
                                 Ver Reservas para un dia especifico
                             </button>
-                            <button>
+                            <button onClick={goToBuscarReservaPC}>
                                 Ver Reservas para un curso
                             </button>
                         </div>

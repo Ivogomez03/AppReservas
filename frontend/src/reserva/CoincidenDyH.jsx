@@ -33,29 +33,29 @@ const CoincidenDyH = () => {
     };
 
     return (
-        <div>
+        <div className="CDYH-conteiner">
             <h2>Coinciden días y horarios</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Días</th>
-                        <th>Horas</th>
-                        <th>Duración</th>
-                        <th>Tipo</th>
+            <table className="CDYH-tabla">
+                <thead className="CDYH-cabezaTabla">
+                    <tr className="CDYH-tr">
+                        <th className="CDYH-columnas">Días</th>
+                        <th className="CDYH-columnas">Horas</th>
+                        <th className="CDYH-columnas">Duración</th>
+                        <th className="CDYH-columnas">Tipo</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="CDYH-cuerpoTabla">
                     {conflictos.map((conflicto, index) => (
-                        <tr key={index}>
-                            <td>{conflicto.dia}</td>
-                            <td>{conflicto.hora}</td>
-                            <td>{conflicto.duracion} min</td>
-                            <td>{conflicto.tipo}</td>
+                        <tr className="CDYH-tr" key={index}>
+                            <td className="CDYH-data">{conflicto.dia}</td>
+                            <td className="CDYH-data">{conflicto.hora}</td>
+                            <td className="CDYH-data">{conflicto.duracion} min</td>
+                            <td className="CDYH-data">{conflicto.tipo}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <button onClick={navigate('/login/ReservaClaseE', { state: { diasRegistrados } })}>Volver</button>
+            <button className="CDYH-volver" onClick={navigate('/login/ReservaClaseE', { state: { diasRegistrados } })}>Volver</button>
         </div>
     );
 }

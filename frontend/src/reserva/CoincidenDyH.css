@@ -1,0 +1,71 @@
+/* Contenedor principal */
+.CDYH-conteiner {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f7a544;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px #000000;
+}
+
+/* Título */
+.CDYH-conteiner h2 {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Tabla */
+.CDYH-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.CDYH-tr {
+    background-color: #ff9615;
+    color: white;
+    text-align: left;
+}
+
+.CDYH-columnas,
+.CDYH-data {
+    padding: 12px 15px;
+    border: 1px solid #00000029;
+    border-radius: 2px;
+}
+
+.CDYH-columnas {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.CDYH-cuerpoTabla tr {
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.CDYH-cuerpoTabla tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.CDYH-cuerpoTabla tr:hover {
+    background-color: #e9f5ff;
+}
+
+/* Botones de acción */
+.CDYH-volver {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.CDYH-volver:focus {
+    outline: none;
+}

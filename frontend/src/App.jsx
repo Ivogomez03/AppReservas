@@ -14,6 +14,9 @@ import ReservaClaseE from './reserva/ReservaClaseE';
 import BuscarBedel from './buscar/BuscarBedel';
 import ModificarBedel from './modificar/ModificarBedel';
 import ListaBedeles from './buscar/ListaBedeles';
+import CoincidenDyH from './reserva/CoincidenDyH';
+import BuscarReservasDE from './buscar/BuscarReservasDE';
+import BuscarReservasPC from './buscar/BuscarReservasPC';
 const App = () => {
     const navigate = useNavigate();
 
@@ -101,10 +104,13 @@ const MainApp = () => {
                 <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
                 <Route path="/login/bienvenidoBedel/TipoReserva" element={<TipoDeReserva />} />
+                <Route path="/login/bienvenidoBedel/BuscarReservasDE" element={<BuscarReservasDE />} />
+                <Route path="/login/bienvenidoBedel/BuscarReservasPC" element={<BuscarReservasPC />} />
                 <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
                 <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
                 <Route path="/login/RegistrarReservaEsporadica" element={<RegistrarReservaE />} />
                 <Route path="/login/ReservaClaseE" element={<ReservaClaseE />} />
+                <Route path="/login/CoincidenDyH" element={<CoincidenDyH />} />
             </Routes>
         </Router>
     );
