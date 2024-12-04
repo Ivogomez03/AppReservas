@@ -4,6 +4,10 @@ import './bienvenidoBedel.css'
 const BienvenidoBedel = () => {
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
+
     const goToTipoReserva = () => {
         navigate('/login/bienvenidoBedel/TipoReserva');
     }
@@ -16,6 +20,21 @@ const BienvenidoBedel = () => {
     return (
         <div className='conteiner-bienvenido-bedel'>
             <div className='ventanaTransparente-bienvenido-bedel'>
+                <button className="back-button" onClick={goBack}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        width="32" 
+                        height="32"
+                    >
+                    <path
+                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                    />
+                    </svg>
+                </button>
+
+
                 <div className="seccion-bienvenido-bedel">
                     <h1>Bienvenido Bedel</h1>
                 </div>

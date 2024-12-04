@@ -5,6 +5,10 @@ const Login = ({ resetForm }) => {
 
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
+
     const goToBienvenidoBedel = () => {
         navigate('/login/bienvenidoBedel');
     }
@@ -125,6 +129,20 @@ const Login = ({ resetForm }) => {
 
             <img src="/reserved.png" alt="" className='shape-login' />
             <div className='sub-conteiner-login'>
+                <button className="back-button" onClick={goBack}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        width="32" 
+                        height="32"
+                    >
+                    <path
+                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                    />
+                    </svg>
+                </button>
+                
                 <h1>
                     Inicie sesión
                 </h1>

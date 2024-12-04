@@ -7,7 +7,9 @@ import Select from 'react-select';
 const BuscarBedel = ({ resetForm }) => {
     const navigate = useNavigate();
 
-
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
 
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
@@ -141,6 +143,19 @@ const BuscarBedel = ({ resetForm }) => {
     return (
         <div className='conteiner-principal-busqueda-bedel'>
             <div className="seccion-bienvenida-busqueda-bedel">
+                <button className="back-button" onClick={goBack}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        width="32" 
+                        height="32"
+                    >
+                    <path
+                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                    />
+                    </svg>
+                </button>
                 <h1>Busqueda de bedel</h1>
                 <p>Indique los parametros de busqueda</p>
 
