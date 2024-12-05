@@ -28,7 +28,6 @@ import com.example.backend.Repositorio.AulaDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,6 +82,7 @@ public class AulaServicio implements IAulaServicio {
       
         
     }
+
     public void modificarAulaInformatica(ModificarAulaDTO aulaDTO,AulaInformatica aula){
         
 
@@ -138,6 +138,7 @@ public class AulaServicio implements IAulaServicio {
 
 
     }
+   
     @Autowired 
     private AulaDAO aulaDAO;
     @Autowired 
@@ -169,6 +170,7 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
         
     }
+    
     private SalidaCU9DTO convertirASalidaCU9DTO(Aula aula) {
         SalidaCU9DTO dto = new SalidaCU9DTO();
         dto.setNumeroDeAula(aula.getNumeroDeAula());
@@ -252,14 +254,15 @@ public class AulaServicio implements IAulaServicio {
             throw new ValidationException("Hubo un error con el tipo de reserva");
         }
     }
-   public List<AulaDTO> obtenerAulasPorClase(Class<? extends Aula> tipoClase) {
+    
+    public List<AulaDTO> obtenerAulasPorClase(Class<? extends Aula> tipoClase) {
     return aulaDAO.findAll().stream()
             .filter(tipoClase::isInstance)
             .map(this::convertirADTO)
             .collect(Collectors.toList());
 }
 
-public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int periodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+    public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int periodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
     List<Periodica> reservasEnPeriodo = reservaDAO.obtenerReservasPorPeriodo(periodo);
@@ -285,7 +288,8 @@ public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends
 
     return aulasDisponibles;
 }
-public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+    
+    public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
     List<Aula> aulasPorTipo = aulasPorTipoDTO.stream().map(this::convertirAEntidad).collect(Collectors.toList());
 
@@ -330,7 +334,7 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? exte
 
 
 
-public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
     List<Esporadica> reservasEnFecha = reservaDAO.obtenerReservasPorFecha(fecha);
@@ -357,7 +361,7 @@ public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> ti
     return aulasDisponibles;
 }
 
-public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? extends Aula> tipoClase, List<Esporadica> reservas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? extends Aula> tipoClase, List<Esporadica> reservas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
     List<Aula> aulasPorTipo = aulasPorTipoDTO.stream().map(this::convertirAEntidad).collect(Collectors.toList());
 
@@ -400,9 +404,7 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? ext
     return null;
 }
 
-
-
-private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto) {
+    public AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto) {
     AulaConHorariosDTO dto = new AulaConHorariosDTO();
     dto.setIdAula(aula.getIdAula());
     dto.setTipoPizarron(aula.getTipoPizarron());
@@ -442,8 +444,7 @@ private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperp
     return dto;
 }
 
-
-   private AulaDTO convertirADTO(Aula aula) {
+    public AulaDTO convertirADTO(Aula aula) {
     AulaDTO dto = new AulaDTO();
     dto.setIdAula(aula.getIdAula());
     dto.setTipoPizarron(aula.getTipoPizarron());
@@ -472,7 +473,8 @@ private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperp
     }
     return dto;
 }
-private Aula convertirAEntidad(AulaDTO dto) {
+
+    public Aula convertirAEntidad(AulaDTO dto) {
     Aula aula;
     if (dto.isAulaInformatica()) {
         AulaInformatica informatica = new AulaInformatica();

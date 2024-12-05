@@ -1,6 +1,6 @@
 package com.example.backend.Modelos;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,6 +12,7 @@ import lombok.Setter;
 public class Periodo {
     @Id
     private int idPeriodo;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private TipoPeriodo tipoPeriodo;
 }
