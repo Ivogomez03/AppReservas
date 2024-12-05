@@ -1,16 +1,18 @@
 package com.example.backend.Servicio.Implementacion;
 
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.backend.DTO.BedelDTO;
 import com.example.backend.DTO.ValidarContrasenaDTO;
 import com.example.backend.Modelos.Bedel;
+import com.example.backend.Modelos.TurnoDeTrabajo;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
-import com.example.backend.Modelos.TurnoDeTrabajo;
-import java.util.stream.Collectors;
-import java.util.List;
-import java.util.regex.Pattern;
 @Service
 public class BedelServicio implements IBedelServicios {
     @Autowired 
@@ -109,7 +111,12 @@ public class BedelServicio implements IBedelServicios {
 
         // Si no hay apellido y hay turno
         if ((apellido == null || apellido.isEmpty()) && turno != null) {
+            if(turno == TurnoDeTrabajo.Todos){
+                bedeles = bedelDAO.findByHabilitadoTrue();
+            }
+            else{
             bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
+            }
         }
         // Si hay apellido y no hay turno
         else if (turno == null && (apellido != null && !apellido.isEmpty())) {

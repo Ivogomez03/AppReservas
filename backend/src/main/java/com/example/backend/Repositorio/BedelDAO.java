@@ -14,6 +14,7 @@ public interface BedelDAO extends CrudRepository<Bedel, Integer> {
     List<Bedel> findByApellidoAndHabilitadoTrue(String apellido);
 
     List<Bedel> findByTurnoDeTrabajoAndHabilitadoTrue(TurnoDeTrabajo turno);
+     List<Bedel> findByHabilitadoTrue();
 
     @Query("SELECT b FROM Bedel b WHERE b.apellido = :apellido AND b.turnoDeTrabajo = :turno AND b.habilitado = true")
     List<Bedel> buscarPorApellidoYTurno(@Param("apellido") String apellido, @Param("turno") TurnoDeTrabajo turno);
