@@ -11,7 +11,7 @@ const ReservaClaseP = ({ resetForm }) => {
 
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
-      };
+    };
 
     const location = useLocation();
 
@@ -45,8 +45,8 @@ const ReservaClaseP = ({ resetForm }) => {
     ];
 
     const [form, setForm] = useState({
-        horasMinutos: '',
-        diaSemana: '',
+        horaInicio: '',
+        dia: '',
         duracion: '',
     });
 
@@ -57,15 +57,15 @@ const ReservaClaseP = ({ resetForm }) => {
 
 
     const [placeholders, setPlaceholders] = useState({
-        horasMinutos: "Hora:minutos",
-        diaSemana: "Dia de la semana",
+        horaInicio: "Hora:minutos",
+        dia: "Dia de la semana",
         duracion: "Duración",
     });
 
     const [errors, setErrors] = useState({
-        horasMinutos: false,
+        horaInicio: false,
         duracion: false,
-        diaSemana: false,
+        dia: false,
     });
     const [animationClass, setAnimationClass] = useState('');
 
@@ -73,20 +73,20 @@ const ReservaClaseP = ({ resetForm }) => {
 
     const resetFormulario = () => {
         setForm({
-            horasMinutos: '',
-            diaSemana: '',
+            horaInicio: '',
+            dia: '',
             duracion: '',
         });
         setPlaceholders({
-            horasMinutos: "Hora:minutos",
-            diaSemana: "Dia de la semana",
+            horaInicio: "Hora:minutos",
+            dia: "Dia de la semana",
             duracion: "Duración",
+        });
 
-        })
         setErrors({
-            horasMinutos: false,
+            horaInicio: false,
             duracion: false,
-            diaSemana: false,
+            dia: false,
         });
         setBackendMessage('');
     };
@@ -114,12 +114,12 @@ const ReservaClaseP = ({ resetForm }) => {
         const newErrors = { ...errors };
 
         // Validaciones locales
-        if (!form.horasMinutos) {
-            newErrors.horasMinutos = true;
-            setPlaceholders(prev => ({ ...prev, horasMinutos: "Completa Hora:minutos." }));
+        if (!form.horaInicio) {
+            newErrors.horaInicio = true;
+            setPlaceholders(prev => ({ ...prev, horaInicio: "Completa Hora:minutos." }));
         }
-        if (!form.diaSemana) {
-            newErrors.diaSemana = true;
+        if (!form.dia) {
+            newErrors.dia = true;
         }
         if (!form.duracion || form.duracion.length > 6) {
             newErrors.duracion = true;
@@ -148,8 +148,8 @@ const ReservaClaseP = ({ resetForm }) => {
         console.log('Actualizados días:', diasRegistrados);
 
         setForm({
-            horasMinutos: '',
-            diaSemana: '',
+            horaInicio: '',
+            dia: '',
             duracion: '',
         });
     }
@@ -158,17 +158,17 @@ const ReservaClaseP = ({ resetForm }) => {
         <div className='conteiner-principal-RCP'>
             <div className='panel-izquierdo-RCP'>
                 <button className="back-button" onClick={goBack}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    width="32" 
-                    height="32"
-                >
-                <path
-                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                />
-                </svg>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        width="32"
+                        height="32"
+                    >
+                        <path
+                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                        />
+                    </svg>
                 </button>
 
                 <h1>Reserva de clase</h1>
@@ -177,26 +177,26 @@ const ReservaClaseP = ({ resetForm }) => {
             <form onSubmit={handleSiguiente} className='formulario-RCP'>
                 <h1>Período</h1>
                 <select
-                    name="diaSemana"
-                    value={form.diaSemana}
+                    name="dia"
+                    value={form.dia}
                     onChange={handleChange}
-                    className={`select-RCP ${errors.diaSemana ? 'select-error-RCP' : ''}`}
+                    className={`select-RCP ${errors.dia ? 'select-error-RCP' : ''}`}
                 >
                     <option value="" disabled>Dia de la semana</option>
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
                 </select>
-                {errors.diaSemana && <span className="error-message-RCP">Dia de la semana</span>}
+                {errors.dia && <span className="error-message-RCP">Dia de la semana</span>}
                 <input
                     type="time"
-                    name="horasMinutos"
-                    placeholder={placeholders.horasMinutos}
-                    value={form.horasMinutos}
+                    name="horaInicio"
+                    placeholder={placeholders.horaInicio}
+                    value={form.horaInicio}
                     onChange={handleChange}
-                    className={`input-RCP ${errors.horasMinutos ? 'input-error-RCP' : ''}`}
+                    className={`input-RCP ${errors.horaInicio ? 'input-error-RCP' : ''}`}
                 />
-                {errors.horasMinutos && <span className="error-message-RCP">Completa horas y minutos</span>}
+                {errors.horaInicio && <span className="error-message-RCP">Completa hora y minutos</span>}
 
                 <input
                     type="text"
