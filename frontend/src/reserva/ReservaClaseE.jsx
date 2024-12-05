@@ -9,7 +9,7 @@ const ReservaClaseE = ({ resetForm }) => {
 
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
-      };
+    };
 
     const navigate = useNavigate();
 
@@ -36,8 +36,8 @@ const ReservaClaseE = ({ resetForm }) => {
 
 
     const [form, setForm] = useState({
-        horasMinutos: '',
-        fechaAnio: '',
+        horaInicio: '',
+        fecha: '',
         duracion: '',
     });
 
@@ -48,15 +48,15 @@ const ReservaClaseE = ({ resetForm }) => {
 
 
     const [placeholders, setPlaceholders] = useState({
-        horasMinutos: "Hora:minutos",
-        fechaAnio: "Dia del año",
+        horaInicio: "Hora:minutos",
+        fecha: "Dia del año",
         duracion: "Duración",
     });
 
     const [errors, setErrors] = useState({
-        horasMinutos: false,
+        horaInicio: false,
         duracion: false,
-        fechaAnio: false,
+        fecha: false,
     });
     const [animationClass, setAnimationClass] = useState('');
 
@@ -64,20 +64,20 @@ const ReservaClaseE = ({ resetForm }) => {
 
     const resetFormulario = () => {
         setForm({
-            horasMinutos: '',
-            fechaAnio: '',
+            horaInicio: '',
+            fecha: '',
             duracion: '',
         });
         setPlaceholders({
-            horasMinutos: "Hora:minutos",
-            fechaAnio: "Dia del año",
+            horaInicio: "Hora:minutos",
+            fecha: "Dia del año",
             duracion: "Duración",
 
         })
         setErrors({
-            horasMinutos: false,
+            horaInicio: false,
             duracion: false,
-            fechaAnio: false,
+            fecha: false,
         });
         setBackendMessage('');
     };
@@ -105,16 +105,20 @@ const ReservaClaseE = ({ resetForm }) => {
         const newErrors = { ...errors };
 
         // Validaciones locales
-        if (!form.horasMinutos) {
-            newErrors.horasMinutos = true;
-            setPlaceholders(prev => ({ ...prev, horasMinutos: "Completa Hora:minutos." }));
+        if (!form.horaInicio) {
+            newErrors.horaInicio = true;
+            setPlaceholders(prev => ({ ...prev, horaInicio: "Completa Hora:minutos." }));
         }
-        if (!form.fechaAnio) {
-            newErrors.fechaAnio = true;
+        if (!form.fecha) {
+            newErrors.fecha = true;
         }
         if (!form.duracion || form.duracion.length > 6) {
             newErrors.duracion = true;
-            setPlaceholders(prev => ({ ...prev, duracion: "Completa el duracion (máximo 6 caracteres)." }));
+            setPlaceholders(prev => ({ ...prev, duracion: "Completa la duracion (máximo 6 digitos) ." }));
+        }
+        if (form.duracion % 30 != 0) {
+            newErrors.duracion = true;
+            setPlaceholders(prev => ({ ...prev, duracion: "La duración debe ser multiplo de 30 minutos" }));
         }
         // Actualizar el estado de errores
         setErrors(newErrors);
@@ -123,38 +127,25 @@ const ReservaClaseE = ({ resetForm }) => {
         if (Object.values(newErrors).some(error => error)) {
             return;
         }
-        try {
-            const response = await fetch("/verificarReserva", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
-            if (response.status === 409) {
-                const conflictos = await response.json();
-                navigate('/login/CoincidenDyH', { state: { conflictos, tipo } }); // Redirige al componente CoincidenDyH
-            } else if (response.ok) {
-                // Si no hay conflictos, continúa con la navegación normal
-                setDiasRegistrados(prevDias => {
-                    const nuevoDia = { ...form };
-                    console.log("Nuevo dia", nuevoDia)
-                    console.log("PrevDias", ...prevDias)
-                    return [...prevDias, nuevoDia];  // Agregar el nuevo día al arreglo
-                });
-                // Esperamos a que el estado se actualice
-                setTimeout(() => {
-                    // Ahora, hacemos la navegación pasando los días actualizados a la siguiente pantalla
-                    navigate('/login/RegistrarReservaEsporadica', { state: { diasRegistrados: [...diasRegistrados, form] } });
-                }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
-                console.log('Actualizados días:', diasRegistrados);
-            }
-        } catch (error) {
-            console.error("Error al verificar la reserva:", error);
-        }
+
+        setDiasRegistrados(prevDias => {
+            const nuevoDia = { ...form };
+            console.log("Nuevo dia", nuevoDia)
+            console.log("PrevDias", ...prevDias)
+            return [...prevDias, nuevoDia];  // Agregar el nuevo día al arreglo
+        });
+        // Esperamos a que el estado se actualice
+        setTimeout(() => {
+            // Ahora, hacemos la navegación pasando los días actualizados a la siguiente pantalla
+            navigate('/login/RegistrarReservaEsporadica', { state: { diasRegistrados: [...diasRegistrados, form] } });
+        }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
+        console.log('Actualizados días:', diasRegistrados);
+
 
 
         setForm({
-            horasMinutos: '',
-            fechaAnio: '',
+            horaInicio: '',
+            fecha: '',
             duracion: '',
         });
     }
@@ -167,12 +158,12 @@ const ReservaClaseE = ({ resetForm }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        width="32" 
+                        width="32"
                         height="32"
                     >
-                    <path
-                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                    />
+                        <path
+                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                        />
                     </svg>
                 </button>
 
@@ -183,22 +174,22 @@ const ReservaClaseE = ({ resetForm }) => {
                 <h1>Esporádica</h1>
                 <input
                     type="date"
-                    name="fechaAnio"
-                    placeholder={placeholders.fechaAnio}
-                    value={form.fechaAnio}
+                    name="fecha"
+                    placeholder={placeholders.fecha}
+                    value={form.fecha}
                     onChange={handleChange}
-                    className={`input-RCP ${errors.fechaAnio ? 'input-error-RCP' : ''}`}
+                    className={`input-RCP ${errors.fecha ? 'input-error-RCP' : ''}`}
                 />
-                {errors.fechaAnio && <span className="error-message-RCP">Dia del año</span>}
+                {errors.fecha && <span className="error-message-RCP">Dia del año</span>}
                 <input
                     type="time"
-                    name="horasMinutos"
-                    placeholder={placeholders.horasMinutos}
-                    value={form.horasMinutos}
+                    name="horaInicio"
+                    placeholder={placeholders.horaInicio}
+                    value={form.horaInicio}
                     onChange={handleChange}
-                    className={`input-RCP ${errors.horasMinutos ? 'input-error-RCP' : ''}`}
+                    className={`input-RCP ${errors.horaInicio ? 'input-error-RCP' : ''}`}
                 />
-                {errors.horasMinutos && <span className="error-message-RCP">Completa horas y minutos</span>}
+                {errors.horaInicio && <span className="error-message-RCP">Completa horas y minutos</span>}
 
                 <input
                     type="text"
