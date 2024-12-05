@@ -9,8 +9,8 @@ const ListaBedeles = () => {
 
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
-      };
-    
+    };
+
 
     // Obtenemos la lista de bedeles desde location.state
     const bedeles = location.state?.bedeles || [];
@@ -28,17 +28,17 @@ const ListaBedeles = () => {
 
     return (
         <div className="lista-bedeles-container">
-             <button className="back-button" onClick={goBack}>
+            <button className="back-button" onClick={goBack}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    width="32" 
+                    width="32"
                     height="32"
                 >
-                <path
-                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                />
+                    <path
+                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                    />
                 </svg>
             </button>
             <h2 className="titulo">Bedeles seleccionados</h2>

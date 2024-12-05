@@ -22,7 +22,15 @@ const ListaAulas = () => {
 
     // Función para manejar la edición
     const handleModificar = (aula) => {
-        navigate(`/login/bienvenidoBedel/BuscarAulas/ModificarAula`, { state: { aula: aula } });
+        if (aula.tipoAula === "Multimedio") {
+            navigate(`/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaMultimedio`, { state: { aula: aula } });
+        }
+        else if (aula.tipoAula === "SinRecursosAdicionales") {
+            navigate(`/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaSinRecursosAdicionales`, { state: { aula: aula } });
+        }
+        else {
+            navigate(`/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaInformatica`, { state: { aula: aula } });
+        }
     };
 
     return (

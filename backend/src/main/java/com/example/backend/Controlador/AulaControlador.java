@@ -1,5 +1,7 @@
 package com.example.backend.Controlador;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import com.example.backend.DTO.AulaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +50,7 @@ public class AulaControlador {
                                  .body(Collections.singletonList(new SalidaCU9DTO()));
         }
     }
-    @PostMapping("/modificarAula")
+    @PutMapping("/modificarAula")
     public ResponseEntity<String> modificarAula(@RequestBody ModificarAulaDTO dto){
         try {
             String salida = aulaServicio.modificarAula(dto);

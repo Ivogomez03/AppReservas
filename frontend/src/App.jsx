@@ -18,6 +18,9 @@ import BuscarReservasDE from './buscar/BuscarReservasDE';
 import BuscarReservasPC from './buscar/BuscarReservasPC';
 import BuscarAulas from './buscar/BuscarAulas';
 import ListaAulas from './buscar/ListaAulas';
+import ModificarAulaMultimedio from './modificar/ModificarAulaMultimedio';
+import ModificarAulaSRA from './modificar/ModificarAulaSRA';
+import ModificarAulaInformatica from './modificar/ModificarAulaInformatica';
 
 const App = () => {
     const navigate = useNavigate();
@@ -110,6 +113,9 @@ const MainApp = () => {
                 <Route path="/login/bienvenidoBedel/BuscarReservasPC" element={<BuscarReservasPC />} />
                 <Route path="/login/bienvenidoBedel/BuscarAulas" element={<BuscarAulas />} />
                 <Route path="/login/bienvenidoBedel/BuscarAulas/ListaAulas" element={<ListaAulas />} />
+                <Route path="/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaMultimedio" element={<ModificarAulaMultimedio />} />
+                <Route path="/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaSinRecursosAdicionales" element={<ModificarAulaSRA />} />
+                <Route path="/login/bienvenidoBedel/BuscarAulas/ListaAulas/ModificarAulaInformatica" element={<ModificarAulaInformatica />} />
                 <Route path="/login/RegistrarReservaPeriodica" element={<RegistrarReservaP />} />
                 <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
                 <Route path="/login/RegistrarReservaEsporadica" element={<RegistrarReservaE />} />

@@ -175,7 +175,25 @@ public class AulaServicio implements IAulaServicio {
         dto.setCapacidad(aula.getCapacidad());
         dto.setTipoAula(aula.getTipoAula());
         dto.setPiso(aula.getPiso());
+        dto.setAireAcondicionado(aula.isAireAcondicionado());
         dto.setHabilitado(aula.isHabilitado());
+        dto.setTipoPizarron(aula.getTipoPizarron());
+        if(aula instanceof AulaMultimedio){
+            AulaMultimedio multimedio = (AulaMultimedio) aula;
+            dto.setComputadora(multimedio.isComputadora());
+            dto.setTelevisor(multimedio.isTelevisor());
+            dto.setVentilador(multimedio.isVentilador());
+            dto.setCanion(multimedio.isCanion());
+        }
+        if(aula instanceof AulaInformatica){
+            AulaInformatica informatica = (AulaInformatica) aula;
+            dto.setCantidadDeComputadoras(informatica.getCantidadDeComputadoras());
+            dto.setCanion(informatica.isCanion());
+        }
+        if(aula instanceof AulaSinRecursosAdicionales){
+            AulaSinRecursosAdicionales aulaSRA = (AulaSinRecursosAdicionales) aula;
+            dto.setVentilador(aulaSRA.isVentilador());
+        }
         return dto;
     }
     
