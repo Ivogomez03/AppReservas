@@ -63,10 +63,11 @@ public class AulaControlador {
 public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo(
         @RequestParam Class<? extends Aula> tipoClase,
         @RequestParam int periodo,
+        @RequestParam int cantidad,
         @RequestParam DiaSemana diaSemana,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
-    List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(tipoClase, periodo, diaSemana, horaInicio, horaFin);
+    List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(tipoClase, periodo, diaSemana, horaInicio, horaFin,cantidad);
     return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
 }
 
@@ -74,10 +75,11 @@ public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo
     @GetMapping("/disponibles-esporadicas")
     public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesEsporadicas(
             @RequestParam Class<? extends Aula> tipoClase,
+             @RequestParam int cantidad,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
-        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesEsporadicas(tipoClase, fecha, horaInicio, horaFin);
+        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesEsporadicas(tipoClase, fecha, horaInicio, horaFin, cantidad);
         return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
     }
 
