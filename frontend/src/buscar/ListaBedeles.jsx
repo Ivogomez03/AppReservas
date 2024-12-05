@@ -16,9 +16,9 @@ const ListaBedeles = () => {
     const bedeles = location.state?.bedeles || [];
 
     // Función para manejar la eliminación
-    const handleEliminar = (idUsuario) => {
-        navigate(`/login/bienvenidoAdmin/BuscarBedel/EliminarBedel/${idUsuario}`);
-        console.log(`Eliminar bedel con ID: ${idUsuario}`);
+    const handleEliminar = (bedel) => {
+        navigate(`/login/bienvenidoAdmin/BuscarBedel/EliminarBedel`, { state: { bedel: bedel } });
+
     };
 
     // Función para manejar la edición
@@ -67,7 +67,7 @@ const ListaBedeles = () => {
                                     <FaEdit />
                                 </button>
                                 <button
-                                    onClick={() => handleEliminar(bedel.idUsuario)}
+                                    onClick={() => handleEliminar(bedel)}
                                     className="btn-accion btn-eliminar"
                                 >
                                     <FaTrashAlt />

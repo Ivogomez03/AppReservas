@@ -21,7 +21,7 @@ import ListaAulas from './buscar/ListaAulas';
 import ModificarAulaMultimedio from './modificar/ModificarAulaMultimedio';
 import ModificarAulaSRA from './modificar/ModificarAulaSRA';
 import ModificarAulaInformatica from './modificar/ModificarAulaInformatica';
-
+import EliminarBedel from './eliminar/EliminarBedel'
 const App = () => {
     const navigate = useNavigate();
 
@@ -105,6 +105,7 @@ const MainApp = () => {
                 <Route path="/login/bienvenidoAdmin/RegistrarBedel" element={<RegistrarBedel />} />
                 <Route path="/login/bienvenidoAdmin/BuscarBedel" element={<BuscarBedel />} />
                 <Route path="/login/bienvenidoAdmin/BuscarBedel/ModificarBedel" element={<ModificarBedel />} />
+                <Route path="/login/bienvenidoAdmin/BuscarBedel/EliminarBedel" element={<EliminarBedel />} />
                 <Route path="/login/bienvenidoAdmin/BuscarBedel/ListaBedeles" element={<ListaBedeles />} />
                 <Route path="/login/bienvenidoAdmin" element={<BienvenidoAdmin />} />
                 <Route path="/login/bienvenidoBedel" element={<BienvenidoBedel />} />
