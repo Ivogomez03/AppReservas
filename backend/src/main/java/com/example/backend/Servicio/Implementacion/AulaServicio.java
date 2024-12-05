@@ -24,7 +24,9 @@ import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.FechaEspecifica;
 import com.example.backend.Modelos.Periodica;
+import com.example.backend.Modelos.Periodo;
 import com.example.backend.Repositorio.AulaDAO;
+import com.example.backend.Repositorio.PeriodoDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -46,6 +48,9 @@ public class AulaServicio implements IAulaServicio {
     private  AulaSRADAO aulaSRADAO;
     @Autowired
     private  AulaMultimedioDAO aulaMultimedioDAO;
+    
+    @Autowired
+    private PeriodoDAO periodoDAO;
     
     private static final Logger logger = (Logger) LoggerFactory.getLogger(AulaServicio.class);
 
@@ -260,10 +265,16 @@ public class AulaServicio implements IAulaServicio {
             .collect(Collectors.toList());
 }
 
-public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int periodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int idPeriodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
-    List<Periodica> reservasEnPeriodo = reservaDAO.obtenerReservasPorPeriodo(periodo);
+    // Obtener el periodo actual
+    Periodo periodoActual = periodoDAO.findById(idPeriodo).orElseThrow(() -> new IllegalArgumentException("Periodo no encontrado"));
+    LocalDate fechaInicioPeriodo = periodoActual.getFechaInicio().toLocalDate();
+    LocalDate fechaFinPeriodo = periodoActual.getFechaFin().toLocalDate();
+
+    // Obtener reservas en los periodos que coincidan con las fechas de inicio y fin del periodo actual
+    List<Periodica> reservasEnPeriodo = reservaDAO.obtenerReservasPorFechasPeriodo(fechaInicioPeriodo, fechaFinPeriodo);
     List<Aula> aulasOcupadas = reservasEnPeriodo.stream()
             .flatMap(reserva -> reserva.getDias().stream())
             .filter(dia -> dia.getDiaSemana().equals(diaSemana)
@@ -286,6 +297,7 @@ public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends
 
     return aulasDisponibles;
 }
+
 public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
     List<Aula> aulasPorTipo = aulasPorTipoDTO.stream().map(this::convertirAEntidad).collect(Collectors.toList());
