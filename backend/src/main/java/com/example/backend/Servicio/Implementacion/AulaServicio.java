@@ -1,24 +1,28 @@
 package com.example.backend.Servicio.Implementacion;
 
-import com.example.backend.DTO.AulaConHorariosDTO;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.backend.DTO.AulaConHorariosDTO;
+import com.example.backend.DTO.AulaDTO;
 import com.example.backend.DTO.BuscarAulaDTO;
+import com.example.backend.DTO.HorarioSuperpuestoDTO;
 import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.DTO.SalidaCU9DTO;
+import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.Aula;
 import com.example.backend.Modelos.AulaInformatica;
 import com.example.backend.Modelos.AulaMultimedio;
 import com.example.backend.Modelos.AulaSinRecursosAdicionales;
-import com.example.backend.Repositorio.AulaInformaticaDAO;
-import com.example.backend.Repositorio.AulaMultimedioDAO;
-import com.example.backend.Repositorio.AulaSRADAO;
-import com.example.backend.Repositorio.ReservaDAO;
-import com.example.backend.Servicio.IAulaServicio;
-import com.example.backend.DTO.AulaDTO;
-import com.example.backend.DTO.HorarioSuperpuestoDTO;
-import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.Dia;
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
@@ -26,16 +30,12 @@ import com.example.backend.Modelos.FechaEspecifica;
 import com.example.backend.Modelos.Periodica;
 import com.example.backend.Modelos.Periodo;
 import com.example.backend.Repositorio.AulaDAO;
+import com.example.backend.Repositorio.AulaInformaticaDAO;
+import com.example.backend.Repositorio.AulaMultimedioDAO;
+import com.example.backend.Repositorio.AulaSRADAO;
 import com.example.backend.Repositorio.PeriodoDAO;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.backend.Repositorio.ReservaDAO;
+import com.example.backend.Servicio.IAulaServicio;
 
 
 
@@ -265,7 +265,7 @@ public class AulaServicio implements IAulaServicio {
             .collect(Collectors.toList());
 }
 
-public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int idPeriodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int idPeriodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
     // Obtener el periodo actual
@@ -285,11 +285,12 @@ public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends
             .collect(Collectors.toList());
 
     List<AulaDTO> aulasDisponibles = aulasPorTipo.stream()
+            .filter(aulaDTO -> aulaDTO.getCapacidad() >= capacidadMinima)  // Filtrar por capacidad mínima
             .filter(aulaDTO -> aulasOcupadas.stream().noneMatch(aula -> aula.getIdAula() == aulaDTO.getIdAula()))
             .collect(Collectors.toList());
 
     if (aulasDisponibles.isEmpty()) {
-        AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicionPeriodica(tipoClase, reservasEnPeriodo, diaSemana, horaInicio, horaFin);
+        AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicionPeriodica(tipoClase, reservasEnPeriodo, diaSemana, horaInicio, horaFin, capacidadMinima);
         if (aulaConMenorSuperposicion != null) {
             aulasDisponibles.add(aulaConMenorSuperposicion);
         }
@@ -298,9 +299,14 @@ public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends
     return aulasDisponibles;
 }
 
-public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+
+
+public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
-    List<Aula> aulasPorTipo = aulasPorTipoDTO.stream().map(this::convertirAEntidad).collect(Collectors.toList());
+    List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
+            .map(this::convertirAEntidad)
+            .filter(aula -> aula.getCapacidad() >= capacidadMinima)  // Filtrar por capacidad mínima
+            .collect(Collectors.toList());
 
     Map<Integer, HorarioSuperpuestoDTO> superposiciones = reservas.stream()
             .flatMap(reserva -> reserva.getDias().stream())
@@ -343,7 +349,8 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? exte
 
 
 
-public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+
+public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
     List<Esporadica> reservasEnFecha = reservaDAO.obtenerReservasPorFecha(fecha);
@@ -357,11 +364,12 @@ public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> ti
             .collect(Collectors.toList());
 
     List<AulaDTO> aulasDisponibles = aulasPorTipo.stream()
+            .filter(aulaDTO -> aulaDTO.getCapacidad() >= capacidadMinima) // Filtrar por capacidad mínima
             .filter(aulaDTO -> aulasOcupadas.stream().noneMatch(aula -> aula.getIdAula() == aulaDTO.getIdAula()))
             .collect(Collectors.toList());
 
     if (aulasDisponibles.isEmpty()) {
-        AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicionEsporadica(tipoClase, reservasEnFecha, fecha, horaInicio, horaFin);
+        AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicionEsporadica(tipoClase, reservasEnFecha, fecha, horaInicio, horaFin, capacidadMinima);
         if (aulaConMenorSuperposicion != null) {
             aulasDisponibles.add(aulaConMenorSuperposicion);
         }
@@ -370,9 +378,14 @@ public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> ti
     return aulasDisponibles;
 }
 
-public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? extends Aula> tipoClase, List<Esporadica> reservas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+
+
+public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? extends Aula> tipoClase, List<Esporadica> reservas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
-    List<Aula> aulasPorTipo = aulasPorTipoDTO.stream().map(this::convertirAEntidad).collect(Collectors.toList());
+    List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
+            .map(this::convertirAEntidad)
+            .filter(aula -> aula.getCapacidad() >= capacidadMinima)  // Filtrar por capacidad mínima
+            .collect(Collectors.toList());
 
     Map<Integer, HorarioSuperpuestoDTO> superposiciones = reservas.stream()
             .map(Esporadica::getFechaEspecifica)
@@ -412,6 +425,7 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? ext
     }
     return null;
 }
+
 
 
 
