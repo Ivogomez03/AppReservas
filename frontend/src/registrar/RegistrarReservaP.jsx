@@ -82,6 +82,9 @@ const RegistrarReservaP = ({ resetForm }) => {
         contrasena: ''
     });
 
+    const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value); //Para verificar que solo entren letras
+
+    const onlyNumbers = (str) => /^[0-9]*$/.test(str); //Para verificar que solo entren numeros 
 
     const [placeholders, setPlaceholders] = useState({
         cantidadAlumnos: "Cantidad de alumnos",
@@ -143,6 +146,22 @@ const RegistrarReservaP = ({ resetForm }) => {
 
     const handleChange = (e) => {
         console.log({ ...form })
+
+        const { name, value } = e.target;
+
+        // Validar que ciertos campos acepten solo letras
+        if (["nombreProfesor", "apellidoProfesor"].includes(name)) {
+            if (!onlyLetters(value)) {
+                return; // Salir si el valor contiene caracteres no permitidos
+            }
+        }
+
+        if (["cantidadAlumnos"].includes(name) && !onlyNumbers(value)) {
+            if (!onlyNumbers(value)){
+                return;
+            }
+        }
+
         setForm({
             ...form,
             [e.target.name]: e.target.value
@@ -279,7 +298,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RRP ${errors.cantidadAlumnos ? 'input-error-RRP' : ''}`}
                 />
-                {errors.cantidadAlumnos && <span className="error-message-RRP">Completa la cantidad de alumnos.</span>}
                 <select
                     name="tipoAula"
                     value={form.tipoAula}
@@ -291,7 +309,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                         <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
                 </select>
-                {errors.tipoAula && <span className="error-message-RRP">Selecciona un Aula.</span>}
 
                 <input
                     type="text"
@@ -301,7 +318,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RRP ${errors.nombreProfesor ? 'input-error-RRP' : ''}`}
                 />
-                {errors.nombreProfesor && <span className="error-message-RRP">Completa el nombre del profesor (máximo 50 caracteres).</span>}
 
                 <input
                     type="text"
@@ -311,7 +327,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RRP ${errors.apellidoProfesor ? 'input-error-RRP' : ''}`}
                 />
-                {errors.apellidoProfesor && <span className="error-message-RRP">Completa el apellido del profesor (máximo 50 caracteres).</span>}
 
                 <input
                     type="text"
@@ -321,7 +336,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RRP ${errors.nombreCatedra ? 'input-error-RRP' : ''}`}
                 />
-                {errors.nombreCatedra && <span className="error-message-RRP">Completa el nombre de la catedra, seminario o curso.</span>}
 
                 <input
                     type="correo"
@@ -331,7 +345,6 @@ const RegistrarReservaP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RRP ${errors.correo ? 'input-error-RRP' : ''}`}
                 />
-                {errors.correo && <span className="error-message">Completa el correo electrónico.</span>}
 
 
                 <div className='botones-RRP'>
