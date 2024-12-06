@@ -1,6 +1,5 @@
 package com.example.backend.DTO;
 
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,15 +10,19 @@ public class ReservaDTO {
     private int idReserva;
     private String nombreProfesor;
     private String apellidoProfesor;
-    private String correo; // validar con exprecion regular
+    private String correo;
     private String nombreCatedra; 
-    private String idProfesor;
-    private String idCatedra;
+    private int idProfesor;
+    private int idCatedra;
+    private int cantidadAlumnos;
+    private String tipoAula;
+
     private boolean esporadica;
     private boolean periodicaAnual;
     private boolean periodicaPrimerCuatrimestre;
     private boolean periodicaSegundoCuatrimestre;
-    private List<PeriodosDTO> periodos;
-    private List<LocalDate> fechas;
+
+    private List<CDU01DiasDTO> dias;
+    private List<CDU01FechaDTO> fechasespecificas;
     
 }

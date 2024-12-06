@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
     @Override
     List<Aula> findAll();
 
-     @Query("SELECT a FROM Aula a WHERE (:numeroAula IS NULL OR a.numeroDeAula = :numeroAula) AND (:capacidadMinima IS NULL OR a.capacidad >= :capacidadMinima)")
+    @Query("SELECT a FROM Aula a WHERE (:numeroAula IS NULL OR a.numeroDeAula = :numeroAula) AND (:capacidadMinima IS NULL OR a.capacidad >= :capacidadMinima)")
     List<Aula> buscarPorCriterio(@Param("numeroAula") Integer numeroAula, @Param("capacidadMinima") Integer capacidadMinima);
 }
     

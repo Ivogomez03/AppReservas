@@ -3,12 +3,15 @@ package com.example.backend.Servicio;
 import java.util.List;
 
 import com.example.backend.DTO.AulaDTO;
+import com.example.backend.DTO.CDU01ReservaYAulaFinal;
+import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.DTO.ReservaSingularDTO;
+import com.example.backend.Modelos.Aula;
 
 public interface IReservaServicio {
     //Registrar una reserva
-    public List<AulaDTO> registrarReserva(ReservaDTO reserva);
+    public List<CDU01ReservasYAulas> registrarReserva(ReservaDTO reserva);
 
     //Validar que la reserva no se superponga con otra
     public boolean validarHorasInicioDuracion(ReservaDTO reserva);
@@ -23,7 +26,7 @@ public interface IReservaServicio {
     public boolean validarDatos(ReservaDTO reserva);   
     
     //Validar nombre
-    //public boolean valdiarNombre(String nombre);
+    public boolean validarNombre(String nombre);
 
     //Validar apellido
     public boolean valdiarApellido(String nombre);
@@ -35,8 +38,9 @@ public interface IReservaServicio {
     public boolean validarNombreCatedra(String catedra);
 
     //Guardar una reserva
-    public void guardarReserva(ReservaSingularDTO reserva, AulaDTO aulaDTO);
+    public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva);
 
-    //Guardar reserva esporadica
     public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO);
+
+    public List<CDU01ReservasYAulas> obtenerAulas(ReservaDTO reserva);
 }

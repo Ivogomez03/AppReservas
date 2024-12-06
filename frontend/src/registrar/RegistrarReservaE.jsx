@@ -185,6 +185,7 @@ const RegistrarReservaE = ({ resetForm }) => {
         }
 
         try {
+            console.log("El dto es :", { ...form, fechasespecificas: diasRegistrados })
             const response = await fetch('/reserva/registrar', {
                 method: 'POST',
                 headers: {

@@ -1,13 +1,10 @@
 package com.example.backend.Controlador;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import com.example.backend.DTO.AulaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,6 +67,16 @@ public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo
     List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(tipoClase, periodo, diaSemana, horaInicio, horaFin,cantidad);
     return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
 }
+    @GetMapping("/disponibles-periodicas")
+    public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo(
+            @RequestParam Class<? extends Aula> tipoClase,
+            @RequestParam int periodo,
+            @RequestParam DiaSemana diaSemana,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
+        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(tipoClase, periodo, diaSemana, horaInicio, horaFin);
+        return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
+    }
 
 
     @GetMapping("/disponibles-esporadicas")

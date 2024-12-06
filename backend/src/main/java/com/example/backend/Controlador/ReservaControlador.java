@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.DTO.ApiResponse;
-import com.example.backend.DTO.AulaDTO;
+import com.example.backend.DTO.CDU01ReservaYAulaFinal;
+import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ErrorAlGuardar;
 import com.example.backend.DTO.ReservaDTO;
-import com.example.backend.DTO.ReservaSingularDTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Servicio.IReservaServicio;
 
@@ -25,7 +25,7 @@ public class ReservaControlador {
     public ResponseEntity<ApiResponse<?>> registrarReserva(@RequestBody ReservaDTO reservaDTO) {
         try {
             // Llama al servicio para registrar la reserva
-            List<AulaDTO> aulasDisponibles = reservaServicio.registrarReserva(reservaDTO);
+            List<CDU01ReservasYAulas> aulasDisponibles = reservaServicio.registrarReserva(reservaDTO);
 
             // Si todo está bien, devuelve la lista de aulas y el reservaDTO
             return ResponseEntity.ok(new ApiResponse<>(true, Map.of("aulas", aulasDisponibles, "reserva", reservaDTO), null));
@@ -36,10 +36,10 @@ public class ReservaControlador {
     }
     
     @PostMapping("/reserva/guardar")
-    public ResponseEntity<ErrorAlGuardar> guardarReserva(@RequestBody ReservaSingularDTO reservaSingularDTO, AulaDTO aulaDTO) {
+    public ResponseEntity<ErrorAlGuardar> guardarReserva(@RequestBody List<CDU01ReservaYAulaFinal> reservaYAula , ReservaDTO reservaDTO) {
         try {
             // Llama al servicio para registrar la reserva
-            reservaServicio.guardarReserva(reservaSingularDTO, aulaDTO);
+            reservaServicio.guardarReserva(reservaYAula, reservaDTO);
 
             // Si todo está bien, devuelve la lista de aulas y el reservaDTO
             return ResponseEntity.ok(new ErrorAlGuardar(true, null));

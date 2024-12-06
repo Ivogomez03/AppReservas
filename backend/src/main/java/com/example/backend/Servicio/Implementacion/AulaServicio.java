@@ -48,7 +48,10 @@ public class AulaServicio implements IAulaServicio {
     private  AulaSRADAO aulaSRADAO;
     @Autowired
     private  AulaMultimedioDAO aulaMultimedioDAO;
-    
+    @Autowired 
+    private AulaDAO aulaDAO;
+    @Autowired 
+    private ReservaDAO reservaDAO;
     @Autowired
     private PeriodoDAO periodoDAO;
     
@@ -64,39 +67,46 @@ public class AulaServicio implements IAulaServicio {
         
         // Validación del tipo de aula
         if (aula == null) {
+
             throw new IllegalArgumentException("Este numero de aula no existe");
             
         }
         else if(dto.getCapacidad() < 0){
+
             throw new IllegalArgumentException("La capacidad debe ser mayor a 0");
+
         }
         else{
-        
             
-                if (aula instanceof AulaInformatica) {
-                    modificarAulaInformatica(dto,(AulaInformatica)aula);
-                } 
-                else if (aula instanceof AulaMultimedio) {
-                    modificarAulaMultimedio(dto,(AulaMultimedio)aula);
-                } 
-                else if (aula instanceof AulaSinRecursosAdicionales) {
-                    modificarAulaSinRecursosAdicionales(dto,(AulaSinRecursosAdicionales)aula);
-                }
-                return "El aula ha sido modificada correctamente";
+            if (aula instanceof AulaInformatica) {
+                modificarAulaInformatica(dto,(AulaInformatica)aula);
+            } 
+            else if (aula instanceof AulaMultimedio) {
+                modificarAulaMultimedio(dto,(AulaMultimedio)aula);
+            } 
+            else if (aula instanceof AulaSinRecursosAdicionales) {
+                modificarAulaSinRecursosAdicionales(dto,(AulaSinRecursosAdicionales)aula);
+            }
+            return "El aula ha sido modificada correctamente";
             
         }
       
         
     }
+
     public void modificarAulaInformatica(ModificarAulaDTO aulaDTO,AulaInformatica aula){
         
 
         if (aulaDTO.getCantidadDeComputadoras() <= 0) {
+
             throw new IllegalArgumentException("La cantidad de PCs debe ser mayor a cero");
+
         }
 
         if (aulaDTO.getCantidadDeComputadoras() > aulaDTO.getCapacidad()) {
+
             throw new IllegalArgumentException("La cantidad de PCs no puede ser mayor a la capacidad");
+
         }
 
         // 4. Modificar los datos del aula informática
@@ -108,7 +118,6 @@ public class AulaServicio implements IAulaServicio {
 
         // 5. Guardar los cambios en la base de datos
         aulaInformaticaDAO.save(aula);
-
 
     }
 
@@ -128,8 +137,11 @@ public class AulaServicio implements IAulaServicio {
     }
 
     public void modificarAulaSinRecursosAdicionales(ModificarAulaDTO aulaDTO,AulaSinRecursosAdicionales aula){
+        
         if (aulaDTO.isAireAcondicionado() && aulaDTO.isVentilador()) {
+
             throw new IllegalArgumentException("Si el aula posee aire acondicionado no puede poseer ventiladores y viceversa.");
+
         }
         // 4. Modificar los datos del aula sin recursos
         aula.setCapacidad(aulaDTO.getCapacidad());
@@ -143,40 +155,54 @@ public class AulaServicio implements IAulaServicio {
 
 
     }
-    @Autowired 
-    private AulaDAO aulaDAO;
-    @Autowired 
-    private ReservaDAO reservaDAO;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList buscarAulas(BuscarAulaDTO buscarAulaDTO) {
+
         ArrayList<Aula> aulas = new ArrayList<>();
         System.out.println("El DTO es: " + buscarAulaDTO);
+
         // Consultar cada DAO según el criterio
-      if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Todas")) {
-    aulas.addAll(aulaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
-    } else {
-    if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Informatica")) {
-        aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
-    }
-    if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Multimedio")) {
-        aulas.addAll(aulaMultimedioDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
-    }
-    if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Sin Recursos Adicionales")) {
-        aulas.addAll(aulaSRADAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
-    }
-    }
+        if (buscarAulaDTO.getTipoAula() == null || buscarAulaDTO.getTipoAula().equalsIgnoreCase("Todas")) {
+
+            aulas.addAll(aulaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+
+        } 
+        else {
+
+            if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Informatica")) {
+
+                aulas.addAll(aulaInformaticaDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+
+            }
+            if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Multimedio")) {
+
+                aulas.addAll(aulaMultimedioDAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+
+            }
+            if (buscarAulaDTO.getTipoAula().equalsIgnoreCase("Sin Recursos Adicionales")) {
+
+                aulas.addAll(aulaSRADAO.buscarPorCriterio(buscarAulaDTO.getNumeroDeAula(), buscarAulaDTO.getCapacidad()));
+
+            }
+        }
+        
         if (aulas.isEmpty()){
+
             throw new ValidationException("No se encontro ningún aula con los criterios especificados");
+
         }
 
         return (ArrayList) aulas.stream()
-                .map(this::convertirASalidaCU9DTO)
-                .collect(Collectors.toList());
+            .map(this::convertirASalidaCU9DTO)
+            .collect(Collectors.toList());
         
     }
+
     private SalidaCU9DTO convertirASalidaCU9DTO(Aula aula) {
+
         SalidaCU9DTO dto = new SalidaCU9DTO();
+
         dto.setNumeroDeAula(aula.getNumeroDeAula());
         dto.setCapacidad(aula.getCapacidad());
         dto.setTipoAula(aula.getTipoAula());
@@ -184,28 +210,39 @@ public class AulaServicio implements IAulaServicio {
         dto.setAireAcondicionado(aula.isAireAcondicionado());
         dto.setHabilitado(aula.isHabilitado());
         dto.setTipoPizarron(aula.getTipoPizarron());
+
         if(aula instanceof AulaMultimedio){
+
             AulaMultimedio multimedio = (AulaMultimedio) aula;
             dto.setComputadora(multimedio.isComputadora());
             dto.setTelevisor(multimedio.isTelevisor());
             dto.setVentilador(multimedio.isVentilador());
             dto.setCanion(multimedio.isCanion());
+
         }
+
         if(aula instanceof AulaInformatica){
+
             AulaInformatica informatica = (AulaInformatica) aula;
             dto.setCantidadDeComputadoras(informatica.getCantidadDeComputadoras());
             dto.setCanion(informatica.isCanion());
+
         }
+
         if(aula instanceof AulaSinRecursosAdicionales){
             AulaSinRecursosAdicionales aulaSRA = (AulaSinRecursosAdicionales) aula;
             dto.setVentilador(aulaSRA.isVentilador());
+
         }
+
         return dto;
+
     }
     
     public Aula crearAula(AulaDTO aulaDTO) {
 
         if(aulaDTO.isAulaMultimedia()){
+
             AulaMultimedio aula = new AulaMultimedio();
             aula.setTelevisor(aulaDTO.isTelevisor());
             aula.setCanion(aulaDTO.isCanion());
@@ -223,7 +260,9 @@ public class AulaServicio implements IAulaServicio {
 
             return aula;
         }
+
         else if(aulaDTO.isAulaInformatica()){
+
             AulaInformatica aula = new AulaInformatica();
             aula.setCantidadDeComputadoras(aulaDTO.getCantidadDeComputadoras());
             aula.setCanion(aulaDTO.isCanion());
@@ -238,8 +277,11 @@ public class AulaServicio implements IAulaServicio {
             aula.setHabilitado(aulaDTO.isHabilitado());
 
             return aula;
+
         }
+
         else if(aulaDTO.isAulaSinRecursosAdicionales()){
+
             AulaSinRecursosAdicionales aula = new AulaSinRecursosAdicionales();
             aula.setVentilador(aulaDTO.isVentilador());
 
@@ -253,16 +295,21 @@ public class AulaServicio implements IAulaServicio {
             aula.setHabilitado(aulaDTO.isHabilitado());
 
             return aula;
+
         }
+
         else{
+
             throw new ValidationException("Hubo un error con el tipo de reserva");
+
         }
     }
+
    public List<AulaDTO> obtenerAulasPorClase(Class<? extends Aula> tipoClase) {
     return aulaDAO.findAll().stream()
-            .filter(tipoClase::isInstance)
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
+        .filter(tipoClase::isInstance)
+        .map(this::convertirADTO)
+        .collect(Collectors.toList());
 }
 
 public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends Aula> tipoClase, int idPeriodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
@@ -290,19 +337,24 @@ public List<AulaDTO> obtenerAulasDisponiblesPeriodicasConPeriodo(Class<? extends
             .collect(Collectors.toList());
 
     if (aulasDisponibles.isEmpty()) {
+
         AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicionPeriodica(tipoClase, reservasEnPeriodo, diaSemana, horaInicio, horaFin, capacidadMinima);
+
         if (aulaConMenorSuperposicion != null) {
+
             aulasDisponibles.add(aulaConMenorSuperposicion);
+
         }
+
     }
 
     return aulasDisponibles;
 }
 
-
-
 public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? extends Aula> tipoClase, List<Periodica> reservas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
+    
     List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
             .map(this::convertirAEntidad)
             .filter(aula -> aula.getCapacidad() >= capacidadMinima)  // Filtrar por capacidad mínima
@@ -347,9 +399,6 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionPeriodica(Class<? exte
     return null;
 }
 
-
-
-
 public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
@@ -377,8 +426,6 @@ public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<? extends Aula> ti
 
     return aulasDisponibles;
 }
-
-
 
 public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? extends Aula> tipoClase, List<Esporadica> reservas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
     List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
@@ -426,10 +473,7 @@ public AulaConHorariosDTO obtenerAulaConMenorSuperposicionEsporadica(Class<? ext
     return null;
 }
 
-
-
-
-private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto) {
+public AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto) {
     AulaConHorariosDTO dto = new AulaConHorariosDTO();
     dto.setIdAula(aula.getIdAula());
     dto.setTipoPizarron(aula.getTipoPizarron());
@@ -470,7 +514,7 @@ private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperp
 }
 
 
-   private AulaDTO convertirADTO(Aula aula) {
+   public AulaDTO convertirADTO(Aula aula) {
     AulaDTO dto = new AulaDTO();
     dto.setIdAula(aula.getIdAula());
     dto.setTipoPizarron(aula.getTipoPizarron());
@@ -499,7 +543,8 @@ private AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperp
     }
     return dto;
 }
-private Aula convertirAEntidad(AulaDTO dto) {
+
+public Aula convertirAEntidad(AulaDTO dto) {
     Aula aula;
     if (dto.isAulaInformatica()) {
         AulaInformatica informatica = new AulaInformatica();
@@ -533,4 +578,3 @@ private Aula convertirAEntidad(AulaDTO dto) {
 
 
 }
-

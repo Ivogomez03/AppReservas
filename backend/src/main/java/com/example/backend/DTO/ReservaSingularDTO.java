@@ -16,6 +16,6 @@ public class ReservaSingularDTO {
     private boolean periodicaAnual;
     private boolean periodicaPrimerCuatrimestre;
     private boolean periodicaSegundoCuatrimestre;
-    private PeriodosDTO periodo;
-    private FechaDTO fechaEspecifica;
+    private CDU01DiasDTO dias;
+    private CDU01FechaDTO fechaEspecifica;
 }

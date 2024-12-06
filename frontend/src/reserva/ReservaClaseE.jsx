@@ -137,7 +137,7 @@ const ReservaClaseE = ({ resetForm }) => {
         // Esperamos a que el estado se actualice
         setTimeout(() => {
             // Ahora, hacemos la navegación pasando los días actualizados a la siguiente pantalla
-            navigate('/login/RegistrarReservaEsporadica', { state: { diasRegistrados: [...diasRegistrados, form] } });
+            navigate('/login/RegistrarReservaEsporadica', { state: { dia: [...diasRegistrados, form] } });
         }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
         console.log('Actualizados días:', diasRegistrados);
 

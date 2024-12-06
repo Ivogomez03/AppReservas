@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class FechaDTO {
+public class CDU01FechaDTO {
     private LocalDate fecha;
     private LocalTime horaInicio;
     private int duracion;
