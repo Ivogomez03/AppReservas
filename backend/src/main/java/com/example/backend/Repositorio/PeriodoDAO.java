@@ -1,9 +1,14 @@
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.example.backend.Repositorio;
 
-import org.springframework.data.repository.CrudRepository;
-
 import com.example.backend.Modelos.Periodo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface PeriodoDAO extends CrudRepository<Periodo, Integer> {
-
+@Repository
+public interface PeriodoDAO extends JpaRepository<Periodo, Integer> {
 }

@@ -1,9 +1,13 @@
 package com.example.backend.Servicio;
 
 import java.util.List;
+
+import com.example.backend.DTO.AulaDTO;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ReservaDTO;
+import com.example.backend.DTO.ReservaSingularDTO;
+import com.example.backend.Modelos.Aula;
 
 public interface IReservaServicio {
     //Registrar una reserva
@@ -36,6 +40,7 @@ public interface IReservaServicio {
     //Guardar una reserva
     public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva);
 
-    //Obtener las aulas para cada reserva y asiganrlas
+    public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO);
+
     public List<CDU01ReservasYAulas> obtenerAulas(ReservaDTO reserva);
 }

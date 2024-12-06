@@ -9,10 +9,12 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.DTO.CDU01FechaDTO;
+import com.example.backend.DTO.AulaDTO;
 import com.example.backend.DTO.CDU01DiasDTO;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ReservaDTO;
+import com.example.backend.DTO.ReservaSingularDTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
@@ -32,10 +34,13 @@ public class ReservaServicio implements IReservaServicio {
     private AulaServicio aulaServicio;
 
     @Autowired
-    private PeriodoDAO periodoDAO;
+    private EsporadicaServicio esporadicaServicio;
 
     @Autowired
-    private EsporadicaServicio esporadicaServicio;
+    private PeriodicaServicio periodicasServicio;
+
+    @Autowired
+    private PeriodoDAO periodoDAO;
 
 
     //Registrar una reserva
@@ -175,7 +180,20 @@ public class ReservaServicio implements IReservaServicio {
     public List<Esporadica> obtenerReservasPorFecha(LocalDate fecha) {
         return reservaDAO.obtenerReservasPorFecha(fecha);
     }
-    
+
+    @Override
+    public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
+        
+    }
+   
+    public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {
+        if(reserva.isEsporadica()){
+            esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva);
+        }
+        else {
+            periodicasServicio.guardarReservaPeriodica(reserva, reservaYAula);
+        }
+    }
 
     public List<CDU01ReservasYAulas> obtenerAulas(ReservaDTO reserva) {
 
@@ -251,16 +269,6 @@ public class ReservaServicio implements IReservaServicio {
             throw new ValidationException("Hubo un error con el tipo de reserva");
         }
         return reservaYAulas;
-    }
-
-    @Override
-    public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {
-        if(reserva.isEsporadica()){
-            esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva);
-        }
-        else {
-            
-        }
     }
 }
  

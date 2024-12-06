@@ -28,7 +28,6 @@ public class FechaEspecificaServicio implements IFechaEspecificaservicio {
             fechaEspecifica.setHoraInicio(reservaYAulaFinal.getFechas().getHoraInicio());
             fechaEspecifica.setHoraFin(reservaYAulaFinal.getFechas().getHoraInicio().plusMinutes(reservaYAulaFinal.getFechas().getDuracion()));
             fechaEspecifica.setIdFechaEspecifica(0);
-            
             fechaEspecifica.setAula(aulaServicio.convertirAEntidad(reservaYAulaFinal.getAula()));
             fechaEspecifica.setEsporadica(esporadica);
             fechaEspecificaDAO.save(fechaEspecifica);

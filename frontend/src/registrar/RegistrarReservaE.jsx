@@ -10,11 +10,11 @@ const RegistrarReservaE = ({ resetForm }) => {
 
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
-      };
+    };
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [diasRegistrados, setDiasRegistrados] = useState(location.state?.diasRegistrados || []);
+    const [diasRegistrados, setDiasRegistrados] = useState(location.state?.dia || []);
 
 
 
@@ -56,10 +56,14 @@ const RegistrarReservaE = ({ resetForm }) => {
     const [form, setForm] = useState({
         cantidadAlumnos: '',
         tipoAula: '',
-        nombre: '',
-        apellido: '',
+        nombreProfesor: '',
+        apellidoProfesor: '',
         nombreCatedra: '',
-        email: ''
+        correo: '',
+        esporadica: true,
+        periodicaAnual: false,
+        periodicaPrimerCuatrimestre: false,
+        periodicaSegundoCuatrimestre: false
     });
 
     const [backendErrors, setBackendErrors] = useState({
@@ -71,19 +75,19 @@ const RegistrarReservaE = ({ resetForm }) => {
     const [placeholders, setPlaceholders] = useState({
         cantidadAlumnos: "Cantidad de alumnos",
         tipoAula: "Tipo de aula",
-        nombre: "Nombre",
-        apellido: "Apellido",
+        nombreProfesor: "Nombre profesor",
+        apellidoProfesor: "Apellido profesor",
         nombreCatedra: "Nombre de la cátedra, seminario o curso",
-        email: "Correo electrónico"
+        correo: "Correo electrónico"
     });
 
     const [errors, setErrors] = useState({
         cantidadAlumnos: false,
-        apellido: false,
-        nombre: false,
+        apellidoProfesor: false,
+        nombreProfesor: false,
         tipoAula: false,
         nombreCatedra: false,
-        email: false
+        correo: false
     });
     const [animationClass, setAnimationClass] = useState('');
 
@@ -93,26 +97,30 @@ const RegistrarReservaE = ({ resetForm }) => {
         setForm({
             cantidadAlumnos: '',
             tipoAula: '',
-            nombre: '',
-            apellido: '',
+            nombreProfesor: '',
+            apellidoProfesor: '',
             nombreCatedra: '',
-            email: ''
+            correo: '',
+            esporadica: true,
+            periodicaAnual: false,
+            periodicaPrimerCuatrimestre: false,
+            periodicaSegundoCuatrimestre: false
         });
         setPlaceholders({
             cantidadAlumnos: "Cantidad de alumnos",
             tipoAula: "Tipo de aula",
-            nombre: "Nombre",
-            apellido: "Apellido",
+            nombreProfesor: "Nombre profesor",
+            apellidoProfesor: "Apellido profesor",
             nombreCatedra: "Nombre de la cátedra, seminario o curso",
-            email: "Correo electrónico"
+            correo: "Correo electrónico"
         })
         setErrors({
             cantidadAlumnos: false,
-            apellido: false,
-            nombre: false,
+            apellidoProfesor: false,
+            nombreProfesor: false,
             tipoAula: false,
             nombreCatedra: false,
-            email: false
+            correo: false
 
         });
         setBackendMessage('');
@@ -141,32 +149,32 @@ const RegistrarReservaE = ({ resetForm }) => {
         const newErrors = { ...errors };
 
         // Validaciones locales
-        if (!form.cantidadAlumnos) {
+        if (!form.cantidadAlumnos || form.cantidadAlumnos > 999 || form.cantidadAlumnos < 0) {
             newErrors.cantidadAlumnos = true;
-            setPlaceholders(prev => ({ ...prev, cantidadAlumnos: "Completa la cantidad de alumnos." }));
+            setPlaceholders(prev => ({ ...prev, cantidadAlumnos: "Completa la cantidad de alumnos (máximo 999)" }));
         }
         if (!form.tipoAula) {
             newErrors.tipoAula = true;
         }
-        if (!form.apellido || form.apellido.length > 50) {
-            newErrors.apellido = true;
-            setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
+        if (!form.apellidoProfesor || form.apellidoProfesor.length > 50) {
+            newErrors.apellidoProfesor = true;
+            setPlaceholders(prev => ({ ...prev, apellidoProfesor: "Completa el apellido del profesor (máximo 50 caracteres)." }));
         }
-        if (!form.nombre || form.nombre.length > 50) {
-            newErrors.nombre = true;
-            setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
+        if (!form.nombreProfesor || form.nombreProfesor.length > 50) {
+            newErrors.nombreProfesor = true;
+            setPlaceholders(prev => ({ ...prev, nombreProfesor: "Completa el nombre del profesor (máximo 50 caracteres)." }));
         }
 
-        if (!form.email || form.email.length > 70) {
-            newErrors.email = true;
-            setPlaceholders(prev => ({ ...prev, email: "Completa el correo electrónico (máximo 70 caracteres)." }));
+        if (!form.correo || form.correo.length > 70) {
+            newErrors.correo = true;
+            setPlaceholders(prev => ({ ...prev, correo: "Completa el correo electrónico (máximo 70 caracteres)." }));
         }
         if (!form.nombreCatedra || form.nombreCatedra.length > 100) {
             newErrors.nombreCatedra = true;
             setPlaceholders(prev => ({ ...prev, nombreCatedra: "Completa el nombre de la catedra, seminario o curso (máximo 100 caracteres)." }));
         }
         if (!diasRegistrados) {
-            //logica
+            alert("Ingresa al menos un dia")
         }
         // Actualizar el estado de errores
         setErrors(newErrors);
@@ -177,12 +185,12 @@ const RegistrarReservaE = ({ resetForm }) => {
         }
 
         try {
-            const response = await fetch('/reserva/CU13', {
+            const response = await fetch('/reserva/registrar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(form),
+                body: JSON.stringify({ ...form, fechasespecificas: diasRegistrados }),
             });
 
             const result = await response.json(); // Usamos .json() para recibir la respuesta como objeto JSON
@@ -219,12 +227,12 @@ const RegistrarReservaE = ({ resetForm }) => {
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            width="32" 
+                            width="32"
                             height="32"
                         >
-                        <path
-                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                        />
+                            <path
+                                d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                            />
                         </svg>
                     </button>
 
@@ -237,8 +245,8 @@ const RegistrarReservaE = ({ resetForm }) => {
                     <div className="dias-registrados">
                         {diasRegistrados.map((dia, index) => (
                             <div key={index} className="dia-registrado">
-                                {console.log("Fecha", dia.fechaAnio)}
-                                <div className='dias-registrados-info'>{dia.fechaAnio || 'Sin fecha'}-{dia.horasMinutos}-{dia.duracion}min</div>
+                                {console.log("Fecha", dia.fecha)}
+                                <div className='dias-registrados-info'>{dia.fecha}-{dia.horaInicio}-{dia.duracion}min</div>
                                 <button
                                     className="boton-eliminar"
                                     onClick={() => handleDeleteDia(index)}
@@ -277,23 +285,23 @@ const RegistrarReservaE = ({ resetForm }) => {
 
                 <input
                     type="text"
-                    name="nombre"
-                    placeholder={placeholders.nombre}
-                    value={form.nombre}
+                    name="nombreProfesor"
+                    placeholder={placeholders.nombreProfesor}
+                    value={form.nombreProfesor}
                     onChange={handleChange}
-                    className={`input-RRP ${errors.nombre ? 'input-error-RRP' : ''}`}
+                    className={`input-RRP ${errors.nombreProfesor ? 'input-error-RRP' : ''}`}
                 />
-                {errors.nombre && <span className="error-message-RRP">Completa el nombre (máximo 50 caracteres).</span>}
+                {errors.nombreProfesor && <span className="error-message-RRP">Completa el nombre del profesor (máximo 50 caracteres).</span>}
 
                 <input
                     type="text"
-                    name="apellido"
-                    placeholder={placeholders.apellido}
-                    value={form.apellido}
+                    name="apellidoProfesor"
+                    placeholder={placeholders.apellidoProfesor}
+                    value={form.apellidoProfesor}
                     onChange={handleChange}
-                    className={`input-RRP ${errors.apellido ? 'input-error-RRP' : ''}`}
+                    className={`input-RRP ${errors.apellidoProfesor ? 'input-error-RRP' : ''}`}
                 />
-                {errors.apellido && <span className="error-message-RRP">Completa el apellido (máximo 50 caracteres).</span>}
+                {errors.apellidoProfesor && <span className="error-message-RRP">Completa el apellido del profesor (máximo 50 caracteres).</span>}
 
                 <input
                     type="text"
@@ -306,14 +314,14 @@ const RegistrarReservaE = ({ resetForm }) => {
                 {errors.nombreCatedra && <span className="error-message-RRP">Completa el nombre de la catedra, seminario o curso.</span>}
 
                 <input
-                    type="email"
-                    name="email"
-                    placeholder={placeholders.email}
-                    value={form.email}
+                    type="correo"
+                    name="correo"
+                    placeholder={placeholders.correo}
+                    value={form.correo}
                     onChange={handleChange}
-                    className={`input-RRP ${errors.email ? 'input-error-RRP' : ''}`}
+                    className={`input-RRP ${errors.correo ? 'input-error-RRP' : ''}`}
                 />
-                {errors.email && <span className="error-message">Completa el correo electrónico.</span>}
+                {errors.correo && <span className="error-message">Completa el correo electrónico.</span>}
 
 
                 <div className='botones-RRP'>

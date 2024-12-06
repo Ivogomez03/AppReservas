@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './ModificarBedel.css';
+import './EliminarBedel.css';
 import CancelarBedel from './../cancelar/CancelarBedel';
 
-const ModificarBedel = ({ resetForm }) => {
+const EliminarBedel = ({ resetForm }) => {
     const navigate = useNavigate();
     const goBack = () => {
         navigate(-1); // Navega hacia la página anterior
@@ -18,10 +18,7 @@ const ModificarBedel = ({ resetForm }) => {
         apellido: '',
         nombre: '',
         turnoDeTrabajo: '',
-        idUsuario: '',
-        idAdminCreador: '1',
-        contrasena: '',
-        confirmarContrasena: ''
+        idUsuario: ''
     });
 
     const [backendErrors, setBackendErrors] = useState({
@@ -37,21 +34,12 @@ const ModificarBedel = ({ resetForm }) => {
                 apellido: bedel.apellido || '',
                 nombre: bedel.nombre || '',
                 turnoDeTrabajo: bedel.turnoDeTrabajo || '',
-                idUsuario: bedel.idUsuario || '',
-                idAdminCreador: bedel.idAdminCreador || '1',
-                contrasena: '',
-                confirmarContrasena: '',
+                idUsuario: bedel.idUsuario || ''
             });
         }
     }, [bedel]);
 
 
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,8 +47,8 @@ const ModificarBedel = ({ resetForm }) => {
         // Validaciones y lógica de envío del formulario...
 
         try {
-            const response = await fetch(`/bedel/CU14/modificarBedel`, {
-                method: 'PUT',
+            const response = await fetch(`/bedel/CU15`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -86,8 +74,8 @@ const ModificarBedel = ({ resetForm }) => {
     };
 
     return (
-        <div className="conteiner-mod-bedel">
-            <div className="panel-izquierdo">
+        <div className="conteinerEliminarBedel">
+            <form onSubmit={handleSubmit} className="formularioEliminarBedel">
                 <button className="back-button" onClick={goBack}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -101,69 +89,38 @@ const ModificarBedel = ({ resetForm }) => {
                         />
                     </svg>
                 </button>
-                <h1>Por favor</h1>
-                <h2>Ingrese los datos solicitados</h2>
-            </div>
-            <form onSubmit={handleSubmit} className="formulario">
-                <h2>Modificar Bedel</h2>
+                <h2>Eliminar Bedel</h2>
 
                 <input
                     type="text"
                     name="apellido"
                     placeholder="Apellido"
-                    value={form.apellido}
-                    onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    value={"Apellido: " + form.apellido}
+                    readOnly
+                    className="inputEliminarBedel" /* Clase correcta */
                 />
                 <input
                     type="text"
                     name="nombre"
                     placeholder="Nombre"
-                    value={form.nombre}
-                    onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    value={"Nombre: " + form.nombre}
+                    readOnly
+                    className="inputEliminarBedel" /* Clase correcta */
                 />
-                <select
-                    name="turnoDeTrabajo"
-                    value={form.turnoDeTrabajo}
-                    onChange={handleChange}
-                    className="selectModBedel" /* Clase correcta */
-                >
-                    <option value="Mañana">Mañana</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noche">Noche</option>
-                </select>
-
                 <input
                     type="text"
-                    name="idUsuario"
-                    placeholder="Identificador de usuario"
-                    value={form.idUsuario}
-                    onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    name="turnoDeTrabajo"
+                    placeholder="Turno de Trabajo"
+                    value={"Turno de trabajo: " + form.turnoDeTrabajo}
                     readOnly
+                    className="inputEliminarBedel" /* Clase correcta */
                 />
 
-                <input
-                    type="password"
-                    name="contrasena"
-                    placeholder="Contraseña"
-                    value={form.contrasena}
-                    onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
-                />
 
-                <input
-                    type="password"
-                    name="confirmarContrasena"
-                    placeholder="Confirmar contraseña"
-                    value={form.confirmarContrasena}
-                    onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
-                />
 
-                <div className="BotonesBedel">
-                    <button type="submit" className="botonModBedel">Modificar</button>
+
+                <div className="BotonesEliminarBedel">
+                    <button type="submit" className="botonEliminarBedel">Eliminar</button>
                     <button
                         type="button"
                         onClick={() => setShowModal(true)}
@@ -176,11 +133,11 @@ const ModificarBedel = ({ resetForm }) => {
             {showModal && (
                 <CancelarBedel
                     onCancel={() => setShowModal(false)}
-                    onConfirm={() => navigate('/login/bienvenidoAdmin/BuscarBedel/ListaBedeles')}
+                    onConfirm={() => navigate('/login/bienvenidoAdmin/BuscarBedel')}
                 />
             )}
         </div>
     );
 };
 
-export default ModificarBedel;
+export default EliminarBedel;
