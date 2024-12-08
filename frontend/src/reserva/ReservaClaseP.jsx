@@ -44,6 +44,17 @@ const ReservaClaseP = ({ resetForm }) => {
         { value: 'Viernes', label: 'Viernes' },
     ];
 
+    const optionsDuracion = [
+        { value: 30 , label: '0:30'},
+        { value: 60 , label: '1:00'},
+        { value: 90 , label: '1:30'},
+        { value: 120 , label: '2:00'},
+        { value: 150 , label: '2:30'},
+        { value: 180 , label: '3:00'},
+        { value: 210 , label: '3:30'},
+        { value: 240 , label: '4:00'},
+    ];
+
     const [form, setForm] = useState({
         horaInicio: '',
         dia: '',
@@ -123,7 +134,7 @@ const ReservaClaseP = ({ resetForm }) => {
         }
         if (!form.duracion || form.duracion.length > 6) {
             newErrors.duracion = true;
-            setPlaceholders(prev => ({ ...prev, duracion: "Completa el duracion (máximo 6 caracteres)." }));
+            setPlaceholders(prev => ({ ...prev, duracion: "Selecione duracion." }));
         }
         // Actualizar el estado de errores
         setErrors(newErrors);
@@ -147,11 +158,7 @@ const ReservaClaseP = ({ resetForm }) => {
         }, 0);  // El timeout es solo para asegurarse de que el estado se haya actualizado
         console.log('Actualizados días:', diasRegistrados);
 
-        setForm({
-            horaInicio: '',
-            dia: '',
-            duracion: '',
-        });
+        resetFormulario();
     }
 
     return (
@@ -187,7 +194,6 @@ const ReservaClaseP = ({ resetForm }) => {
                         <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
                 </select>
-                {errors.dia && <span className="error-message-RCP">Dia de la semana</span>}
                 <input
                     type="time"
                     name="horaInicio"
@@ -196,17 +202,18 @@ const ReservaClaseP = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`input-RCP ${errors.horaInicio ? 'input-error-RCP' : ''}`}
                 />
-                {errors.horaInicio && <span className="error-message-RCP">Completa hora y minutos</span>}
 
-                <input
-                    type="text"
+                <select
                     name="duracion"
-                    placeholder={placeholders.duracion}
                     value={form.duracion}
                     onChange={handleChange}
-                    className={`input-RCP ${errors.duracion ? 'input-error-RCP' : ''}`}
-                />
-                {errors.duracion && <span className="error-message-RCP">Completa la duracion (máximo 6 caracteres).</span>}
+                    className={`select-RCP ${errors.duracion ? 'select-error-RCP' : ''}`}
+                >
+                    <option value="" disabled>Duración</option>
+                    {optionsDuracion.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                </select>
 
                 <div className='botones-RCP'>
                     <button className='botonRCP' type="submit">Siguiente</button>
