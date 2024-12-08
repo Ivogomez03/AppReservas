@@ -11,6 +11,7 @@ const BuscarBedel = ({ resetForm }) => {
         navigate(-1); // Navega hacia la página anterior
     };
 
+    const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
     const mostrar = () => {
@@ -76,6 +77,15 @@ const BuscarBedel = ({ resetForm }) => {
     }, [resetForm]);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        // Validar que ciertos campos acepten solo letras
+        if (["apellido"].includes(name)) {
+            if (!onlyLetters(value)) {
+                return; // Salir si el valor contiene caracteres no permitidos
+            }
+        }
+
         console.log({ ...form })
         setForm({
             ...form,

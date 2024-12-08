@@ -8,6 +8,12 @@ const BuscarAulas = ({ resetForm }) => {
     const [showModal, setShowModal] = useState(false);
     const [backendMessage, setBackendMessage] = useState('');
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
+
+    const onlyNumbers = (str) => /^[0-9]*$/.test(str);
+
     const [form, setForm] = useState({
         numeroDeAula: '',
         tipo: 'Todas',
@@ -32,6 +38,13 @@ const BuscarAulas = ({ resetForm }) => {
     }, [resetForm]);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        if (["numeroDeAula","capacidad"].includes(name) && !onlyNumbers(value)) {
+            if (!onlyNumbers(value)){
+                return;
+            }
+        }
         setForm({
             ...form,
             [e.target.name]: e.target.value
@@ -44,7 +57,7 @@ const BuscarAulas = ({ resetForm }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         // No hay validaciones estrictas ya que todos los campos son opcionales
         try {
             const queryParams = new URLSearchParams({
@@ -84,6 +97,19 @@ const BuscarAulas = ({ resetForm }) => {
     return (
         <div className='conteiner-principal-busqueda-BA'>
             <div className="seccion-bienvenida-busqueda-BA">
+            <button className="back-button" onClick={goBack}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="32" 
+                height="32"
+                >
+                <path
+                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                />
+                </svg>
+            </button>
                 <h1>Buscar Aulas</h1>
                 <p>Seleccione uno o más criterios para buscar un aula.</p>
             </div>

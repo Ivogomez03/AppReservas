@@ -22,6 +22,29 @@ body {
     animation: slideIn 1s ease-out forwards;
 }
 
+.back-button {
+    position: fixed;
+    top: 35px;
+    left: 35px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .back-button:hover {
+    color: #ffffff; /* Cambia el color al pasar el mouse */
+  }
+  
+  svg {
+    stroke-width: 2; /* Hace la flecha más gruesa */
+    stroke: currentColor; /* Asegura que tome el color actual */
+  }
+
 .seccion-bienvenida-busqueda-DE h1 {
     font-size: 48px;
 }

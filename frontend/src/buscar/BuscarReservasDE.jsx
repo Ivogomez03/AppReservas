@@ -9,6 +9,10 @@ const BuscarReservasDE = ({ resetForm }) => {
     const [showModal, setShowModal] = useState(false);
     const [backendMessage, setBackendMessage] = useState('');
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+      };
+
     const [form, setForm] = useState({
         dia: '',
         tipoAula: 'Todas',
@@ -99,6 +103,19 @@ const BuscarReservasDE = ({ resetForm }) => {
     return (
         <div className='conteiner-principal-busqueda-DE'>
             <div className="seccion-bienvenida-busqueda-DE">
+            <button className="back-button" onClick={goBack}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="32" 
+                height="32"
+                >
+                <path
+                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                />
+                </svg>
+            </button>
                 <h1>Listado de Reservas</h1>
                 <p>Seleccione los criterios para obtener el listado.</p>
             </div>

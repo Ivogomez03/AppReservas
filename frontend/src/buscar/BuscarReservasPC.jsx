@@ -7,8 +7,11 @@ import Select from 'react-select';
 const BuscarReservasPC = ({ resetForm }) => {
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1); // Navega hacia la página anterior
+    };
 
-
+    const onlyNumbers = (str) => /^[0-9]*$/.test(str);
 
     const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
     const mostrar = () => {
@@ -68,6 +71,13 @@ const BuscarReservasPC = ({ resetForm }) => {
     }, [resetForm]);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        if (["año"].includes(name) && !onlyNumbers(value)) {
+            if (!onlyNumbers(value)){
+                return;
+            }
+        }
         console.log({ ...form })
         setForm({
             ...form,
@@ -135,6 +145,19 @@ const BuscarReservasPC = ({ resetForm }) => {
     return (
         <div className='conteiner-principal-busqueda-PC'>
             <div className="seccion-bienvenida-busqueda-PC">
+            <button className="back-button" onClick={goBack}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="32" 
+                height="32"
+                >
+                <path
+                    d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                />
+                </svg>
+            </button>
                 <h1>Curso y Año</h1>
                 <p>Indique los parametros de busqueda</p>
 

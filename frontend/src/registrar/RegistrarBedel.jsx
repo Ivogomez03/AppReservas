@@ -10,6 +10,9 @@ const RegistrarBedel = ({ resetForm }) => {
 
   const navigate = useNavigate();
 
+  const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
+  const onlyNumbers = (str) => /^[0-9]*$/.test(str);
+
   const goToLogin = () => {
     navigate('/login');
   };
@@ -119,6 +122,20 @@ const RegistrarBedel = ({ resetForm }) => {
   }, [resetForm]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Validar que ciertos campos acepten solo letras
+    if (["nombre", "apellido"].includes(name)) {
+      if (!onlyLetters(value)) {
+          return; // Salir si el valor contiene caracteres no permitidos
+      }
+    }
+
+    if (["idUsuario"].includes(name) && !onlyNumbers(value)) {
+        if (!onlyNumbers(value)){
+            return;
+        }
+    }
     console.log({ ...form })
     setForm({
       ...form,
@@ -241,7 +258,6 @@ const RegistrarBedel = ({ resetForm }) => {
           onChange={handleChange}
           className={`inputRegBedel ${errors.apellido ? 'input-error' : ''}`}
         />
-        {errors.apellido && <span className="error-message">Completa el apellido (máximo 50 caracteres).</span>}
 
         <input
           type="text"
@@ -251,7 +267,6 @@ const RegistrarBedel = ({ resetForm }) => {
           onChange={handleChange}
           className={`inputRegBedel ${errors.nombre ? 'input-error' : ''}`}
         />
-        {errors.nombre && <span className="error-message">Completa el nombre (máximo 50 caracteres).</span>}
 
         <select
           name="turnoDeTrabajo"
@@ -264,7 +279,6 @@ const RegistrarBedel = ({ resetForm }) => {
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>
-        {errors.turnoDeTrabajo && <span className="error-message">Selecciona un turno de trabajo.</span>}
 
         <input
           type="text"
@@ -284,7 +298,6 @@ const RegistrarBedel = ({ resetForm }) => {
           onChange={handleChange}
           className={`inputRegBedel ${errors.contrasena ? 'input-error' : ''}`}
         />
-        {errors.contrasena && <span className="error-message">Completa la contraseña.</span>}
         {backendErrors.contrasena && <span className="error-message">{backendErrors.contrasena}</span>}
 
         <input
@@ -295,7 +308,6 @@ const RegistrarBedel = ({ resetForm }) => {
           onChange={handleChange}
           className={`inputRegBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}
         />
-        {errors.confirmarContrasena && <span className="error-message">Las contraseñas no coinciden.</span>}
 
         <div className='BotonesBedel'>
           <button className='botonRegBedel' type="submit">Registrar</button>
