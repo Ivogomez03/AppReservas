@@ -9,6 +9,8 @@ const ModificarBedel = ({ resetForm }) => {
         navigate(-1); // Navega hacia la página anterior
     };
 
+    const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
+    const onlyNumbers = (str) => /^[0-9]*$/.test(str);
 
     const location = useLocation();
 
@@ -47,6 +49,22 @@ const ModificarBedel = ({ resetForm }) => {
 
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        // Validar que ciertos campos acepten solo letras
+        if (["nombre", "apellido"].includes(name)) {
+        if (!onlyLetters(value)) {
+            return; // Salir si el valor contiene caracteres no permitidos
+        }
+        }
+
+        if (["idUsuario"].includes(name) && !onlyNumbers(value)) {
+            if (!onlyNumbers(value)){
+                return;
+            }
+        }
+        console.log({ ...form })
+
         setForm({
             ...form,
             [e.target.name]: e.target.value

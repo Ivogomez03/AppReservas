@@ -152,6 +152,18 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
 }
+/* Estilo de error para el select */
+.select-error {
+    background-color: #ffe5e5;
+    border: 1px solid #ff6666;
+}
+
+.input-error {
+    background-color: #ffe5e5;
+    /* Rojo claro */
+    border: 1px solid #ff6666;
+    /* Borde rojo suave para errores */
+}
 
 /* Mensaje de error */
 .backend-message-error {

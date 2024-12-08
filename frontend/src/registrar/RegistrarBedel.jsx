@@ -149,37 +149,37 @@ const RegistrarBedel = ({ resetForm }) => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = { ...errors };
+      e.preventDefault();
+      const newErrors = { ...errors };
 
-    // Validaciones locales
-    if (!form.apellido || form.apellido.length > 50) {
-      newErrors.apellido = true;
-      setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
-    }
-    if (!form.nombre || form.nombre.length > 50) {
-      newErrors.nombre = true;
-      setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
-    }
-    if (!form.turnoDeTrabajo) {
-      newErrors.turnoDeTrabajo = true;
-    }
-    if (!form.idUsuario || form.idUsuario.length > 10) {
-      newErrors.idUsuario = true;
-      setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
-    }
-    if (!form.contrasena) {
-      newErrors.contrasena = true;
-      setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
-    }
-    if (form.contrasena !== form.confirmarContrasena) {
-      newErrors.confirmarContrasena = true;
-      setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
-      setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
-    }
+      // Validaciones locales
+      if (!form.apellido || form.apellido.length > 50) {
+        newErrors.apellido = true;
+        setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
+      }
+      if (!form.nombre || form.nombre.length > 50) {
+        newErrors.nombre = true;
+        setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
+      }
+      if (!form.turnoDeTrabajo) {
+        newErrors.turnoDeTrabajo = true;
+      }
+      if (!form.idUsuario || form.idUsuario.length > 10) {
+        newErrors.idUsuario = true;
+        setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
+      }
+      if (!form.contrasena) {
+        newErrors.contrasena = true;
+        setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
+      }
+      if (form.contrasena !== form.confirmarContrasena) {
+        newErrors.confirmarContrasena = true;
+        setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
+        setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
+      }
 
-    // Actualizar el estado de errores
-    setErrors(newErrors);
+      // Actualizar el estado de errores
+      setErrors(newErrors);
 
     // Si hay errores, detener el envío
     if (Object.values(newErrors).some(error => error)) {

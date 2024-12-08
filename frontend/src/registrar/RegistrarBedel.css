@@ -127,16 +127,6 @@ h2 {
 
 
 
-.error-message {
-    color: red;
-    /* Color del texto del mensaje de error */
-    font-size: 14px;
-    /* Tamaño de fuente para los mensajes de error */
-    margin-top: 5px;
-    /* Espacio entre el campo y el mensaje de error */
-    font-weight: bold;
-    /* Hacer el texto en negrita */
-}
 
 .BotonesBedel {
     width: 50%;
