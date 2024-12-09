@@ -52,10 +52,13 @@ const ReservaClaseE = ({ resetForm }) => {
         duracion: '',
     });
 
-    const [backendErrors, setBackendErrors] = useState({
-        idUsuario: '',
-        contrasena: ''
-    });
+    // Calcular la fecha mínima permitida (mañana)
+    const getTomorrowDate = () => {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1); // Sumar un día
+        return tomorrow.toISOString().split('T')[0]; // Formatear como YYYY-MM-DD
+    };
 
 
     const [placeholders, setPlaceholders] = useState({
@@ -69,7 +72,6 @@ const ReservaClaseE = ({ resetForm }) => {
         duracion: false,
         fecha: false,
     });
-    const [animationClass, setAnimationClass] = useState('');
 
     const [backendMessage, setBackendMessage] = useState('');
 
@@ -186,7 +188,8 @@ const ReservaClaseE = ({ resetForm }) => {
                 <input
                     type="date"
                     name="fecha"
-                    placeholder={placeholders.fecha}
+                    placeholder="Seleccionar fecha"
+                    min={getTomorrowDate()} // Restringir a fechas de mañana en adelante
                     value={form.fecha}
                     onChange={handleChange}
                     className={`input-RCP ${errors.fecha ? 'input-error-RCP' : ''}`}
