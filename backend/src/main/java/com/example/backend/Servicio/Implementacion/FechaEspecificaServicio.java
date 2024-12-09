@@ -3,6 +3,8 @@ package com.example.backend.Servicio.Implementacion;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Modelos.Esporadica;
@@ -10,6 +12,7 @@ import com.example.backend.Modelos.FechaEspecifica;
 import com.example.backend.Repositorio.FechaEspecificaDAO;
 import com.example.backend.Servicio.IFechaEspecificaservicio;
 
+@Service
 public class FechaEspecificaServicio implements IFechaEspecificaservicio {
 
     @Autowired

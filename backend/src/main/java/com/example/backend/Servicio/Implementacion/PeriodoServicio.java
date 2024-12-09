@@ -3,6 +3,8 @@ package com.example.backend.Servicio.Implementacion;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.Periodo;
@@ -10,6 +12,8 @@ import com.example.backend.Modelos.TipoPeriodo;
 import com.example.backend.Repositorio.PeriodoDAO;
 import com.example.backend.Servicio.IPeriodoServicio;
 
+
+@Service
 public class PeriodoServicio implements IPeriodoServicio {
 
     @Autowired

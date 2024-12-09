@@ -3,12 +3,15 @@ package com.example.backend.Servicio.Implementacion;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.Modelos.Dia;
 import com.example.backend.Modelos.Periodica;
 import com.example.backend.Repositorio.DiaDAO;
 import com.example.backend.Servicio.IDiaServicio;
 
+@Service
 public class DiaServicio implements IDiaServicio {
 
     @Autowired

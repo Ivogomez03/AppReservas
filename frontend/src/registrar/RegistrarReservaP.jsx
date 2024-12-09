@@ -59,9 +59,9 @@ const RegistrarReservaP = ({ resetForm }) => {
 
 
     const options = [
-        { value: 'Multimedio', label: 'Multimedio' },
-        { value: 'Informatica', label: 'Informatica' },
-        { value: 'Sin recursos adicionales', label: 'Sin recursos adicionales' },
+        { value: 'AulaMultimedio', label: 'Multimedio' },
+        { value: 'AulaInformatica', label: 'Informática' },
+        { value: 'AulaSinRecursosAdicionales', label: 'Sin recursos adicionales' },
     ];
 
     const [form, setForm] = useState({

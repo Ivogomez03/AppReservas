@@ -22,7 +22,7 @@ public class ReservaControlador {
     private IReservaServicio reservaServicio;
 
     @PostMapping("/reserva/registrar")
-    public ResponseEntity<ApiResponse<?>> registrarReserva(@RequestBody ReservaDTO reservaDTO) {
+    public ResponseEntity<ApiResponse<?>> registrarReserva(@RequestBody ReservaDTO reservaDTO) throws ClassNotFoundException {
         try {
             // Llama al servicio para registrar la reserva
             List<CDU01ReservasYAulas> aulasDisponibles = reservaServicio.registrarReserva(reservaDTO);
