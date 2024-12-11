@@ -19,6 +19,7 @@ public class PeriodoServicio implements IPeriodoServicio {
     @Autowired
     private PeriodoDAO periodoDAO;
     
+    @Override
     public Periodo obtenerPeriodo(ReservaDTO reserva) {
 
         Iterable <Periodo> periodos2;

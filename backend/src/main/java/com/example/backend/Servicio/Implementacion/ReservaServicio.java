@@ -17,8 +17,6 @@ import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.Periodica;
-import com.example.backend.Modelos.Periodo;
-import com.example.backend.Repositorio.PeriodoDAO;
 import com.example.backend.Repositorio.ReservaDAO;
 import com.example.backend.Servicio.IReservaServicio;
 
@@ -38,7 +36,7 @@ public class ReservaServicio implements IReservaServicio {
     private PeriodicaServicio periodicasServicio;
 
     @Autowired
-    private PeriodoDAO periodoDAO;
+    private PeriodoServicio periodoServicio;
 
 
     //Registrar una reserva
@@ -189,57 +187,32 @@ public class ReservaServicio implements IReservaServicio {
     }
 
     public List<CDU01ReservasYAulas> obtenerAulas(ReservaDTO reserva) throws ClassNotFoundException {
+
         try{
+
             Class<?> clase = Class.forName(reserva.getNombreCatedra()); // Obtiene la referencia a la clase
-        
 
         List<CDU01ReservasYAulas> reservaYAulas = new ArrayList<>();
 
         if(reserva.isEsporadica()){
+
             for(CDU01FechaDTO fecha : reserva.getFechasespecificas()){
                 CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
                 reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesEsporadicas(clase, fecha.getFecha(), fecha.getHoraInicio(), fecha.getHoraInicio().plusMinutes(fecha.getDuracion()),reserva.getCantidadAlumnos()));
                 reservaYAula.setFechas(fecha);
                 reservaYAulas.add(reservaYAula);  
             }
+
         }
+
         else if(!reserva.isEsporadica()){
 
-            int idPeriodoAnual =-1, idPeriodoPrimerCuatrimestre = -1, idPeriodoSegundoCuatrimestre = -1;
-            Iterable <Periodo> periodos = periodoDAO.findAll();
-
-            for (Periodo elemento : periodos) {
-                if (elemento.getFechaInicio().getYear() == LocalDate.now().getYear()) {
-                    switch (elemento.getTipoPeriodo()) {
-                        case ANUAL:
-                            idPeriodoAnual = elemento.getIdPeriodo();
-                            break;
-                        case PRIMERCUATRIMESTRE:
-                            idPeriodoPrimerCuatrimestre = elemento.getIdPeriodo();
-                            break;
-                        case SEGUNDOCUATRIMESTRE:
-                            idPeriodoSegundoCuatrimestre = elemento.getIdPeriodo();
-                            break;
-                        default:
-                            throw new ValidationException("Hubo un error con el tipo de periodo");
-                    }
-                }
-            }
-
-            if (reserva.isPeriodicaAnual() && idPeriodoAnual == -1) {
-                throw new ValidationException("No se encontró un período anual válido para el año actual.");
-            }
-            if (reserva.isPeriodicaPrimerCuatrimestre() && idPeriodoPrimerCuatrimestre == -1) {
-                throw new ValidationException("No se encontró un período del primer cuatrimestre válido para el año actual.");
-            }
-            if (reserva.isPeriodicaSegundoCuatrimestre() && idPeriodoSegundoCuatrimestre == -1) {
-                throw new ValidationException("No se encontró un período del segundo cuatrimestre válido para el año actual.");
-            }
+            int idPeriodoReserva = periodoServicio.obtenerPeriodo(reserva).getIdPeriodo();
             
             if(reserva.isPeriodicaAnual()){
                 for(CDU01DiasDTO dia : reserva.getDias()){
                     CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoAnual, dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
                     reservaYAula.setDias(dia);
                     reservaYAulas.add(reservaYAula);  
                 }
@@ -247,7 +220,7 @@ public class ReservaServicio implements IReservaServicio {
             else if(reserva.isPeriodicaPrimerCuatrimestre()){
                 for(CDU01DiasDTO dia : reserva.getDias()){
                     CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoPrimerCuatrimestre, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
                     reservaYAula.setDias(dia);
                     reservaYAulas.add(reservaYAula);  
                 }
@@ -255,7 +228,7 @@ public class ReservaServicio implements IReservaServicio {
             else if(reserva.isPeriodicaSegundoCuatrimestre()){
                 for(CDU01DiasDTO dia : reserva.getDias()){
                     CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoSegundoCuatrimestre, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
                     reservaYAula.setDias(dia);
                     reservaYAulas.add(reservaYAula);  
                 }
