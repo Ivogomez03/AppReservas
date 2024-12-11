@@ -11,9 +11,12 @@ import com.example.backend.Modelos.TipoPeriodo;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PeriodoDAO extends JpaRepository<Periodo, Integer> {
-    List<Periodo> findByTipoPeriodo(TipoPeriodo tipoPeriodo);
+    @Query("SELECT p FROM Periodo p WHERE p.tipoPeriodo = :tipoPeriodo")
+    List<Periodo> findByTipoPeriodo(@Param("tipoPeriodo") TipoPeriodo tipoPeriodo);
 }
