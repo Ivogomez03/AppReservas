@@ -25,14 +25,15 @@ public class BedelServicio implements IBedelServicios {
     private static final Pattern PASSWORD_PATTERN = 
         Pattern.compile("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%&*]).{8,16}$");
 
-
-
+    @Override
     public String validatePassword(String contra) {
         if (!PASSWORD_PATTERN.matcher(contra).matches()) {
             return "La contraseña debe tener al menos de 8 caracteres, un maximo de 16 caracteres, al menos un número, una mayúscula y un caracter especial.";
         }
         return "Contraseña valida";
     }
+
+    @Override
     public String validarId(int id) {
 
         if(bedelDAO.findById(id).isPresent()){
@@ -43,6 +44,7 @@ public class BedelServicio implements IBedelServicios {
         }
     
     }
+
     @Override
     public ValidarContrasenaDTO validarBedel(BedelDTO bedelDTO) {
         
@@ -72,10 +74,14 @@ public class BedelServicio implements IBedelServicios {
         return salida;
         
     }
+
+    @Override
     public Bedel buscarBedel(int id){
         return bedelDAO.findById(id).orElse(null);
 
     }
+
+    @Override
     public boolean validarBedel(int id, String contrasena) {
         // Busca el bedel por ID
         Bedel bedel = buscarBedel(id);
@@ -93,6 +99,8 @@ public class BedelServicio implements IBedelServicios {
         // Si todo es correcto, devuelve true
         return true;
     }
+
+    @Override
     public void eliminarBedel(BedelDTO bedelSeleccionado) {
         // Buscar el Bedel en la base de datos;
         Bedel bedel = bedelDAO.findById(bedelSeleccionado.getIdUsuario()).get();
@@ -103,6 +111,8 @@ public class BedelServicio implements IBedelServicios {
         // Guardar el Bedel actualizado en la base de datos
         bedelDAO.save(bedel);
     }
+
+    @Override
     public List<BedelDTO> buscarBedelesPorTurnoyApellido(TurnoDeTrabajo turno, String apellido) {
 
         List<Bedel> bedeles;
@@ -141,7 +151,9 @@ public class BedelServicio implements IBedelServicios {
                 .map(this::convertirABedelDTO)
                 .collect(Collectors.toList());
     }
-    private BedelDTO convertirABedelDTO(Bedel bedel) {
+
+    @Override
+    public BedelDTO convertirABedelDTO(Bedel bedel) {
         BedelDTO dto = new BedelDTO();
         dto.setIdUsuario(bedel.getIdUsuario());
         dto.setNombre(bedel.getNombre());
@@ -149,6 +161,8 @@ public class BedelServicio implements IBedelServicios {
         dto.setTurnoDeTrabajo(bedel.getTurnoDeTrabajo());
         return dto;
     }
+
+    @Override
     public String modificarBedel(BedelDTO bedelDTO) {
 
         String contraValida = this.validatePassword(bedelDTO.getContrasena());
@@ -175,6 +189,8 @@ public class BedelServicio implements IBedelServicios {
         }
         
     }
+
+    @Override
     public BedelDTO obtenerDatosBedel(BedelDTO bedelDTO) {
         // Recuperar el ID del BedelDTO
         int id = bedelDTO.getIdUsuario();
@@ -186,32 +202,5 @@ public class BedelServicio implements IBedelServicios {
         // Convertir el Bedel a DTO
         return convertirABedelDTO(bedel);
     }
-
-
-
-    /*
-    public List<BedelDTO> buscarBedelesPorApellido(String apellido) {
-        List<Bedel> bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
-
-        if (bedeles.isEmpty()) {
-            throw new IllegalArgumentException("No existen bedeles habilitados con el apellido proporcionado.");
-        }
-
-        return bedeles.stream()
-                .map(this::convertirABedelDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<BedelDTO> buscarBedelesPorTurno(TurnoDeTrabajo turno) {
-        List<Bedel> bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
-
-        if (bedeles.isEmpty()) {
-            throw new IllegalArgumentException("No existen bedeles habilitados con el turno proporcionado.");
-        }
-
-        return bedeles.stream()
-                .map(this::convertirABedelDTO)
-                .collect(Collectors.toList());
-    }*/
 }
     

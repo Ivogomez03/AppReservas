@@ -43,7 +43,7 @@ public class ReservaServicio implements IReservaServicio {
     @Override
     public List<CDU01ReservasYAulas> registrarReserva(ReservaDTO reserva) throws ValidationException, ClassNotFoundException {
         
-        if(this.validarDatos(reserva) && this.validarHorasInicioDuracion(reserva) && this.validarDuracionMultiplo30(reserva) && this.validarFechaActual(reserva)){
+        if(this.validarDatos(reserva) && this.validarHorasInicioDuracion(reserva)){
             return this.obtenerAulas(reserva);
         }
 
@@ -62,33 +62,6 @@ public class ReservaServicio implements IReservaServicio {
             if (!diasUnicos.add(dia.getDia())) {
                 // Si no se puede agregar al conjunto, significa que el día está duplicado
                 throw new ValidationException("No puede haber más de una hora de inicio y duración para un día");
-            }
-        }
-        return true;
-    }
-
-    // Validar que la duración sea un múltiplo de 30 minutos
-    @Override
-    public boolean validarDuracionMultiplo30(ReservaDTO reserva) {
-
-        List<CDU01DiasDTO> dias = reserva.getDias();
-
-        for (CDU01DiasDTO dia : dias) {
-            if (dia.getDuracion() % 30 != 0) {
-                throw new ValidationException("La duración debe ser un múltiplo de 30 minutos");
-            }
-        }
-        return true;
-    }
-
-    // Validar que la fecha ingresada sea posterior a la actual
-    @Override
-    public boolean validarFechaActual(ReservaDTO reserva) {
-
-        List<CDU01FechaDTO> fechas = reserva.getFechasespecificas();
-        for (CDU01FechaDTO fecha : fechas) {
-            if (fecha.getFecha().isBefore(LocalDate.now()) || fecha.getFecha().isEqual(LocalDate.now())) {
-                throw new ValidationException("La fecha no puede ser anterior o igual a la fecha actual");
             }
         }
         return true;
@@ -168,15 +141,17 @@ public class ReservaServicio implements IReservaServicio {
         return true;
     }
 
-
+    @Override
     public List<Periodica> obtenerReservasPorPeriodo(int idPeriodo) {
         return reservaDAO.obtenerReservasPorPeriodo(idPeriodo);
     }
 
+    @Override
     public List<Esporadica> obtenerReservasPorFecha(LocalDate fecha) {
         return reservaDAO.obtenerReservasPorFecha(fecha);
     }
    
+    @Override
     public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {
         if(reserva.isEsporadica()){
             esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva);
@@ -186,11 +161,10 @@ public class ReservaServicio implements IReservaServicio {
         }
     }
 
+    @Override
     public List<CDU01ReservasYAulas> obtenerAulas(ReservaDTO reserva) throws ClassNotFoundException {
 
-        try{
-
-            Class<?> clase = Class.forName(reserva.getNombreCatedra()); // Obtiene la referencia a la clase
+        Class<?> clase = aulaServicio.crearAula(reserva).getClass();
 
         List<CDU01ReservasYAulas> reservaYAulas = new ArrayList<>();
 
@@ -238,10 +212,7 @@ public class ReservaServicio implements IReservaServicio {
             throw new ValidationException("Hubo un error con el tipo de reserva");
         }
         return reservaYAulas;
-        }catch (ClassNotFoundException e) {
-            e.printStackTrace(); // Maneja el error apropiadamente
-        }
-            return null;
+        
     }
 }
  

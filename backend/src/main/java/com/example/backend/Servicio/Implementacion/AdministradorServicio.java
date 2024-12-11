@@ -11,10 +11,13 @@ public class AdministradorServicio implements  IAdministradorServicio{
     @Autowired
     private AdministradorDAO adminDAO;
 
+    @Override
     public Administrador buscarAdministrador(int id){
         return adminDAO.findById(id).orElse(null);
 
     }
+
+    @Override
     public boolean validarAdministrador(int id, String contrasena) {
         // Busca el administrador por ID
         Administrador admin = buscarAdministrador(id);
