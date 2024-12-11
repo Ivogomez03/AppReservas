@@ -1,4 +1,5 @@
 package com.example.backend.Controlador;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import com.example.backend.DTO.AulaDTO;
@@ -26,68 +27,37 @@ public class AulaControlador {
 
     @Autowired
     private AulaServicio aulaServicio;
-    
-    @GetMapping("/buscarAula")
-    public ResponseEntity<List<SalidaCU9DTO>> buscarAula(@RequestParam(required = false) Integer numeroDeAula,@RequestParam(required = false) String tipoAula,@RequestParam(required = false) Integer capacidad) {
-        try {
-        // Construir el DTO con los parámetros
-        BuscarAulaDTO buscarAulaDTO = new BuscarAulaDTO();
-        Integer numeroDeAulaLimpio = (numeroDeAula != null && numeroDeAula > 0) ? numeroDeAula : null;
-        Integer capacidadLimpia = (capacidad != null && capacidad > 0) ? capacidad : null;
-        String tipoAulaLimpio = (tipoAula != null && !tipoAula.trim().isEmpty()) ? tipoAula : null;
-        buscarAulaDTO.setNumeroDeAula(numeroDeAulaLimpio);
-        buscarAulaDTO.setTipoAula(tipoAulaLimpio);
-        buscarAulaDTO.setCapacidad(capacidadLimpia);
 
-        // Pasar el DTO al servicio
-        List<SalidaCU9DTO> listaAulas = aulaServicio.buscarAulas(buscarAulaDTO);
-        return ResponseEntity.ok(listaAulas);
+    @GetMapping("/buscarAula")
+    public ResponseEntity<List<SalidaCU9DTO>> buscarAula(@RequestParam(required = false) Integer numeroDeAula,
+            @RequestParam(required = false) String tipoAula, @RequestParam(required = false) Integer capacidad) {
+        try {
+            // Construir el DTO con los parámetros
+            BuscarAulaDTO buscarAulaDTO = new BuscarAulaDTO();
+            Integer numeroDeAulaLimpio = (numeroDeAula != null && numeroDeAula > 0) ? numeroDeAula : null;
+            Integer capacidadLimpia = (capacidad != null && capacidad > 0) ? capacidad : null;
+            String tipoAulaLimpio = (tipoAula != null && !tipoAula.trim().isEmpty()) ? tipoAula : null;
+            buscarAulaDTO.setNumeroDeAula(numeroDeAulaLimpio);
+            buscarAulaDTO.setTipoAula(tipoAulaLimpio);
+            buscarAulaDTO.setCapacidad(capacidadLimpia);
+
+            // Pasar el DTO al servicio
+            List<SalidaCU9DTO> listaAulas = aulaServicio.buscarAulas(buscarAulaDTO);
+            return ResponseEntity.ok(listaAulas);
         } catch (ValidationException e) {
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                 .body(Collections.singletonList(new SalidaCU9DTO()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonList(new SalidaCU9DTO()));
         }
     }
+
     @PutMapping("/modificarAula")
-    public ResponseEntity<String> modificarAula(@RequestBody ModificarAulaDTO dto){
+    public ResponseEntity<String> modificarAula(@RequestBody ModificarAulaDTO dto) {
         try {
             String salida = aulaServicio.modificarAula(dto);
             return ResponseEntity.ok(salida);
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("/disponibles-periodicas")
-    public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesPeriodicasConPeriodo(
-            @RequestParam Class<? extends Aula> tipoAula,
-            @RequestParam int idPeriodo,
-            @RequestParam int cantidadAlumnos,
-            @RequestParam DiaSemana dia,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
-            @RequestParam int duracion) { // Nueva duración en minutos
-        // Calcular la hora fin sumando la duración a la hora inicio
-        LocalTime horaFin = horaInicio.plusMinutes(duracion);
-
-        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(
-                tipoAula, idPeriodo, dia, horaInicio, horaFin, cantidadAlumnos);
-
-        return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
-    }
-
-    @GetMapping("/disponibles-esporadicas")
-    public ResponseEntity<List<AulaDTO>> obtenerAulasDisponiblesEsporadicas(
-            @RequestParam Class<? extends Aula> tipoAula,
-            @RequestParam int cantidadAlumnos,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
-            @RequestParam int duracion) { // Nueva duración en minutos
-        // Calcular la hora fin sumando la duración a la hora inicio
-        LocalTime horaFin = horaInicio.plusMinutes(duracion);
-
-        List<AulaDTO> aulasDisponibles = aulaServicio.obtenerAulasDisponiblesEsporadicas(
-                tipoAula, fecha, horaInicio, horaFin, cantidadAlumnos);
-
-        return new ResponseEntity<>(aulasDisponibles, HttpStatus.OK);
-    }
-
 
 }

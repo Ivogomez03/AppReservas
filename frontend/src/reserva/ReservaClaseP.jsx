@@ -37,22 +37,22 @@ const ReservaClaseP = ({ resetForm }) => {
 
 
     const options = [
-        { value: 'Lunes', label: 'Lunes' },
-        { value: 'Martes', label: 'Martes' },
-        { value: 'Miercoles', label: 'Miercoles' },
-        { value: 'Jueves', label: 'Jueves' },
-        { value: 'Viernes', label: 'Viernes' },
+        { value: 'LUNES', label: 'Lunes' },
+        { value: 'MARTES', label: 'Martes' },
+        { value: 'MIERCOLES', label: 'Miercoles' },
+        { value: 'JUEVES', label: 'Jueves' },
+        { value: 'VIERNES', label: 'Viernes' },
     ];
 
     const optionsDuracion = [
-        { value: 30 , label: '0:30'},
-        { value: 60 , label: '1:00'},
-        { value: 90 , label: '1:30'},
-        { value: 120 , label: '2:00'},
-        { value: 150 , label: '2:30'},
-        { value: 180 , label: '3:00'},
-        { value: 210 , label: '3:30'},
-        { value: 240 , label: '4:00'},
+        { value: 30, label: '0:30' },
+        { value: 60, label: '1:00' },
+        { value: 90, label: '1:30' },
+        { value: 120, label: '2:00' },
+        { value: 150, label: '2:30' },
+        { value: 180, label: '3:00' },
+        { value: 210, label: '3:30' },
+        { value: 240, label: '4:00' },
     ];
 
     const [form, setForm] = useState({

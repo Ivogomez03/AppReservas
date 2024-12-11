@@ -59,9 +59,9 @@ const RegistrarReservaP = ({ resetForm }) => {
 
 
     const options = [
-        { value: 'AulaMultimedio', label: 'Multimedio' },
-        { value: 'AulaInformatica', label: 'Informática' },
-        { value: 'AulaSinRecursosAdicionales', label: 'Sin recursos adicionales' },
+        { value: 'Multimedio', label: 'Multimedio' },
+        { value: 'Informatica', label: 'Informática' },
+        { value: 'SinRecursosAdicionales', label: 'Sin recursos adicionales' },
     ];
 
     const [form, setForm] = useState({
@@ -157,7 +157,7 @@ const RegistrarReservaP = ({ resetForm }) => {
         }
 
         if (["cantidadAlumnos"].includes(name) && !onlyNumbers(value)) {
-            if (!onlyNumbers(value)){
+            if (!onlyNumbers(value)) {
                 return;
             }
         }
