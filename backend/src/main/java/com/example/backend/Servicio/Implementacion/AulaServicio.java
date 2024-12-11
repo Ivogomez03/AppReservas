@@ -542,13 +542,13 @@ public class AulaServicio implements IAulaServicio {
     public Aula crearAula(ReservaDTO reservaDTO){
         Aula aula = null;
 
-        if(reservaDTO.getTipoAula()=="Multimedio"){
+        if(reservaDTO.getTipoAula().equals("Multimedio")){
             aula = new AulaMultimedio();
         }
-        else if(reservaDTO.getTipoAula()=="Informatica"){
+        else if(reservaDTO.getTipoAula().equals("Informatica")){
             aula = new AulaInformatica();
         }
-        else if(reservaDTO.getTipoAula()=="SinRecursosAdicionales"){
+        else if(reservaDTO.getTipoAula().equals("SinRecursosAdicionales")){
             aula = new AulaSinRecursosAdicionales();
         }
         else{

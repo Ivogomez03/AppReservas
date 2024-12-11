@@ -1,6 +1,8 @@
 package com.example.backend.Servicio.Implementacion;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +24,20 @@ public class PeriodoServicio implements IPeriodoServicio {
     @Override
     public Periodo obtenerPeriodo(ReservaDTO reserva) {
 
-        Iterable <Periodo> periodos2;
+        List <Periodo> periodos2 = new ArrayList<>();
         Periodo periodoU = null;
         if (reserva.isPeriodicaAnual()) {
-            periodos2 = periodoDAO.findByTipoPeriodo(TipoPeriodo.ANUAL);
+            periodos2.addAll(periodoDAO.findByTipoPeriodo(TipoPeriodo.ANUAL));
+            List<Periodo> periodos = periodoDAO.findAll();
+            for(Periodo periodo : periodos){
+                System.out.println("El primer periodo es: "+periodo.getFechaInicio());
+            } 
         }
         else if(reserva.isPeriodicaPrimerCuatrimestre()){
-            periodos2 = periodoDAO.findByTipoPeriodo(TipoPeriodo.PRIMERCUATRIMESTRE);
+            periodos2.addAll(periodoDAO.findByTipoPeriodo(TipoPeriodo.PRIMERCUATRIMESTRE));
         }
         else if(reserva.isPeriodicaSegundoCuatrimestre()){
-            periodos2 = periodoDAO.findByTipoPeriodo(TipoPeriodo.SEGUNDOCUATRIMESTRE);
+            periodos2.addAll(periodoDAO.findByTipoPeriodo(TipoPeriodo.SEGUNDOCUATRIMESTRE));
         }
         else{
             throw new ValidationException("No se encontro el periodo para esta reserva");
