@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 public class FechaEspecifica {
 
-      @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFechaEspecifica;
 

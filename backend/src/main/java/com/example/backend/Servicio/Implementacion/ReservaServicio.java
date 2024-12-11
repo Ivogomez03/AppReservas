@@ -9,14 +9,11 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.DTO.CDU01FechaDTO;
-import com.example.backend.DTO.AulaDTO;
 import com.example.backend.DTO.CDU01DiasDTO;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ReservaDTO;
-import com.example.backend.DTO.ReservaSingularDTO;
 import com.example.backend.Excepciones.ValidationException;
-import com.example.backend.Modelos.Aula;
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.Periodica;
@@ -180,11 +177,6 @@ public class ReservaServicio implements IReservaServicio {
 
     public List<Esporadica> obtenerReservasPorFecha(LocalDate fecha) {
         return reservaDAO.obtenerReservasPorFecha(fecha);
-    }
-
-    @Override
-    public void guardarReservaEsporadica(ReservaSingularDTO reserva, AulaDTO aulaDTO) {
-        
     }
    
     public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {

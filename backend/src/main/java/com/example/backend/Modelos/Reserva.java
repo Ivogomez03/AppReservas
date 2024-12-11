@@ -1,5 +1,7 @@
 package com.example.backend.Modelos;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import lombok.Setter;
 public abstract class Reserva {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idReserva;
     private String nombreProfesor;
     private String apellidoProfesor;

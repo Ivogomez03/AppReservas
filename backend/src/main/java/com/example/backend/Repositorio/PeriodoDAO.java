@@ -6,9 +6,14 @@
 package com.example.backend.Repositorio;
 
 import com.example.backend.Modelos.Periodo;
+import com.example.backend.Modelos.TipoPeriodo;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PeriodoDAO extends JpaRepository<Periodo, Integer> {
+    List<Periodo> findByTipoPeriodo(TipoPeriodo tipoPeriodo);
 }

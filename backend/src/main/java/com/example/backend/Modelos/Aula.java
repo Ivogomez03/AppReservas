@@ -1,6 +1,8 @@
 package com.example.backend.Modelos;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -17,6 +19,7 @@ public abstract class Aula {
     private int capacidad;
     private int piso;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAula;
     private String caracteristicas;
     private boolean aireAcondicionado;
