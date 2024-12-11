@@ -20,8 +20,12 @@ public interface ReservaDAO extends JpaRepository<Dia, Integer> {
     List<Periodica> obtenerReservasPorFechasPeriodo(@Param("fechaInicioPeriodo") LocalDate fechaInicioPeriodo, @Param("fechaFinPeriodo") LocalDate fechaFinPeriodo);
     @Query("SELECT r FROM Esporadica r JOIN r.fechaEspecifica f WHERE f.fecha = :fecha") 
        List<Esporadica> obtenerReservasPorFecha(@Param("fecha") LocalDate fecha);
+       
     @Query("SELECT r FROM Periodica r WHERE r.nombreCatedra = :nombreCatedra AND YEAR(r.periodo.fechaInicio) = :anio")
     List<Periodica> obtenerReservasPeriodicasPorNombreCatedra(@Param("nombreCatedra") String nombreCatedra, @Param("anio") int anio);
     @Query("SELECT r FROM Esporadica r JOIN r.fechaEspecifica f WHERE r.nombreCatedra = :nombreCatedra AND YEAR(f.fecha) = :anio")
     List<Esporadica> obtenerReservasEsporadicasPorNombreCatedra(@Param("nombreCatedra") String nombreCatedra, @Param("anio") int anio);
+
+    @Query("SELECT r FROM Esporadica r")
+    List<Esporadica> obtenerReservasEsporadicas();
 }
