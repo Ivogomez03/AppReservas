@@ -174,6 +174,7 @@ const RegistrarReservaP = ({ resetForm }) => {
 
 
     const handleSubmit = async (e) => {
+        console.log("Asi seria el DTO: ", { ...form, dias: diasRegistrados })
         e.preventDefault();
         const newErrors = { ...errors };
 
@@ -240,6 +241,7 @@ const RegistrarReservaP = ({ resetForm }) => {
                 setTimeout(() => {
                     setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
                     resetFormulario(); // Limpiar formulario
+                    navigate('/login/RegistrarReservaPeriodica/ElegirAula', { state: { data: { ...result } } });
                 }, 2000); // Esperar 2 segundos antes de hacer fade out
             }
 

@@ -267,10 +267,11 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
     }
 
-
-    public List<AulaDTO> obtenerAulasDisponiblesPeriodicas(Class<?> tipoClase, int idPeriodo, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+    public List<AulaDTO> obtenerAulasDisponiblesPeriodicas(Class<?> tipoClase, int idPeriodo, DiaSemana diaSemana,
+            LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
         List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
-
+        System.out.println("TipoClase: " + tipoClase + " idPeriodo: " + idPeriodo + " DiaSemana: " + diaSemana
+                + horaInicio + horaFin + capacidadMinima);
         // Obtener el periodo actual
         Periodo periodoActual = periodoDAO.findById(idPeriodo)
                 .orElseThrow(() -> new IllegalArgumentException("Periodo no encontrado"));
@@ -278,7 +279,8 @@ public class AulaServicio implements IAulaServicio {
         LocalDate fechaFinPeriodo = periodoActual.getFechaFin();
 
         // Obtener reservas periódicas en el periodo especificado
-        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(fechaInicioPeriodo, fechaFinPeriodo);
+        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(fechaInicioPeriodo,
+                fechaFinPeriodo);
         List<Aula> aulasOcupadasPeriodicas = reservasPeriodicas.stream()
                 .flatMap(reserva -> reserva.getDias().stream())
                 .filter(dia -> dia.getDiaSemana().equals(diaSemana)
@@ -312,7 +314,8 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
 
         if (aulasDisponibles.isEmpty()) {
-            AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicion(tipoClase, reservasEsporadicas, reservasPeriodicas, diaSemana, horaInicio, horaFin, capacidadMinima);
+            AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicion(tipoClase,
+                    reservasEsporadicas, reservasPeriodicas, diaSemana, horaInicio, horaFin, capacidadMinima);
             if (aulaConMenorSuperposicion != null) {
                 aulasDisponibles.add(aulaConMenorSuperposicion);
             }
@@ -321,7 +324,8 @@ public class AulaServicio implements IAulaServicio {
         return aulasDisponibles;
     }
 
-    public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<?> tipoClase, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+    public List<AulaDTO> obtenerAulasDisponiblesEsporadicas(Class<?> tipoClase, LocalDate fecha, LocalTime horaInicio,
+            LocalTime horaFin, int capacidadMinima) {
         List<AulaDTO> aulasPorTipo = obtenerAulasPorClase(tipoClase);
 
         // Obtener reservas esporádicas en la fecha especificada
@@ -340,7 +344,8 @@ public class AulaServicio implements IAulaServicio {
         List<Aula> aulasOcupadasPeriodicas = new ArrayList<>();
         for (Periodo periodo : periodos) {
             if (!fecha.isBefore(periodo.getFechaInicio()) && !fecha.isAfter(periodo.getFechaFin())) {
-                List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(periodo.getFechaInicio(), periodo.getFechaFin());
+                List<Periodica> reservasPeriodicas = reservaDAO
+                        .obtenerReservasPorFechasPeriodo(periodo.getFechaInicio(), periodo.getFechaFin());
                 aulasOcupadasPeriodicas.addAll(reservasPeriodicas.stream()
                         .flatMap(reserva -> reserva.getDias().stream())
                         .filter(dia -> dia.getDiaSemana().equals(fecha.getDayOfWeek())
@@ -363,7 +368,8 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
 
         if (aulasDisponibles.isEmpty()) {
-            AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicion(tipoClase, reservasEsporadicas, aulasOcupadasPeriodicas, fecha, horaInicio, horaFin, capacidadMinima);
+            AulaConHorariosDTO aulaConMenorSuperposicion = obtenerAulaConMenorSuperposicion(tipoClase,
+                    reservasEsporadicas, aulasOcupadasPeriodicas, fecha, horaInicio, horaFin, capacidadMinima);
             if (aulaConMenorSuperposicion != null) {
                 aulasDisponibles.add(aulaConMenorSuperposicion);
             }
@@ -372,7 +378,9 @@ public class AulaServicio implements IAulaServicio {
         return aulasDisponibles;
     }
 
-    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase, List<Esporadica> reservasEsporadicas, List<Periodica> reservasPeriodicas, DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase,
+            List<Esporadica> reservasEsporadicas, List<Periodica> reservasPeriodicas, DiaSemana diaSemana,
+            LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
         List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
         List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
                 .map(this::convertirAEntidad)
@@ -386,14 +394,16 @@ public class AulaServicio implements IAulaServicio {
                 .filter(fechaEspecifica -> fechaEspecifica.getFecha().getDayOfWeek().equals(diaSemana)
                         && fechaEspecifica.getHoraInicio().isBefore(horaFin)
                         && fechaEspecifica.getHoraFin().isAfter(horaInicio))
-                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
+                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(),
+                        new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
 
         reservasPeriodicas.stream()
                 .flatMap(reserva -> reserva.getDias().stream())
                 .filter(dia -> dia.getDiaSemana().equals(diaSemana)
                         && dia.getHoraInicio().isBefore(horaFin)
                         && dia.getHoraFin().isAfter(horaInicio))
-                .forEach(dia -> superposiciones.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin())));
+                .forEach(dia -> superposiciones.put(dia.getAula().getIdAula(),
+                        new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin())));
 
         if (superposiciones.isEmpty()) {
             return null;
@@ -411,7 +421,9 @@ public class AulaServicio implements IAulaServicio {
         return null;
     }
 
-    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase, List<Esporadica> reservasEsporadicas, List<Aula> aulasOcupadasPeriodicas, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase,
+            List<Esporadica> reservasEsporadicas, List<Aula> aulasOcupadasPeriodicas, LocalDate fecha,
+            LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
         List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
         List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
                 .map(this::convertirAEntidad)
@@ -425,7 +437,8 @@ public class AulaServicio implements IAulaServicio {
                 .filter(fechaEspecifica -> fechaEspecifica.getFecha().equals(fecha)
                         && fechaEspecifica.getHoraInicio().isBefore(horaFin)
                         && fechaEspecifica.getHoraFin().isAfter(horaInicio))
-                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
+                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(),
+                        new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
 
         aulasOcupadasPeriodicas.stream()
                 .forEach(aula -> superposiciones.put(aula.getIdAula(), new HorarioSuperpuestoDTO(horaInicio, horaFin)));
@@ -555,13 +568,11 @@ public class AulaServicio implements IAulaServicio {
     public Aula crearAula(ReservaDTO reservaDTO) {
         Aula aula = null;
 
-        if(reservaDTO.getTipoAula().equals("Multimedio")){
+        if (reservaDTO.getTipoAula().equals("Multimedio")) {
             aula = new AulaMultimedio();
-        }
-        else if(reservaDTO.getTipoAula().equals("Informatica")){
+        } else if (reservaDTO.getTipoAula().equals("Informatica")) {
             aula = new AulaInformatica();
-        }
-        else if(reservaDTO.getTipoAula().equals("SinRecursosAdicionales")){
+        } else if (reservaDTO.getTipoAula().equals("SinRecursosAdicionales")) {
             aula = new AulaSinRecursosAdicionales();
         } else {
             throw new ValidationException("Hubo un error con el tipo de aula");

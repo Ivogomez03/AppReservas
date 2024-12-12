@@ -38,16 +38,16 @@ public class ReservaServicio implements IReservaServicio {
     @Autowired
     private PeriodoServicio periodoServicio;
 
-
-    //Registrar una reserva
+    // Registrar una reserva
     @Override
-    public List<CDU01ReservasYAulas> registrarReserva(ReservaDTO reserva) throws ValidationException, ClassNotFoundException {
-        
-        if(this.validarDatos(reserva) && this.validarHorasInicioDuracion(reserva)){
+    public List<CDU01ReservasYAulas> registrarReserva(ReservaDTO reserva)
+            throws ValidationException, ClassNotFoundException {
+
+        if (this.validarDatos(reserva) && this.validarHorasInicioDuracion(reserva)) {
             return this.obtenerAulas(reserva);
         }
 
-       throw new ValidationException("Hubo un error al registrar la reserva");
+        throw new ValidationException("Hubo un error al registrar la reserva");
 
     }
 
@@ -67,75 +67,79 @@ public class ReservaServicio implements IReservaServicio {
         return true;
     }
 
-    //Validar datos
+    // Validar datos
     @Override
     public boolean validarDatos(ReservaDTO reserva) {
-        
-        if(this.validarNombre(reserva.getNombreProfesor()) && this.valdiarApellido(reserva.getApellidoProfesor()) && this.validarCorreo(reserva.getCorreo()) && this.validarNombreCatedra(reserva.getNombreCatedra())){
+
+        if (this.validarNombre(reserva.getNombreProfesor()) && this.valdiarApellido(reserva.getApellidoProfesor())
+                && this.validarCorreo(reserva.getCorreo()) && this.validarNombreCatedra(reserva.getNombreCatedra())) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-    }    
-    
-    //Validar nombre
-    private static final String NOMBRE_PROFESOR_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"; // Expresión regular para validar el nombre del profesor (solo letras y espacios)
+    }
+
+    // Validar nombre
+    private static final String NOMBRE_PROFESOR_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"; // Expresión regular
+                                                                                                   // para validar el
+                                                                                                   // nombre del
+                                                                                                   // profesor (solo
+                                                                                                   // letras y espacios)
+
     @Override
-    public boolean validarNombre(String nombre){
+    public boolean validarNombre(String nombre) {
 
         Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
 
-        if(nombre == null) {
+        if (nombre == null) {
             throw new ValidationException("El nombre del profesor no puede ser nulo");
-        }
-        else if (!pattern.matcher(nombre).matches()){
+        } else if (!pattern.matcher(nombre).matches()) {
             throw new ValidationException("El nombre del profesor no es válido");
         }
         return true;
     }
 
-    //Validar apellido
+    // Validar apellido
     @Override
     public boolean valdiarApellido(String nombre) {
 
         Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
 
-        if(nombre == null) {
+        if (nombre == null) {
             throw new ValidationException("El apellido del profesor no puede ser nulo");
-        }
-        else if (!pattern.matcher(nombre).matches()){
+        } else if (!pattern.matcher(nombre).matches()) {
             throw new ValidationException("El apellido del profesor no es válido");
         }
         return true;
     }
 
-    //Validar correo
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"; // Expresión regular para validar el correo electrónico
+    // Validar correo
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"; // Expresión regular
+                                                                                                   // para validar el
+                                                                                                   // correo electrónico
+
     @Override
     public boolean validarCorreo(String correo) {
 
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
 
-        if(correo == null) {
+        if (correo == null) {
             throw new ValidationException("El correo no puede ser nulo");
-        }
-        else if (!pattern.matcher(correo).matches()){
+        } else if (!pattern.matcher(correo).matches()) {
             throw new ValidationException("El correo no es válido");
         }
         return true;
     }
 
-    //Validar nombre de la catedra
+    // Validar nombre de la catedra
     @Override
     public boolean validarNombreCatedra(String catedra) {
 
         Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
 
-        if(catedra == null) {
+        if (catedra == null) {
             throw new ValidationException("El nombre de la catedra no puede ser nulo");
-        }
-        else if (!pattern.matcher(catedra).matches()){
+        } else if (!pattern.matcher(catedra).matches()) {
             throw new ValidationException("El nombre de la catedra no es válido");
         }
         return true;
@@ -150,13 +154,12 @@ public class ReservaServicio implements IReservaServicio {
     public List<Esporadica> obtenerReservasPorFecha(LocalDate fecha) {
         return reservaDAO.obtenerReservasPorFecha(fecha);
     }
-   
+
     @Override
     public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {
-        if(reserva.isEsporadica()){
+        if (reserva.isEsporadica()) {
             esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva);
-        }
-        else {
+        } else {
             periodicasServicio.guardarReservaPeriodica(reserva, reservaYAula);
         }
     }
@@ -168,51 +171,55 @@ public class ReservaServicio implements IReservaServicio {
 
         List<CDU01ReservasYAulas> reservaYAulas = new ArrayList<>();
 
-        if(reserva.isEsporadica()){
+        if (reserva.isEsporadica()) {
 
-            for(CDU01FechaDTO fecha : reserva.getFechasespecificas()){
+            for (CDU01FechaDTO fecha : reserva.getFechasespecificas()) {
                 CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesEsporadicas(clase, fecha.getFecha(), fecha.getHoraInicio(), fecha.getHoraInicio().plusMinutes(fecha.getDuracion()),reserva.getCantidadAlumnos()));
+                reservaYAula.setAulas(
+                        aulaServicio.obtenerAulasDisponiblesEsporadicas(clase, fecha.getFecha(), fecha.getHoraInicio(),
+                                fecha.getHoraInicio().plusMinutes(fecha.getDuracion()), reserva.getCantidadAlumnos()));
                 reservaYAula.setFechas(fecha);
-                reservaYAulas.add(reservaYAula);  
+                reservaYAulas.add(reservaYAula);
             }
 
         }
 
-        else if(!reserva.isEsporadica()){
+        else if (!reserva.isEsporadica()) {
 
             int idPeriodoReserva = periodoServicio.obtenerPeriodo(reserva).getIdPeriodo();
-            
-            if(reserva.isPeriodicaAnual()){
-                for(CDU01DiasDTO dia : reserva.getDias()){
+            System.out.println("El periodo es " + idPeriodoReserva);
+            if (reserva.isPeriodicaAnual()) {
+                for (CDU01DiasDTO dia : reserva.getDias()) {
                     CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicas(clase, idPeriodoReserva,
+                            dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),
+                            reserva.getCantidadAlumnos()));
                     reservaYAula.setDias(dia);
-                    reservaYAulas.add(reservaYAula);  
+                    reservaYAulas.add(reservaYAula);
+                }
+            } else if (reserva.isPeriodicaPrimerCuatrimestre()) {
+                for (CDU01DiasDTO dia : reserva.getDias()) {
+                    CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicas(clase, idPeriodoReserva,
+                            dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),
+                            reserva.getCantidadAlumnos()));
+                    reservaYAula.setDias(dia);
+                    reservaYAulas.add(reservaYAula);
+                }
+            } else if (reserva.isPeriodicaSegundoCuatrimestre()) {
+                for (CDU01DiasDTO dia : reserva.getDias()) {
+                    CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
+                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicas(clase, idPeriodoReserva,
+                            dia.getDia(), dia.getHoraInicio(), dia.getHoraInicio().plusMinutes(dia.getDuracion()),
+                            reserva.getCantidadAlumnos()));
+                    reservaYAula.setDias(dia);
+                    reservaYAulas.add(reservaYAula);
                 }
             }
-            else if(reserva.isPeriodicaPrimerCuatrimestre()){
-                for(CDU01DiasDTO dia : reserva.getDias()){
-                    CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
-                    reservaYAula.setDias(dia);
-                    reservaYAulas.add(reservaYAula);  
-                }
-            }
-            else if(reserva.isPeriodicaSegundoCuatrimestre()){
-                for(CDU01DiasDTO dia : reserva.getDias()){
-                    CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
-                    reservaYAula.setAulas(aulaServicio.obtenerAulasDisponiblesPeriodicasConPeriodo(clase, idPeriodoReserva, dia.getDia(), dia.getHoraInicio(),  dia.getHoraInicio().plusMinutes(dia.getDuracion()),reserva.getCantidadAlumnos()));
-                    reservaYAula.setDias(dia);
-                    reservaYAulas.add(reservaYAula);  
-                }
-            }
-        }
-        else{
+        } else {
             throw new ValidationException("Hubo un error con el tipo de reserva");
         }
         return reservaYAulas;
-        
+
     }
 }
- 

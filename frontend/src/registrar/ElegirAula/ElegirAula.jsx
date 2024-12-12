@@ -1,15 +1,31 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { HashRouter, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import "./ElegirAula.css"; // Archivo CSS externo
 
 const ElegirAula = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [indiceDia, setIndiceDia] = useState(0);
-
+    const goBack = () => navigate(-1);
     // Datos de las aulas y la reserva
-    const aulas = location.state?.aulas || [];
-    const reserva = location.state?.reserva || {};
+
+
+    const data = location.state?.data || [];
+    console.log("data2: ", data.data)
+
+
+
+    const aulas = data.data.aulas;
+
+    console.log("Aulas: ", aulas)
+    console.log("Dia: ", aulas[0].dias.dia)
+    console.log("Indice: ", aulas[0].aulas[indiceDia])
+
+
+
+    const reserva = data.data.reserva;
+    console.log("Reserva: ", reserva)
     const [diasSeleccionados, setDiasSeleccionados] = useState([]);
 
     const handleSiguiente = () => {
@@ -28,12 +44,12 @@ const ElegirAula = () => {
     const elegirAula = (aula) => {
         const diaSeleccionado = {
             aula: aula, // Objeto AulaDTO
-            fechas: aulas[indiceDia].fechas, // CDU01FechaDTO
-            dias: aulas[indiceDia].dias, // CDU01DiasDTO
+            fechas: aulas.fechas, // CDU01FechaDTO
+            dias: aulas.dias, // CDU01DiasDTO
         };
 
         setDiasSeleccionados((prev) => [...prev, diaSeleccionado]);
-        alert(`Aula seleccionada: ${aula.ubicacion} para el día ${aulas[indiceDia].dias.dia}`);
+        alert(`Aula seleccionada: ${aula.ubicacion} para el día ${aulas[0].dias.dia}`);
     };
     const enviarDatos = async () => {
         try {
@@ -74,7 +90,7 @@ const ElegirAula = () => {
                 </svg>
             </button>
             <h2>
-                Día: {aulas[indiceDia].dias.dia} - Fecha: {aulas[indiceDia].fechas.fechaInicio}
+                {aulas[0].dias ? "Dia: " + aulas[0].dias.dia : null} - {aulas[0].fechas ? "Fecha: " + aulas[0].fechas.fechaInicio : null}
             </h2>
 
             {aulas.length === 0 ? (
@@ -91,11 +107,11 @@ const ElegirAula = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {aulas[indiceDia].aulas.map((aula, index) => (
+                        {aulas[0].aulas.map((aula, index) => (
                             <tr key={index}>
-                                <td>{aula.ubicacion}</td>
+                                <td>{aula.piso}</td>
                                 <td>{aula.capacidad}</td>
-                                <td>{aula.caracteristicas.join(", ")}</td>
+                                <td>{aula.caracteristicas}</td>
                                 <td>
                                     <button
                                         className="botonSeleccionar"
@@ -109,7 +125,7 @@ const ElegirAula = () => {
                     </tbody>
                 </table>
             )}
-            <button className="botonElegirAula" onClick={handleSiguiente}>Siguiente</button>
+            <button className="btn-accion" onClick={handleSiguiente}>Siguiente</button>
         </div>
     );
 };
