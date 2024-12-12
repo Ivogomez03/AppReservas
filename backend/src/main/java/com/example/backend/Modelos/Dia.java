@@ -1,15 +1,14 @@
 package com.example.backend.Modelos;
 
-import jakarta.persistence.Column;
 import java.time.LocalTime;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Dia {
 
     @Id
@@ -25,7 +24,7 @@ public class Dia {
     @Column(nullable = false)
     private LocalTime horaFin;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idReserva")
     private Periodica periodica;
 

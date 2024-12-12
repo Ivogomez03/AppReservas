@@ -12,6 +12,7 @@ import com.example.backend.DTO.ApiResponse;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ErrorAlGuardar;
+import com.example.backend.DTO.ObjetoFinalCU1;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Servicio.IReservaServicio;
@@ -46,11 +47,11 @@ public class ReservaControlador {
     }
 
     @PostMapping("/reserva/guardar")
-    public ResponseEntity<ErrorAlGuardar> guardarReserva(@RequestBody List<CDU01ReservaYAulaFinal> reservaYAula,
-            ReservaDTO reservaDTO) {
+    public ResponseEntity<ErrorAlGuardar> guardarReserva(@RequestBody ObjetoFinalCU1 objetoFinal) {
         try {
+
             // Llama al servicio para registrar la reserva
-            reservaServicio.guardarReserva(reservaYAula, reservaDTO);
+            reservaServicio.guardarReserva(objetoFinal.getReservaYAula(), objetoFinal.getReserva());
 
             // Si todo está bien, devuelve la lista de aulas y el reservaDTO
             return ResponseEntity.ok(new ErrorAlGuardar(true, null));

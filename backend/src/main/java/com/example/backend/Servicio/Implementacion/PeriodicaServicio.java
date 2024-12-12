@@ -9,9 +9,8 @@ import com.example.backend.Modelos.Periodica;
 import com.example.backend.Repositorio.PeriodicaDAO;
 import com.example.backend.Servicio.IPeriodicaServicio;
 
-
 @Service
-public class PeriodicaServicio implements IPeriodicaServicio{
+public class PeriodicaServicio implements IPeriodicaServicio {
 
     @Autowired
     private PeriodicaDAO periodicaDAO;
@@ -24,7 +23,7 @@ public class PeriodicaServicio implements IPeriodicaServicio{
 
     @Override
     public void guardarReservaPeriodica(ReservaDTO reservaDTO, List<CDU01ReservaYAulaFinal> reservaYAula) {
-        
+        System.out.println("En periodica el dto es: " + reservaYAula);
         Periodica periodica = new Periodica();
         periodica.setIdReserva(reservaDTO.getIdReserva());
         periodica.setNombreProfesor(reservaDTO.getNombreProfesor());
