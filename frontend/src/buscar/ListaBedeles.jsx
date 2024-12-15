@@ -7,7 +7,8 @@ const ListaBedeles = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const goBack = () => {
+    const goBack = (e) => {
+        e.preventDefault()
         navigate(-1); // Navega hacia la página anterior
     };
 

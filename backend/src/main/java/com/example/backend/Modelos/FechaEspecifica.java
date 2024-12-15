@@ -3,7 +3,6 @@ package com.example.backend.Modelos;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 
 import java.time.LocalTime;
 import lombok.Getter;
@@ -27,7 +26,7 @@ public class FechaEspecifica {
 
     @Column(nullable = false)
     private LocalTime HoraFin;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idReservaEsporadica", nullable = false)
     private Esporadica esporadica;
 

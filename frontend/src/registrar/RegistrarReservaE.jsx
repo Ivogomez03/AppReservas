@@ -9,7 +9,7 @@ import CancelarBedel from './../cancelar/CancelarBedel';
 const RegistrarReservaE = ({ resetForm }) => {
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/login/bienvenidoBedel/TipoReserva"); // Navega hacia la página anterior
     };
 
     const navigate = useNavigate();
@@ -50,9 +50,9 @@ const RegistrarReservaE = ({ resetForm }) => {
 
 
     const options = [
-        { value: 'AulaMultimedio', label: 'Multimedio' },
-        { value: 'AulaInformatica', label: 'Informática' },
-        { value: 'AulaSinRecursosAdicionales', label: 'Sin recursos adicionales' },
+        { value: 'Multimedio', label: 'Multimedio' },
+        { value: 'Informatica', label: 'Informática' },
+        { value: 'SinRecursosAdicionales', label: 'Sin recursos adicionales' },
     ];
 
     const [form, setForm] = useState({
@@ -144,7 +144,7 @@ const RegistrarReservaE = ({ resetForm }) => {
         }
 
         if (["cantidadAlumnos"].includes(name) && !onlyNumbers(value)) {
-            if (!onlyNumbers(value)){
+            if (!onlyNumbers(value)) {
                 return;
             }
         }
@@ -227,6 +227,7 @@ const RegistrarReservaE = ({ resetForm }) => {
                 setTimeout(() => {
                     setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
                     resetFormulario(); // Limpiar formulario
+                    navigate('/login/RegistrarReservaEsporadica/ElegirAulaE', { state: { data: { ...result } } })
                 }, 2000); // Esperar 2 segundos antes de hacer fade out
             }
 

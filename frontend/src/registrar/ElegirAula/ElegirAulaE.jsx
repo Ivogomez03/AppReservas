@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ElegirAula.css";
 
-const ElegirAula = () => {
+const ElegirAulaE = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [indiceDia, setIndiceDia] = useState(0);
+    const [indiceFecha, setIndiceDia] = useState(0);
     const goBack = () => navigate(-1);
 
     // Datos de las aulas y la reserva
@@ -24,13 +24,13 @@ const ElegirAula = () => {
 
     // Manejador para avanzar al siguiente día
     const handleSiguiente = () => {
-        if (!diasSeleccionados[indiceDia]) {
+        if (!diasSeleccionados[indiceFecha]) {
             alert("Debes seleccionar un aula antes de continuar.");
             return;
         }
 
-        if (indiceDia < aulas.length - 1) {
-            setIndiceDia(indiceDia + 1);
+        if (indiceFecha < aulas.length - 1) {
+            setIndiceDia(indiceFecha + 1);
         } else {
             alert("Reserva completada para todos los días.");
             enviarDatos(); // Enviar los datos al backend
@@ -41,12 +41,12 @@ const ElegirAula = () => {
     const elegirAula = (aula) => {
         const diaSeleccionado = {
             aula: aula, // Objeto AulaDTO
-            dias: aulas[indiceDia].dias, // Día correspondiente a este aula
-            fechas: aulas[indiceDia].fechas
+            dias: aulas[indiceFecha].dias, // Día correspondiente a este aula
+            fechas: aulas[indiceFecha].fechas // Fechas correspondientes a este aula
         };
 
         setDiasSeleccionados((prev) => [...prev, diaSeleccionado]);
-        alert(`Aula seleccionada: ${aula.numeroDeAula} para el día ${aulas[indiceDia].dias.dia}`);
+        alert(`Aula seleccionada: ${aula.numeroDeAula} para la fecha ${aulas[indiceFecha].fechas.fecha}`);
     };
 
     // Enviar los datos al backend
@@ -90,8 +90,8 @@ const ElegirAula = () => {
             </button>
 
             <h2>
-                {aulas[indiceDia]?.dias ? "Día: " + aulas[indiceDia].dias.dia : null} -
-                {aulas[indiceDia]?.dias ? " Hora: " + aulas[indiceDia].dias.horaInicio : null}
+                {aulas[indiceFecha]?.fechas ? "Día: " + aulas[indiceFecha].fechas.fecha : null} -
+                {aulas[indiceFecha]?.fechas ? " Hora: " + aulas[indiceFecha].fechas.horaInicio : null}
             </h2>
 
             {aulas.length === 0 ? (
@@ -106,7 +106,7 @@ const ElegirAula = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {aulas[indiceDia]?.aulas.map((aula, index) => (
+                        {aulas[indiceFecha]?.aulas.map((aula, index) => (
                             <tr key={index}>
                                 <td>{aula.numeroDeAula}</td>
                                 <td>{aula.capacidad}</td>
@@ -127,4 +127,4 @@ const ElegirAula = () => {
     );
 };
 
-export default ElegirAula;
+export default ElegirAulaE;

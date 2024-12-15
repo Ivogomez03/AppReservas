@@ -5,9 +5,10 @@ const Login = ({ resetForm }) => {
 
     const navigate = useNavigate();
 
-    const goBack = () => {
+    const goBack = (e) => {
+        e.preventDefault()
         navigate(-1); // Navega hacia la página anterior
-      };
+    };
 
     const goToBienvenidoBedel = () => {
         navigate('/login/bienvenidoBedel');
@@ -134,15 +135,15 @@ const Login = ({ resetForm }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        width="32" 
+                        width="32"
                         height="32"
                     >
-                    <path
-                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                    />
+                        <path
+                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                        />
                     </svg>
                 </button>
-                
+
                 <h1>
                     Inicie sesión
                 </h1>
@@ -163,7 +164,7 @@ const Login = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`inputLogin ${errors.contrasena ? 'input-error-login' : ''}`}
                 />
-                <button className='botonLogin' onClick={goToBienvenidoBedel}>Iniciar sesión</button>
+                <button className='botonLogin' onClick={handleSubmit}>Iniciar sesión</button>
             </div>
 
         </div>

@@ -5,8 +5,9 @@ import CancelarBedel from './../cancelar/CancelarBedel';
 
 const ModificarBedel = ({ resetForm }) => {
     const navigate = useNavigate();
-    const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+    const goBack = (e) => {
+        e.preventDefault()
+        navigate("/login/bienvenidoAdmin/BuscarBedel"); // Navega hacia la página anterior
     };
 
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
@@ -53,13 +54,13 @@ const ModificarBedel = ({ resetForm }) => {
 
         // Validar que ciertos campos acepten solo letras
         if (["nombre", "apellido"].includes(name)) {
-        if (!onlyLetters(value)) {
-            return; // Salir si el valor contiene caracteres no permitidos
-        }
+            if (!onlyLetters(value)) {
+                return; // Salir si el valor contiene caracteres no permitidos
+            }
         }
 
         if (["idUsuario"].includes(name) && !onlyNumbers(value)) {
-            if (!onlyNumbers(value)){
+            if (!onlyNumbers(value)) {
                 return;
             }
         }
@@ -106,7 +107,7 @@ const ModificarBedel = ({ resetForm }) => {
     return (
         <div className="conteiner-mod-bedel">
             <div className="panel-izquierdo">
-                <button className="back-button" onClick={goBack}>
+                <button className="back-button" onClick={goBack} type="button">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -194,7 +195,7 @@ const ModificarBedel = ({ resetForm }) => {
             {showModal && (
                 <CancelarBedel
                     onCancel={() => setShowModal(false)}
-                    onConfirm={() => navigate('/login/bienvenidoAdmin/BuscarBedel/ListaBedeles')}
+                    onConfirm={() => navigate('/login/bienvenidoAdmin/BuscarBedel')}
                 />
             )}
         </div>

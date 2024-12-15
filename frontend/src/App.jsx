@@ -23,6 +23,7 @@ import ModificarAulaSRA from './modificar/ModificarAulaSRA';
 import ModificarAulaInformatica from './modificar/ModificarAulaInformatica';
 import EliminarBedel from './eliminar/EliminarBedel'
 import ElegirAula from './registrar/ElegirAula/ElegirAula';
+import ElegirAulaE from './registrar/ElegirAula/ElegirAulaE';
 const App = () => {
     const navigate = useNavigate();
 
@@ -124,6 +125,7 @@ const MainApp = () => {
                 <Route path="/login/ReservaClaseE" element={<ReservaClaseE />} />
                 <Route path="/login/CoincidenDyH" element={<CoincidenDyH />} />
                 <Route path="/login/RegistrarReservaPeriodica/ElegirAula" element={<ElegirAula />} />
+                <Route path="/login/RegistrarReservaEsporadica/ElegirAulaE" element={<ElegirAulaE />} />
             </Routes>
         </Router>
     );

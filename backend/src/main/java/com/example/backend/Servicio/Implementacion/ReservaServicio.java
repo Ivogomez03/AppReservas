@@ -55,16 +55,28 @@ public class ReservaServicio implements IReservaServicio {
     @Override
     public boolean validarHorasInicioDuracion(ReservaDTO reserva) {
 
+        List<CDU01FechaDTO> fechas = reserva.getFechasespecificas();
         List<CDU01DiasDTO> dias = reserva.getDias();
         Set<DiaSemana> diasUnicos = new HashSet<>();
-
-        for (CDU01DiasDTO dia : dias) {
-            if (!diasUnicos.add(dia.getDia())) {
-                // Si no se puede agregar al conjunto, significa que el día está duplicado
-                throw new ValidationException("No puede haber más de una hora de inicio y duración para un día");
+        Set<LocalDate> fechasUnicas = new HashSet<>();
+        if (reserva.isEsporadica()) {
+            for (CDU01FechaDTO fecha : fechas) {
+                if (!fechasUnicas.add(fecha.getFecha())) {
+                    // Si no se puede agregar al conjunto, significa que el día está duplicado
+                    throw new ValidationException("No puede haber más de una hora de inicio y duración para una fecha");
+                }
             }
+            return true;
+        } else {
+            for (CDU01DiasDTO dia : dias) {
+                if (!diasUnicos.add(dia.getDia())) {
+                    // Si no se puede agregar al conjunto, significa que el día está duplicado
+                    throw new ValidationException("No puede haber más de una hora de inicio y duración para un día");
+                }
+            }
+            return true;
         }
-        return true;
+
     }
 
     // Validar datos

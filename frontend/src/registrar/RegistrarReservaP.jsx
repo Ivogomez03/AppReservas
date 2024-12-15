@@ -11,7 +11,7 @@ const RegistrarReservaP = ({ resetForm }) => {
 
     const navigate = useNavigate();
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/login/bienvenidoBedel/TipoReserva"); // Navega hacia la página anterior
     };
 
     const location = useLocation();

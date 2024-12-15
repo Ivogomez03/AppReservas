@@ -6,8 +6,8 @@ const TipoDeReserva = () => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
-      };
+        navigate("/login/bienvenidoBedel"); // Navega hacia la página anterior
+    };
 
     const goToRegReservaPeriodica = (tipoReserva) => {
         navigate('/login/RegistrarReservaPeriodica', { state: { tipoReserva } });
@@ -23,12 +23,12 @@ const TipoDeReserva = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        width="32" 
+                        width="32"
                         height="32"
                     >
-                    <path
-                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                    />
+                        <path
+                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
+                        />
                     </svg>
                 </button>
 

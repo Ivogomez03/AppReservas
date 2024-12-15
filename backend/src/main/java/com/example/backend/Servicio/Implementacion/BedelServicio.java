@@ -13,17 +13,16 @@ import com.example.backend.Modelos.Bedel;
 import com.example.backend.Modelos.TurnoDeTrabajo;
 import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Servicio.IBedelServicios;
+
 @Service
 public class BedelServicio implements IBedelServicios {
-    @Autowired 
+    @Autowired
     private AdministradorServicio gestorAdmin;
     @Autowired
     private BedelDAO bedelDAO;
     @Autowired
 
-
-    private static final Pattern PASSWORD_PATTERN = 
-        Pattern.compile("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%&*]).{8,16}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%&*]).{8,16}$");
 
     @Override
     public String validatePassword(String contra) {
@@ -36,18 +35,17 @@ public class BedelServicio implements IBedelServicios {
     @Override
     public String validarId(int id) {
 
-        if(bedelDAO.findById(id).isPresent()){
+        if (bedelDAO.findById(id).isPresent()) {
             return "Id ya existente";
-        }
-        else{
+        } else {
             return "Id valida";
         }
-    
+
     }
 
     @Override
     public ValidarContrasenaDTO validarBedel(BedelDTO bedelDTO) {
-        
+
         ValidarContrasenaDTO salida = new ValidarContrasenaDTO();
         String contra = bedelDTO.getContrasena();
 
@@ -72,11 +70,11 @@ public class BedelServicio implements IBedelServicios {
         salida.setErrorId(errorId);
 
         return salida;
-        
+
     }
 
     @Override
-    public Bedel buscarBedel(int id){
+    public Bedel buscarBedel(int id) {
         return bedelDAO.findById(id).orElse(null);
 
     }
@@ -85,15 +83,15 @@ public class BedelServicio implements IBedelServicios {
     public boolean validarBedel(int id, String contrasena) {
         // Busca el bedel por ID
         Bedel bedel = buscarBedel(id);
-        
+
         // Verifica si el bedel existe
         if (bedel == null) {
-            throw new IllegalArgumentException("El bedel con ID " + id + " no existe");
+            return false;
         }
 
         // Compara la contraseña
         if (!bedel.getContrasena().equals(contrasena)) {
-            throw new IllegalArgumentException("Contraseña incorrecta para el bedel con ID " + id);
+            return false;
         }
 
         // Si todo es correcto, devuelve true
@@ -121,15 +119,14 @@ public class BedelServicio implements IBedelServicios {
 
         // Si no hay apellido y hay turno
         if ((apellido == null || apellido.isEmpty()) && turno != null) {
-            if(turno == TurnoDeTrabajo.Todos){
+            if (turno == TurnoDeTrabajo.Todos) {
                 bedeles = bedelDAO.findByHabilitadoTrue();
-            }
-            else{
-            bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
+            } else {
+                bedeles = bedelDAO.findByTurnoDeTrabajoAndHabilitadoTrue(turno);
             }
         }
         // Si hay apellido y no hay turno
-        else if (turno == null && (apellido != null && !apellido.isEmpty())) {
+        else if (turno == TurnoDeTrabajo.Todos && (apellido != null && !apellido.isEmpty())) {
             bedeles = bedelDAO.findByApellidoAndHabilitadoTrue(apellido);
         }
         // Si hay ambos criterios
@@ -167,8 +164,8 @@ public class BedelServicio implements IBedelServicios {
 
         String contraValida = this.validatePassword(bedelDTO.getContrasena());
 
-        if(contraValida.equals("Contraseña valida")){
-            //datos nulos o caracteres maximos se valida en front
+        if (contraValida.equals("Contraseña valida")) {
+            // datos nulos o caracteres maximos se valida en front
             Bedel bedel = bedelDAO.findById(bedelDTO.getIdUsuario()).get();
             bedel.setNombre(bedelDTO.getNombre());
             bedel.setApellido(bedelDTO.getApellido());
@@ -183,11 +180,10 @@ public class BedelServicio implements IBedelServicios {
 
             // Convertir el Bedel actualizado a DTO y devolverlo
             return "Bedel ha sido modificado correctamente";
-        }
-        else{
+        } else {
             return contraValida;
         }
-        
+
     }
 
     @Override
@@ -196,11 +192,10 @@ public class BedelServicio implements IBedelServicios {
         int id = bedelDTO.getIdUsuario();
 
         // Buscar el Bedel en la base de datos
-        Bedel bedel = bedelDAO.findById(id).orElseThrow(() -> 
-            new IllegalArgumentException("El bedel con ID " + id + " no existe."));
+        Bedel bedel = bedelDAO.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("El bedel con ID " + id + " no existe."));
 
         // Convertir el Bedel a DTO
         return convertirABedelDTO(bedel);
     }
 }
-    

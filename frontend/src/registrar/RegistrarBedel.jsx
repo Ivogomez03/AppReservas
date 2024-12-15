@@ -13,12 +13,10 @@ const RegistrarBedel = ({ resetForm }) => {
   const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
   const onlyNumbers = (str) => /^[0-9]*$/.test(str);
 
-  const goToLogin = () => {
-    navigate('/login');
-  };
 
-  const goBack = () => {
-    navigate(-1); // Navega hacia la página anterior
+  const goBack = (e) => {
+    e.preventDefault()
+    navigate('/login/bienvenidoAdmin'); // Navega hacia la página anterior
   };
 
   const [showModal, setShowModal] = useState(false);  // Estado para controlar el modal
@@ -34,7 +32,7 @@ const RegistrarBedel = ({ resetForm }) => {
   const handleConfirmCancel = () => {
     setShowModal(false);  // Cierra el modal
     resetFormulario();
-    goToLogin();
+    goBack();
 
     console.log("Formulario cancelado");
   };
@@ -127,14 +125,14 @@ const RegistrarBedel = ({ resetForm }) => {
     // Validar que ciertos campos acepten solo letras
     if (["nombre", "apellido"].includes(name)) {
       if (!onlyLetters(value)) {
-          return; // Salir si el valor contiene caracteres no permitidos
+        return; // Salir si el valor contiene caracteres no permitidos
       }
     }
 
     if (["idUsuario"].includes(name) && !onlyNumbers(value)) {
-        if (!onlyNumbers(value)){
-            return;
-        }
+      if (!onlyNumbers(value)) {
+        return;
+      }
     }
     console.log({ ...form })
     setForm({
@@ -149,37 +147,37 @@ const RegistrarBedel = ({ resetForm }) => {
 
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      const newErrors = { ...errors };
+    e.preventDefault();
+    const newErrors = { ...errors };
 
-      // Validaciones locales
-      if (!form.apellido || form.apellido.length > 50) {
-        newErrors.apellido = true;
-        setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
-      }
-      if (!form.nombre || form.nombre.length > 50) {
-        newErrors.nombre = true;
-        setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
-      }
-      if (!form.turnoDeTrabajo) {
-        newErrors.turnoDeTrabajo = true;
-      }
-      if (!form.idUsuario || form.idUsuario.length > 10) {
-        newErrors.idUsuario = true;
-        setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
-      }
-      if (!form.contrasena) {
-        newErrors.contrasena = true;
-        setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
-      }
-      if (form.contrasena !== form.confirmarContrasena) {
-        newErrors.confirmarContrasena = true;
-        setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
-        setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
-      }
+    // Validaciones locales
+    if (!form.apellido || form.apellido.length > 50) {
+      newErrors.apellido = true;
+      setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
+    }
+    if (!form.nombre || form.nombre.length > 50) {
+      newErrors.nombre = true;
+      setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
+    }
+    if (!form.turnoDeTrabajo) {
+      newErrors.turnoDeTrabajo = true;
+    }
+    if (!form.idUsuario || form.idUsuario.length > 10) {
+      newErrors.idUsuario = true;
+      setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
+    }
+    if (!form.contrasena) {
+      newErrors.contrasena = true;
+      setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
+    }
+    if (form.contrasena !== form.confirmarContrasena) {
+      newErrors.confirmarContrasena = true;
+      setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
+      setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
+    }
 
-      // Actualizar el estado de errores
-      setErrors(newErrors);
+    // Actualizar el estado de errores
+    setErrors(newErrors);
 
     // Si hay errores, detener el envío
     if (Object.values(newErrors).some(error => error)) {
@@ -232,12 +230,12 @@ const RegistrarBedel = ({ resetForm }) => {
       <div className='panel-izquierdo'>
         <button className="back-button" onClick={goBack}>
           <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              width="32" 
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="32"
             height="32"
-            >
+          >
             <path
               d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
             />

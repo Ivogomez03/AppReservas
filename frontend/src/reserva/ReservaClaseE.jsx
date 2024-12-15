@@ -7,7 +7,8 @@ import CancelarBedel from './../cancelar/CancelarBedel'
 
 const ReservaClaseE = ({ resetForm }) => {
 
-    const goBack = () => {
+    const goBack = (e) => {
+        e.preventDefault()
         navigate(-1); // Navega hacia la página anterior
     };
 
@@ -35,14 +36,14 @@ const ReservaClaseE = ({ resetForm }) => {
     const [diasRegistrados, setDiasRegistrados] = useState(location.state?.diasRegistrados || []);
 
     const optionsDuracion = [
-        { value: 30 , label: '0:30'},
-        { value: 60 , label: '1:00'},
-        { value: 90 , label: '1:30'},
-        { value: 120 , label: '2:00'},
-        { value: 150 , label: '2:30'},
-        { value: 180 , label: '3:00'},
-        { value: 210 , label: '3:30'},
-        { value: 240 , label: '4:00'},
+        { value: 30, label: '0:30' },
+        { value: 60, label: '1:00' },
+        { value: 90, label: '1:30' },
+        { value: 120, label: '2:00' },
+        { value: 150, label: '2:30' },
+        { value: 180, label: '3:00' },
+        { value: 210, label: '3:30' },
+        { value: 240, label: '4:00' },
     ];
 
 

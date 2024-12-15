@@ -7,8 +7,9 @@ import Select from 'react-select';
 const BuscarBedel = ({ resetForm }) => {
     const navigate = useNavigate();
 
-    const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+    const goBack = (e) => {
+        e.preventDefault()
+        navigate("/login/bienvenidoAdmin"); // Navega hacia la página anterior
     };
 
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);

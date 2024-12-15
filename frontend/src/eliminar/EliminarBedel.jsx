@@ -5,7 +5,8 @@ import CancelarBedel from './../cancelar/CancelarBedel';
 
 const EliminarBedel = ({ resetForm }) => {
     const navigate = useNavigate();
-    const goBack = () => {
+    const goBack = (e) => {
+        e.preventDefault();
         navigate(-1); // Navega hacia la página anterior
     };
 
@@ -66,6 +67,7 @@ const EliminarBedel = ({ resetForm }) => {
             const result = await response.text(); // Mensaje de éxito
             console.log('Éxito:', result);
             alert(result); // O redirigir si es necesario
+            navigate("/login/bienvenidoAdmin/BuscarBedel");
 
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
@@ -76,7 +78,8 @@ const EliminarBedel = ({ resetForm }) => {
     return (
         <div className="conteinerEliminarBedel">
             <form onSubmit={handleSubmit} className="formularioEliminarBedel">
-                <button className="back-button" onClick={goBack}>
+                <button className="back-button" onClick={goBack} type="button">
+
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"

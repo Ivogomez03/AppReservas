@@ -5,7 +5,7 @@ const BienvenidoBedel = () => {
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1); // Navega hacia la página anterior
+        navigate("/"); // Navega hacia la página anterior
     };
 
     const goToTipoReserva = () => {
