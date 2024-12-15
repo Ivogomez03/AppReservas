@@ -21,6 +21,7 @@ import com.example.backend.DTO.BuscarAulaDTO;
 import com.example.backend.DTO.HorarioSuperpuestoDTO;
 import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.DTO.ReservaDTO;
+import com.example.backend.DTO.ReservaSuperpuestaDTO;
 import com.example.backend.DTO.SalidaCU9DTO;
 import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Modelos.Aula;
@@ -33,6 +34,7 @@ import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.FechaEspecifica;
 import com.example.backend.Modelos.Periodica;
 import com.example.backend.Modelos.Periodo;
+import com.example.backend.Modelos.Reserva;
 import com.example.backend.Repositorio.AulaDAO;
 import com.example.backend.Repositorio.AulaInformaticaDAO;
 import com.example.backend.Repositorio.AulaMultimedioDAO;
@@ -388,22 +390,31 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
 
         Map<Integer, HorarioSuperpuestoDTO> superposiciones = new HashMap<>();
+        Map<Integer, ReservaSuperpuestaDTO> reservasSuperpuestas = new HashMap<>();
 
         reservasEsporadicas.stream()
                 .flatMap(esporadica -> esporadica.getFechaEspecifica().stream())
                 .filter(fechaEspecifica -> fechaEspecifica.getFecha().getDayOfWeek().equals(diaSemana)
                         && fechaEspecifica.getHoraInicio().isBefore(horaFin)
                         && fechaEspecifica.getHoraFin().isAfter(horaInicio))
-                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(),
-                        new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
+                .forEach(fechaEspecifica -> {
+                    superposiciones.putIfAbsent(fechaEspecifica.getAula().getIdAula(),
+                            new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
+                    reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
 
         reservasPeriodicas.stream()
                 .flatMap(reserva -> reserva.getDias().stream())
                 .filter(dia -> dia.getDiaSemana().equals(diaSemana)
                         && dia.getHoraInicio().isBefore(horaFin)
                         && dia.getHoraFin().isAfter(horaInicio))
-                .forEach(dia -> superposiciones.put(dia.getAula().getIdAula(),
-                        new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin())));
+                .forEach(dia -> {
+                    superposiciones.putIfAbsent(dia.getAula().getIdAula(),
+                            new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
+                    reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
 
         if (superposiciones.isEmpty()) {
             return null;
@@ -416,9 +427,22 @@ public class AulaServicio implements IAulaServicio {
 
         if (aulaConMenorSuperposicion != null) {
             HorarioSuperpuestoDTO horario = superposiciones.get(aulaConMenorSuperposicion.getIdAula());
-            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario);
+            ReservaSuperpuestaDTO reservaSuperpuesta = reservasSuperpuestas.get(aulaConMenorSuperposicion.getIdAula());
+            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario, reservaSuperpuesta);
         }
         return null;
+    }
+
+    private ReservaSuperpuestaDTO convertirAReservaSuperpuestaDTO(Reserva reserva) {
+        ReservaSuperpuestaDTO dto = new ReservaSuperpuestaDTO();
+        dto.setIdReserva(reserva.getIdReserva());
+        dto.setNombreProfesor(reserva.getNombreProfesor());
+        dto.setApellidoProfesor(reserva.getApellidoProfesor());
+        dto.setCorreo(reserva.getCorreo());
+        dto.setNombreCatedra(reserva.getNombreCatedra());
+        dto.setIdProfesor(reserva.getIdProfesor());
+        dto.setIdCatedra(reserva.getIdCatedra());
+        return dto;
     }
 
     private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase,
@@ -431,17 +455,32 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
 
         Map<Integer, HorarioSuperpuestoDTO> superposiciones = new HashMap<>();
+        Map<Integer, ReservaSuperpuestaDTO> reservasSuperpuestas = new HashMap<>();
 
         reservasEsporadicas.stream()
                 .flatMap(esporadica -> esporadica.getFechaEspecifica().stream())
                 .filter(fechaEspecifica -> fechaEspecifica.getFecha().equals(fecha)
                         && fechaEspecifica.getHoraInicio().isBefore(horaFin)
                         && fechaEspecifica.getHoraFin().isAfter(horaInicio))
-                .forEach(fechaEspecifica -> superposiciones.put(fechaEspecifica.getAula().getIdAula(),
-                        new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin())));
+                .forEach(fechaEspecifica -> {
+                    superposiciones.put(fechaEspecifica.getAula().getIdAula(),
+                            new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
+                    reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
 
-        aulasOcupadasPeriodicas.stream()
-                .forEach(aula -> superposiciones.put(aula.getIdAula(), new HorarioSuperpuestoDTO(horaInicio, horaFin)));
+        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(fecha.minusDays(1), fecha.plusDays(1));
+        reservasPeriodicas.stream()
+                .flatMap(reserva -> reserva.getDias().stream())
+                .filter(dia -> dia.getDiaSemana().equals(fecha.getDayOfWeek())
+                        && dia.getHoraInicio().isBefore(horaFin)
+                        && dia.getHoraFin().isAfter(horaInicio))
+                .forEach(dia -> {
+                    superposiciones.put(dia.getAula().getIdAula(),
+                            new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
+                    reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
 
         if (superposiciones.isEmpty()) {
             return null;
@@ -454,12 +493,13 @@ public class AulaServicio implements IAulaServicio {
 
         if (aulaConMenorSuperposicion != null) {
             HorarioSuperpuestoDTO horario = superposiciones.get(aulaConMenorSuperposicion.getIdAula());
-            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario);
+            ReservaSuperpuestaDTO reservaSuperpuesta = reservasSuperpuestas.get(aulaConMenorSuperposicion.getIdAula());
+            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario, reservaSuperpuesta);
         }
         return null;
     }
 
-    public AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto) {
+    public AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto, ReservaSuperpuestaDTO reservaSuperpuesta) {
         AulaConHorariosDTO dto = new AulaConHorariosDTO();
         dto.setIdAula(aula.getIdAula());
         dto.setTipoPizarron(aula.getTipoPizarron());
@@ -495,6 +535,8 @@ public class AulaServicio implements IAulaServicio {
         } else {
             logger.info("Horario superpuesto es nulo");
         }
+
+        dto.setReservaSuperpuesta(reservaSuperpuesta);
 
         logger.info("Convertir aula con horario superpuesto: " + dto);
         return dto;
