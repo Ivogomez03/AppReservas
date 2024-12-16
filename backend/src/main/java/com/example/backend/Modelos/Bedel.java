@@ -9,9 +9,10 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
-public class Bedel extends Usuario{
+public class Bedel extends Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "turnoDeTrabajo")

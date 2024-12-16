@@ -123,7 +123,7 @@ const MainApp = () => {
                 <Route path="/login/ReservaClaseP" element={<ReservaClaseP />} />
                 <Route path="/login/RegistrarReservaEsporadica" element={<RegistrarReservaE />} />
                 <Route path="/login/ReservaClaseE" element={<ReservaClaseE />} />
-                <Route path="/login/CoincidenDyH" element={<CoincidenDyH />} />
+                <Route path="/login/CoincidenDiasyHorarios" element={<CoincidenDyH />} />
                 <Route path="/login/RegistrarReservaPeriodica/ElegirAula" element={<ElegirAula />} />
                 <Route path="/login/RegistrarReservaEsporadica/ElegirAulaE" element={<ElegirAulaE />} />
             </Routes>

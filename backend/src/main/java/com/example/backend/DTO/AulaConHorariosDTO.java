@@ -4,26 +4,15 @@
  */
 package com.example.backend.DTO;
 
+import com.example.backend.Modelos.Reserva;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AulaConHorariosDTO extends AulaDTO {
     private HorarioSuperpuestoDTO horarioSuperpuesto;
     private ReservaSuperpuestaDTO reservaSuperpuesta;
-
-    // Getters y setters
-    public HorarioSuperpuestoDTO getHorarioSuperpuesto() {
-        return horarioSuperpuesto;
-    }
-
-    public void setHorarioSuperpuesto(HorarioSuperpuestoDTO horarioSuperpuesto) {
-        this.horarioSuperpuesto = horarioSuperpuesto;
-    }
-
-    public ReservaSuperpuestaDTO getReservaSuperpuesta() {
-        return reservaSuperpuesta;
-    }
-
-    public void setReservaSuperpuesta(ReservaSuperpuestaDTO reservaSuperpuesta) {
-        this.reservaSuperpuesta = reservaSuperpuesta;
-    }
 
     @Override
     public String toString() {
@@ -33,4 +22,3 @@ public class AulaConHorariosDTO extends AulaDTO {
                 '}';
     }
 }
-

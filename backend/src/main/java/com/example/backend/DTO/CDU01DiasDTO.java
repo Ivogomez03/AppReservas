@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CDU01DiasDTO {
-    DiaSemana dia;
-    LocalTime horaInicio;
-    int duracion;
+    private DiaSemana dia;
+    private LocalTime horaInicio;
+    private int duracion;
 }

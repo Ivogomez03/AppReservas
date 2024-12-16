@@ -231,9 +231,7 @@ const RegistrarReservaP = ({ resetForm }) => {
             const newBackendErrors = { ...backendErrors };
 
             setBackendErrors(newBackendErrors);
-
-            // Si no hay errores en el backend, mostrar el mensaje de éxito
-            if (!result.error) {
+            if (!result.data.superpuesto && !result.error) {
                 setBackendMessage("Reserva creada exitosamente.");
 
                 setAnimationClass('fade-in'); // Agregar clase de animación
@@ -242,6 +240,17 @@ const RegistrarReservaP = ({ resetForm }) => {
                     setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
                     resetFormulario(); // Limpiar formulario
                     navigate('/login/RegistrarReservaPeriodica/ElegirAula', { state: { data: { ...result } } });
+                }, 2000); // Esperar 2 segundos antes de hacer fade out
+            }
+            // Si no hay errores en el backend, mostrar el mensaje de éxito
+            if (!result.error && result.data.superpuesto) {
+                setBackendMessage("Se detecto una reserva superpuesta.");
+
+                setAnimationClass('fade-in'); // Agregar clase de animación
+
+                setTimeout(() => {
+                    setAnimationClass('fade-out'); // Iniciar fade out después de 2 segundos
+                    navigate('/login/CoincidenDiasyHorarios', { state: { data: { ...result } } });
                 }, 2000); // Esperar 2 segundos antes de hacer fade out
             }
 

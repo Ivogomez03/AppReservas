@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.DTO.ApiResponse;
+import com.example.backend.DTO.AulaDTO;
+import com.example.backend.DTO.AulaConHorariosDTO;
+import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ErrorAlGuardar;
 import com.example.backend.DTO.ObjetoFinalCU1;
@@ -35,10 +38,20 @@ public class ReservaControlador {
         try {
             // Llama al servicio para registrar la reserva
             List<CDU01ReservasYAulas> aulasDisponibles = reservaServicio.registrarReserva(reservaDTO);
+            boolean esSuperpuesto = false;
+            for (CDU01ReservasYAulas reserva : aulasDisponibles) {
+                for (AulaDTO aula : reserva.getAulas()) { // Ahora accedemos a getAulas() de cada reserva
+                    if (aula instanceof AulaConHorariosDTO) {
 
+                        esSuperpuesto = true;
+                    }
+                }
+            }
             // Si todo está bien, devuelve la lista de aulas y el reservaDTO
             return ResponseEntity
-                    .ok(new ApiResponse<>(true, Map.of("aulas", aulasDisponibles, "reserva", reservaDTO), null));
+                    .ok(new ApiResponse<>(true,
+                            Map.of("aulas", aulasDisponibles, "reserva", reservaDTO, "superpuesto", esSuperpuesto),
+                            null));
         } catch (ValidationException ex) {
             // En caso de error, devuelve el mensaje de error
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, ex.getMessage()));
