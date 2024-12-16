@@ -10,7 +10,7 @@ import com.example.backend.Modelos.TurnoDeTrabajo;
 public interface IBedelServicios {
     public ValidarContrasenaDTO validarBedel(BedelDTO bedeldto);
     public String validatePassword(String contra);
-    public String validarId(int id);
+    public String existeBedelPorId(int id);
     public Bedel buscarBedel(int id);
     public boolean validarBedel(int id, String contrasena);
     public void eliminarBedel(BedelDTO bedelSeleccionado);

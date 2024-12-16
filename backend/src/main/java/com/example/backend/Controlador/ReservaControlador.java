@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.DTO.ApiResponse;
 import com.example.backend.DTO.AulaDTO;
 import com.example.backend.DTO.AulaConHorariosDTO;
-import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ErrorAlGuardar;
 import com.example.backend.DTO.ObjetoFinalCU1;
