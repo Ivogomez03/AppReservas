@@ -48,6 +48,61 @@ const ModificarBedel = ({ resetForm }) => {
         }
     }, [bedel]);
 
+    const [placeholders, setPlaceholders] = useState({
+        apellido: "Apellido",
+        nombre: "Nombre",
+        turnoDeTrabajo: "Turno de trabajo",
+        idUsuario: "Identificador de usuario",
+        contrasena: "Contraseña",
+        confirmarContrasena: "Confirmar contraseña"
+    });
+
+    const [errors, setErrors] = useState({
+        apellido: false,
+        nombre: false,
+        turnoDeTrabajo: false,
+        idUsuario: false,
+        contrasena: false,
+        confirmarContrasena: false
+    });
+    const resetFormulario = () => {
+        setForm({
+            apellido: '',
+            nombre: '',
+            turnoDeTrabajo: '',
+            idUsuario: '',
+            idAdminCreador: '1',
+            contrasena: '',
+            confirmarContrasena: ''
+        });
+        setPlaceholders({
+            apellido: "Apellido",
+            nombre: "Nombre",
+            turnoDeTrabajo: "Turno de trabajo",
+            idUsuario: "Identificador de usuario",
+            contrasena: "Contraseña",
+            confirmarContrasena: "Confirmar contraseña"
+        })
+        setErrors({
+            apellido: false,
+            nombre: false,
+            turnoDeTrabajo: false,
+            idUsuario: false,
+            contrasena: false,
+            confirmarContrasena: false
+
+        });
+        setBackendErrors({
+            idUsuario: '',
+            contrasena: ''
+        });
+        setBackendMessage('');
+    };
+    useEffect(() => {
+        if (resetForm) {
+            resetForm.current = resetFormulario;
+        }
+    }, [resetForm]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -74,7 +129,41 @@ const ModificarBedel = ({ resetForm }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const newErrors = { ...errors };
 
+        // Validaciones locales
+        if (!form.apellido || form.apellido.length > 50) {
+            newErrors.apellido = true;
+            setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
+        }
+        if (!form.nombre || form.nombre.length > 50) {
+            newErrors.nombre = true;
+            setPlaceholders(prev => ({ ...prev, nombre: "Completa el nombre (máximo 50 caracteres)." }));
+        }
+        if (!form.turnoDeTrabajo) {
+            newErrors.turnoDeTrabajo = true;
+        }
+        if (!form.idUsuario || form.idUsuario.length > 10) {
+            newErrors.idUsuario = true;
+            setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el identificador (máximo 10 caracteres)." }));
+        }
+        if (!form.contrasena) {
+            newErrors.contrasena = true;
+            setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
+        }
+        if (form.contrasena !== form.confirmarContrasena) {
+            newErrors.confirmarContrasena = true;
+            setPlaceholders(prev => ({ ...prev, confirmarContrasena: "Las contraseñas no coinciden." }));
+            setForm(prev => ({ ...prev, confirmarContrasena: "" })); // Limpiar el campo
+        }
+
+        // Actualizar el estado de errores
+        setErrors(newErrors);
+
+        // Si hay errores, detener el envío
+        if (Object.values(newErrors).some(error => error)) {
+            return;
+        }
         // Validaciones y lógica de envío del formulario...
 
         try {
@@ -91,6 +180,7 @@ const ModificarBedel = ({ resetForm }) => {
                 const errorMessage = await response.text();
                 setBackendErrors({ general: errorMessage });
                 console.error('Error del servidor:', errorMessage);
+                alert(errorMessage)
                 return;
             }
 
@@ -129,18 +219,19 @@ const ModificarBedel = ({ resetForm }) => {
                 <input
                     type="text"
                     name="apellido"
-                    placeholder="Apellido"
+                    placeholder={placeholders.apellido}
                     value={form.apellido}
                     onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    className={`inputModBedel ${errors.apellido ? 'input-error' : ''}`}
+                /* Clase correcta */
                 />
                 <input
                     type="text"
                     name="nombre"
-                    placeholder="Nombre"
+                    placeholder={placeholders.nombre}
                     value={form.nombre}
                     onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    className={`inputModBedel ${errors.nombre ? 'input-error' : ''}`} /* Clase correcta */
                 />
                 <select
                     name="turnoDeTrabajo"
@@ -156,7 +247,7 @@ const ModificarBedel = ({ resetForm }) => {
                 <input
                     type="text"
                     name="idUsuario"
-                    placeholder="Identificador de usuario"
+                    placeholder={placeholders.idUsuario}
                     value={form.idUsuario}
                     onChange={handleChange}
                     className="inputModBedel" /* Clase correcta */
@@ -166,19 +257,19 @@ const ModificarBedel = ({ resetForm }) => {
                 <input
                     type="password"
                     name="contrasena"
-                    placeholder="Contraseña"
+                    placeholder={placeholders.contrasena}
                     value={form.contrasena}
                     onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    className={`inputModBedel ${errors.contrasena ? 'input-error' : ''}`} /* Clase correcta */
                 />
 
                 <input
                     type="password"
                     name="confirmarContrasena"
-                    placeholder="Confirmar contraseña"
+                    placeholder={placeholders.confirmarContrasena}
                     value={form.confirmarContrasena}
                     onChange={handleChange}
-                    className="inputModBedel" /* Clase correcta */
+                    className={`inputModBedel ${errors.confirmarContrasena ? 'input-error' : ''}`}/* Clase correcta */
                 />
 
                 <div className="BotonesBedel">

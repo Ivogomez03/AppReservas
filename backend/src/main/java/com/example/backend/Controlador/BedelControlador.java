@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.backend.DTO.BedelDTO;
 import com.example.backend.DTO.ValidarContrasenaDTO;
+import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Servicio.Implementacion.BedelServicio;
 import com.example.backend.Modelos.TurnoDeTrabajo;
 import java.util.Collections;
@@ -22,13 +23,14 @@ public class BedelControlador {
     @Autowired
     private BedelServicio bedelServicio;
 
-    //Endpoint para CU13
+    // Endpoint para CU13
     @PostMapping("/bedel/CU13")
     public ValidarContrasenaDTO validarBedel(@RequestBody BedelDTO bedeldto) {
         return bedelServicio.validarBedel(bedeldto);
     }
+
     @DeleteMapping("/bedel/CU15")
-     public ResponseEntity<String> eliminarBedel(@RequestBody BedelDTO bedelSeleccionado) {
+    public ResponseEntity<String> eliminarBedel(@RequestBody BedelDTO bedelSeleccionado) {
         try {
             bedelServicio.eliminarBedel(bedelSeleccionado);
             return ResponseEntity.ok("El bedel ha sido deshabilitado correctamente.");
@@ -36,8 +38,10 @@ public class BedelControlador {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @GetMapping("/bedel/CU16")
-    public ResponseEntity<List<BedelDTO>> buscarPorTurnoyApellido(@RequestParam(required = false) String apellido,@RequestParam(required = false) TurnoDeTrabajo turno) {
+    public ResponseEntity<List<BedelDTO>> buscarPorTurnoyApellido(@RequestParam(required = false) String apellido,
+            @RequestParam(required = false) TurnoDeTrabajo turno) {
         try {
             System.out.println("Apellido recibido: " + apellido);
             System.out.println("Turno recibido: " + turno);
@@ -59,15 +63,15 @@ public class BedelControlador {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @PutMapping("/bedel/CU14/modificarBedel")
     public ResponseEntity<String> modificarBedel(@RequestBody BedelDTO bedelModificado) {
         try {
             String salidaModificar = bedelServicio.modificarBedel(bedelModificado);
             return ResponseEntity.ok(salidaModificar);
-        } catch (IllegalArgumentException e) {
+        } catch (ValidationException e) {
             return ResponseEntity.badRequest().body("Error al modificar el bedel: " + e.getMessage());
         }
     }
-
 
 }

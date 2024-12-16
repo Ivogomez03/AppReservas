@@ -23,6 +23,7 @@
     border-radius: 0% 8% 8% 0%;
     animation: slideIn 1s ease-out forwards;
 }
+
 .back-button {
     position: fixed;
     top: 35px;
@@ -35,16 +36,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .back-button:hover {
-    color: #ffffff; /* Cambia el color al pasar el mouse */
-  }
-  
-  svg {
-    stroke-width: 2; /* Hace la flecha más gruesa */
-    stroke: currentColor; /* Asegura que tome el color actual */
-  }
+}
+
+.back-button:hover {
+    color: #ffffff;
+    /* Cambia el color al pasar el mouse */
+}
+
+svg {
+    stroke-width: 2;
+    /* Hace la flecha más gruesa */
+    stroke: currentColor;
+    /* Asegura que tome el color actual */
+}
 
 .panel-izquierdo h1 {
     font-size: 36px;
@@ -118,6 +122,10 @@
     color: #aaa;
 }
 
+.input-error {
+    border: 2px solid red;
+}
+
 /* Botones */
 .BotonesBedel {
     width: 50%;
@@ -152,6 +160,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
 }
+
 /* Estilo de error para el select */
 .select-error {
     background-color: #ffe5e5;
@@ -179,6 +188,7 @@
     from {
         right: -30%;
     }
+
     to {
         right: 0;
     }
@@ -188,6 +198,7 @@
     from {
         left: -30%;
     }
+
     to {
         left: 0;
     }

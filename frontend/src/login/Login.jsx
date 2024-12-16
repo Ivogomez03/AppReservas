@@ -1,28 +1,27 @@
-import { useState, useEffect } from 'react'
-import { HashRouter, useNavigate } from 'react-router-dom';
-import './Login.css'
-const Login = ({ resetForm }) => {
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
+const Login = ({ resetForm }) => {
     const navigate = useNavigate();
 
     const goBack = (e) => {
-        e.preventDefault()
-        navigate(-1); // Navega hacia la página anterior
+        e.preventDefault();
+        navigate(-1);
     };
 
     const goToBienvenidoBedel = () => {
         navigate('/login/bienvenidoBedel');
-    }
+    };
 
     const goToBienvenidoAdmin = () => {
         navigate('/login/bienvenidoAdmin');
-    }
+    };
 
     const [form, setForm] = useState({
         idUsuario: '',
         contrasena: ''
     });
-
 
     const [placeholders, setPlaceholders] = useState({
         idUsuario: "idUsuario",
@@ -38,18 +37,17 @@ const Login = ({ resetForm }) => {
         setForm({
             idUsuario: '',
             contrasena: '',
-
         });
         setPlaceholders({
             idUsuario: "idUsuario",
             contrasena: "Contraseña",
-        })
+        });
         setErrors({
             idUsuario: false,
             contrasena: false,
         });
-
     };
+
     useEffect(() => {
         if (resetForm) {
             resetForm.current = resetFormulario;
@@ -57,38 +55,46 @@ const Login = ({ resetForm }) => {
     }, [resetForm]);
 
     const handleChange = (e) => {
-        console.log({ ...form })
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
         setErrors({
             ...errors,
-            [e.target.name]: false // Resetea el estado de error al cambiar el input
+            [e.target.name]: false, // Resetea el error al cambiar el input
+        });
+        setPlaceholders({
+            ...placeholders,
+            [e.target.name]: e.target.name === 'idUsuario' ? 'idUsuario' : 'Contraseña', // Limpia el placeholder si había error
         });
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = { ...errors };
+
+        // Resetea errores al iniciar el submit
+        setErrors({
+            idUsuario: false,
+            contrasena: false,
+        });
+
+        const newErrors = { idUsuario: false, contrasena: false };
 
         // Validaciones locales
-
         if (!form.idUsuario) {
             newErrors.idUsuario = true;
-            setPlaceholders(prev => ({ ...prev, idUsuario: "Completa el nombre de idUsuario" }));
+            setPlaceholders((prev) => ({ ...prev, idUsuario: "Completa el idUsuario" }));
         }
         if (!form.contrasena) {
             newErrors.contrasena = true;
-            setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." })); 
+            setPlaceholders((prev) => ({ ...prev, contrasena: "Completa la contraseña." }));
         }
 
         // Actualizar el estado de errores
         setErrors(newErrors);
 
         // Si hay errores, detener el envío
-        if (Object.values(newErrors).some(error => error)) {
+        if (Object.values(newErrors).some((error) => error)) {
             return;
         }
 
@@ -101,40 +107,43 @@ const Login = ({ resetForm }) => {
                 body: JSON.stringify(form),
             });
 
-            const result = await response.json(); // Usamos .json() para recibir la respuesta como objeto JSON
-            console.log(result); // Ver la estructura del objeto JSON en la consola
+            const result = await response.json();
 
-            if (result.bedel == true) {
-                localStorage.setItem('idBedel', result.idUsuario); // Store idBedel in local storage
-                console.log("idBedel stored in localStorage:", result.idUsuario); // Log the idBedel
+            if (result.bedel === true) {
+                localStorage.setItem('idBedel', result.idUsuario);
                 goToBienvenidoBedel();
                 resetFormulario();
-            }
-            else if (result.admin == true) {
-                localStorage.setItem('idAdmin', result.idUsuario); // Store idAdmin in local storage
+            } else if (result.admin === true) {
+                localStorage.setItem('idAdmin', result.idUsuario);
                 goToBienvenidoAdmin();
                 resetFormulario();
-            }
-            else {
+            } else {
                 setErrors({
                     idUsuario: true,
                     contrasena: true,
                 });
+                setPlaceholders({
+                    idUsuario: "Usuario o contraseña incorrectos",
+                    contrasena: "Usuario o contraseña incorrectos",
+                });
             }
-
         } catch (error) {
             console.error('Error en la solicitud:', error);
             setErrors({
                 idUsuario: true,
                 contrasena: true,
             });
+            setPlaceholders({
+                idUsuario: "Error en la conexión",
+                contrasena: "Error en la conexión",
+            });
         }
-    }
-    return (
-        <div className='conteiner-login'>
+    };
 
-            <img src="/reserved.png" alt="" className='shape-login' />
-            <div className='sub-conteiner-login'>
+    return (
+        <div className="conteiner-login">
+            <img src="/reserved.png" alt="" className="shape-login" />
+            <div className="sub-conteiner-login">
                 <button className="back-button" onClick={goBack}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -143,15 +152,11 @@ const Login = ({ resetForm }) => {
                         width="32"
                         height="32"
                     >
-                        <path
-                            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"
-                        />
+                        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
                     </svg>
                 </button>
 
-                <h1>
-                    Inicie sesión
-                </h1>
+                <h1>Inicie sesión</h1>
                 <input
                     type="number"
                     name="idUsuario"
@@ -169,11 +174,12 @@ const Login = ({ resetForm }) => {
                     onChange={handleChange}
                     className={`inputLogin ${errors.contrasena ? 'input-error-login' : ''}`}
                 />
-                <button className='botonLogin' onClick={handleSubmit}>Iniciar sesión</button>
+                <button className="botonLogin" onClick={handleSubmit}>
+                    Iniciar sesión
+                </button>
             </div>
-
         </div>
-    )
+    );
+};
 
-}
 export default Login;
