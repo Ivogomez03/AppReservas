@@ -4,8 +4,6 @@
  */
 package com.example.backend.DTO;
 
-import com.example.backend.Modelos.Reserva;
-
 public class AulaConHorariosDTO extends AulaDTO {
     private HorarioSuperpuestoDTO horarioSuperpuesto;
     private ReservaSuperpuestaDTO reservaSuperpuesta;

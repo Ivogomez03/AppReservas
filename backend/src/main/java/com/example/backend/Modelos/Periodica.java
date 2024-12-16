@@ -15,5 +15,8 @@ public class Periodica extends Reserva{
     @ManyToOne
     @JoinColumn(name = "idPeriodo", nullable = false)
     private Periodo periodo;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "idBedel", nullable = false, referencedColumnName = "idUsuario")
+    private Bedel bedel;
 }

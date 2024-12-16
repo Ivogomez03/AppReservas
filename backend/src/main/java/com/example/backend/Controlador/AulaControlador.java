@@ -2,7 +2,6 @@ package com.example.backend.Controlador;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import com.example.backend.DTO.AulaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +13,8 @@ import com.example.backend.DTO.BuscarAulaDTO;
 import com.example.backend.DTO.ModificarAulaDTO;
 import com.example.backend.Servicio.Implementacion.AulaServicio;
 import com.example.backend.Excepciones.ValidationException;
-import com.example.backend.Modelos.Aula;
-import com.example.backend.Modelos.DiaSemana;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 public class AulaControlador {

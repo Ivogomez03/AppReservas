@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Modelos.Esporadica;
+import com.example.backend.Modelos.FechaEspecifica;
 import com.example.backend.Repositorio.EsporadicaDAO;
+import com.example.backend.Repositorio.FechaEspecificaDAO;
 import com.example.backend.Servicio.IEsporadicaServicio;
 
 @Service
@@ -20,9 +22,12 @@ public class EsporadicaServicio implements IEsporadicaServicio {
     @Autowired
     private EsporadicaDAO esporadicaDAO;
 
+    @Autowired
+    private FechaEspecificaDAO fechaEspecificaDAO;
     @Override
     public void guardarReservaEsporadica(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reservaDTO) {
         Esporadica esporadica = new Esporadica();
+        List<FechaEspecifica> fechasEspecificas = fechaEspecificaServicio.crearFechasEspecificas(reservaDTO, reservaYAula, esporadica);
         esporadica.setIdReserva(reservaDTO.getIdReserva());
         esporadica.setNombreProfesor(reservaDTO.getNombreProfesor());
         esporadica.setApellidoProfesor(reservaDTO.getApellidoProfesor());
@@ -30,7 +35,13 @@ public class EsporadicaServicio implements IEsporadicaServicio {
         esporadica.setNombreCatedra(reservaDTO.getNombreCatedra());
         esporadica.setIdProfesor(reservaDTO.getIdProfesor());
         esporadica.setIdCatedra(reservaDTO.getIdCatedra());
-        esporadica.setFechaEspecifica(fechaEspecificaServicio.crearFechasEspecificas(reservaDTO, reservaYAula, esporadica));
+
+        for(FechaEspecifica fechaEspecifica : fechasEspecificas) {
+            fechaEspecificaDAO.save(fechaEspecifica);
+        }
+
+        esporadica.setFechaEspecifica(fechasEspecificas);
+
         esporadicaDAO.save(esporadica);
 
     }

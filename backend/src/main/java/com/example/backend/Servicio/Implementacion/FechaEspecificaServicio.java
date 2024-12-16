@@ -9,14 +9,10 @@ import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.FechaEspecifica;
-import com.example.backend.Repositorio.FechaEspecificaDAO;
 import com.example.backend.Servicio.IFechaEspecificaservicio;
 
 @Service
 public class FechaEspecificaServicio implements IFechaEspecificaservicio {
-
-    @Autowired
-    private FechaEspecificaDAO fechaEspecificaDAO;
 
     @Autowired
     private AulaServicio aulaServicio;
@@ -34,7 +30,6 @@ public class FechaEspecificaServicio implements IFechaEspecificaservicio {
             fechaEspecifica.setIdFechaEspecifica(0);
             fechaEspecifica.setAula(aulaServicio.convertirAEntidad(reservaYAulaFinal.getAula()));
             fechaEspecifica.setEsporadica(esporadica);
-            fechaEspecificaDAO.save(fechaEspecifica);
             fechasEspecificas.add(fechaEspecifica);
         } 
         

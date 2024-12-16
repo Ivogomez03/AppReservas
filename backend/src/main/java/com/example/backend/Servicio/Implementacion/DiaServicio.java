@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.Modelos.Dia;
 import com.example.backend.Modelos.Periodica;
-import com.example.backend.Repositorio.DiaDAO;
 import com.example.backend.Servicio.IDiaServicio;
 
 @Service
@@ -16,9 +15,6 @@ public class DiaServicio implements IDiaServicio {
 
     @Autowired
     private AulaServicio aulaServicio;
-
-    @Autowired
-    private DiaDAO diaDAO;
 
     @Override
     public List<Dia> crearDias(List<CDU01ReservaYAulaFinal> reservaYAula, Periodica periodica) {
@@ -33,7 +29,6 @@ public class DiaServicio implements IDiaServicio {
             dia.setHoraFin(reserva.getDias().getHoraInicio().plusMinutes(reserva.getDias().getDuracion()));
             dia.setAula(aulaServicio.convertirAEntidad(reserva.getAula()));
             dia.setPeriodica(periodica);
-            diaDAO.save(dia);
             dias.add(dia);
         }
         return dias;
