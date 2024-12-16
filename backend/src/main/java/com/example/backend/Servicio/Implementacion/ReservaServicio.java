@@ -14,9 +14,11 @@ import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.CDU01ReservasYAulas;
 import com.example.backend.DTO.ReservaDTO;
 import com.example.backend.Excepciones.ValidationException;
+import com.example.backend.Modelos.Bedel;
 import com.example.backend.Modelos.DiaSemana;
 import com.example.backend.Modelos.Esporadica;
 import com.example.backend.Modelos.Periodica;
+import com.example.backend.Repositorio.BedelDAO;
 import com.example.backend.Repositorio.ReservaDAO;
 import com.example.backend.Servicio.IReservaServicio;
 
@@ -28,6 +30,9 @@ public class ReservaServicio implements IReservaServicio {
 
     @Autowired
     private AulaServicio aulaServicio;
+
+    @Autowired
+    private BedelDAO bedelRepositorio;
 
     @Autowired
     private EsporadicaServicio esporadicaServicio;
@@ -171,10 +176,14 @@ public class ReservaServicio implements IReservaServicio {
 
     @Override
     public void guardarReserva(List<CDU01ReservaYAulaFinal> reservaYAula, ReservaDTO reserva) {
+        System.out.println("Finding Bedel with id: " + reserva.getIdBedel()); // Log the idBedel
+        Bedel bedel = bedelRepositorio.findById(reserva.getIdBedel())
+                .orElseThrow(() -> new IllegalArgumentException("Bedel not found"));
+
         if (reserva.isEsporadica()) {
-            esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva);
+            esporadicaServicio.guardarReservaEsporadica(reservaYAula, reserva, bedel);
         } else {
-            periodicasServicio.guardarReservaPeriodica(reserva, reservaYAula);
+            periodicasServicio.guardarReservaPeriodica(reserva, reservaYAula, bedel);
         }
     }
 
@@ -196,12 +205,8 @@ public class ReservaServicio implements IReservaServicio {
                 reservaYAulas.add(reservaYAula);
             }
 
-        }
-
-        else if (!reserva.isEsporadica()) {
-
+        } else {
             int idPeriodoReserva = periodoServicio.obtenerPeriodo(reserva).getIdPeriodo();
-            System.out.println("El periodo es " + idPeriodoReserva);
             if (reserva.isPeriodicaAnual()) {
                 for (CDU01DiasDTO dia : reserva.getDias()) {
                     CDU01ReservasYAulas reservaYAula = new CDU01ReservasYAulas();
@@ -230,10 +235,7 @@ public class ReservaServicio implements IReservaServicio {
                     reservaYAulas.add(reservaYAula);
                 }
             }
-        } else {
-            throw new ValidationException("Hubo un error con el tipo de reserva");
         }
         return reservaYAulas;
-
     }
 }

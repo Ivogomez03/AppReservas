@@ -1,42 +1,30 @@
 package com.example.backend.Controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.backend.Servicio.Implementacion.LoginServicio;
+import com.example.backend.Servicio.ILoginServicio;
 import com.example.backend.DTO.LoginDTO;
-import com.example.backend.DTO.SalidaLoginDTO;
+
+import java.util.Map;
 
 @RestController
 public class LoginControlador {
 
     @Autowired
-    private LoginServicio loginServicio;
+    private ILoginServicio loginServicio;
 
     @PostMapping("/login")
-    public ResponseEntity<SalidaLoginDTO> validarLogin(@RequestBody LoginDTO loginDTO) {
-        // Llamar al servicio para validar usuario
-        int esValido = loginServicio.validarUsuario(loginDTO);
-
-        // Crear la respuesta basada en la validación
-        SalidaLoginDTO salida;
-        HttpStatus status;
-
-        if (esValido == 1) {
-            salida = new SalidaLoginDTO(true, false);
-            status = HttpStatus.OK; // Usuario válido
-        } else if (esValido == 2) {
-            salida = new SalidaLoginDTO(false, true);
-            status = HttpStatus.UNAUTHORIZED; // Contraseña incorrecta
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        int result = loginServicio.validarUsuario(loginDTO);
+        if (result == 1) {
+            return ResponseEntity.ok(Map.of("admin", true, "idUsuario", loginDTO.getIdUsuario()));
+        } else if (result == 2) {
+            return ResponseEntity.ok(Map.of("bedel", true, "idUsuario", loginDTO.getIdUsuario()));
         } else {
-            salida = new SalidaLoginDTO(false, false);
-            status = HttpStatus.NOT_FOUND; // Usuario no encontrado
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
-
-        // Retornar la respuesta con el código de estado HTTP
-        return new ResponseEntity<>(salida, status);
     }
 }
