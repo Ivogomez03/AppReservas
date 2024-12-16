@@ -3,10 +3,11 @@ package com.example.backend.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter@Setter
+@Getter
+@Setter
 public class CDU01ReservaYAulaFinal {
-    public AulaDTO aula;
-    public CDU01FechaDTO fechas;
-    public CDU01DiasDTO dias;
+    private AulaDTO aula;
+    private CDU01FechaDTO fechas;
+    private CDU01DiasDTO dias;
 }
-//Ahora cada reserva tiene su aula espacifica
+// Ahora cada reserva tiene su aula espacifica

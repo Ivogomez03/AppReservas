@@ -24,20 +24,20 @@
     margin-top: 20px;
 }
 
-.CDYH-tr {
+.CDYH-tabla tr {
     background-color: #ff9615;
     color: white;
     text-align: left;
 }
 
-.CDYH-columnas,
-.CDYH-data {
+.CDYH-tabla th,
+.CDYH-cuerpoTabla td {
     padding: 12px 15px;
     border: 1px solid #00000029;
     border-radius: 2px;
 }
 
-.CDYH-columnas {
+.CDYH-tabla th {
     font-size: 1rem;
     font-weight: bold;
 }
@@ -68,4 +68,8 @@
 
 .CDYH-volver:focus {
     outline: none;
+}
+
+.CDYH-cuerpoTabla td {
+    color: black;
 }

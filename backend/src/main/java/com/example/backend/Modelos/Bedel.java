@@ -11,9 +11,10 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
-public class Bedel extends Usuario{
+public class Bedel extends Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "turnoDeTrabajo")
@@ -24,6 +25,4 @@ public class Bedel extends Usuario{
     @JoinColumn(name = "idAdminCreador", referencedColumnName = "idUsuario")
     private Administrador AdminCreador;
 
-    @OneToOne(mappedBy = "bedel", cascade = CascadeType.ALL)
-    private Reserva reserva;
 }

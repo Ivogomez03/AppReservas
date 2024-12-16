@@ -1,19 +1,25 @@
 package com.example.backend.Modelos;
+
 import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
-public class Periodica extends Reserva{
+public class Periodica extends Reserva {
 
- @OneToMany(mappedBy = "periodica", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "periodica", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dia> dias;
 
     @ManyToOne
     @JoinColumn(name = "idPeriodo", nullable = false)
     private Periodo periodo;
+
+    @ManyToOne
+    @JoinColumn(name = "idBedel", nullable = true, referencedColumnName = "idUsuario")
+    private Bedel bedel;
 
 }
