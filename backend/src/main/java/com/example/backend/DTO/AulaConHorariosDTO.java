@@ -4,7 +4,6 @@
  */
 package com.example.backend.DTO;
 
-import com.example.backend.Modelos.Reserva;
 import lombok.Getter;
 import lombok.Setter;
 
