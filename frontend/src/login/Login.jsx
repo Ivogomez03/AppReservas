@@ -81,7 +81,7 @@ const Login = ({ resetForm }) => {
         }
         if (!form.contrasena) {
             newErrors.contrasena = true;
-            setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." }));
+            setPlaceholders(prev => ({ ...prev, contrasena: "Completa la contraseña." })); 
         }
 
         // Actualizar el estado de errores
@@ -105,14 +105,15 @@ const Login = ({ resetForm }) => {
             console.log(result); // Ver la estructura del objeto JSON en la consola
 
             if (result.bedel == true) {
+                localStorage.setItem('idBedel', result.idUsuario); // Store idBedel in local storage
+                console.log("idBedel stored in localStorage:", result.idUsuario); // Log the idBedel
                 goToBienvenidoBedel();
                 resetFormulario();
             }
             else if (result.admin == true) {
-
+                localStorage.setItem('idAdmin', result.idUsuario); // Store idAdmin in local storage
                 goToBienvenidoAdmin();
                 resetFormulario();
-
             }
             else {
                 setErrors({
@@ -123,6 +124,10 @@ const Login = ({ resetForm }) => {
 
         } catch (error) {
             console.error('Error en la solicitud:', error);
+            setErrors({
+                idUsuario: true,
+                contrasena: true,
+            });
         }
     }
     return (
@@ -153,7 +158,7 @@ const Login = ({ resetForm }) => {
                     placeholder={placeholders.idUsuario}
                     value={form.idUsuario}
                     onChange={handleChange}
-                    className={`inputLogin${errors.idUsuario ? 'input-error-login' : ''}`}
+                    className={`inputLogin ${errors.idUsuario ? 'input-error-login' : ''}`}
                 />
 
                 <input

@@ -4,8 +4,6 @@ body {
     font-family: 'Roboto', sans-serif;
     height: 100vh;
     margin: 0;
-
-
 }
 
 .conteiner-login {
@@ -17,7 +15,6 @@ body {
     background: -webkit-linear-gradient(270deg, #f7a544, #fa9544 100%);
     background-size: 100%;
     background-repeat: no-repeat;
-
 }
 
 .back-button {
@@ -32,16 +29,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .back-button:hover {
+}
+
+.back-button:hover {
     color: #ffffff; 
-  }
-  
-  svg {
+}
+
+svg {
     stroke-width: 2; 
     stroke: currentColor; 
-  }
+}
 
 .sub-conteiner-login {
     width: 50%;
@@ -80,7 +77,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 16px;
-
     background-color: #ffffff;
 }
 
@@ -100,8 +96,6 @@ body {
     border: 1px solid #ff6666;
     /* Borde rojo suave para errores */
 }
-
-
 
 .error-message-login {
     color: red;
@@ -129,7 +123,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
 }
-
 
 .botonLogin {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);

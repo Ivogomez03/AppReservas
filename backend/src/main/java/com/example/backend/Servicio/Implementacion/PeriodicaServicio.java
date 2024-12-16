@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.DTO.CDU01ReservaYAulaFinal;
 import com.example.backend.DTO.ReservaDTO;
+import com.example.backend.Modelos.Bedel;
 import com.example.backend.Modelos.Dia;
 import com.example.backend.Modelos.Periodica;
 import com.example.backend.Repositorio.DiaDAO;
@@ -30,7 +31,7 @@ public class PeriodicaServicio implements IPeriodicaServicio {
 
     @Transactional
     @Override
-    public void guardarReservaPeriodica(ReservaDTO reservaDTO, List<CDU01ReservaYAulaFinal> reservaYAula) {
+    public void guardarReservaPeriodica(ReservaDTO reservaDTO, List<CDU01ReservaYAulaFinal> reservaYAula, Bedel bedel) {
         System.out.println("En periodica el dto es: " + reservaYAula);
         Periodica periodica = new Periodica();
         List<Dia> dias = diaServicio.crearDias(reservaYAula, periodica);
@@ -42,6 +43,7 @@ public class PeriodicaServicio implements IPeriodicaServicio {
         periodica.setIdProfesor(reservaDTO.getIdProfesor());
         periodica.setIdCatedra(reservaDTO.getIdCatedra());
         periodica.setPeriodo(periodoServicio.obtenerPeriodo(reservaDTO));
+        periodica.setBedel(bedel);
 
         for(Dia dia : dias) {
             diaDAO.save(dia);

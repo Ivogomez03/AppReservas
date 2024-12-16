@@ -176,6 +176,14 @@ const RegistrarReservaP = ({ resetForm }) => {
     const handleSubmit = async (e) => {
         console.log("Asi seria el DTO: ", { ...form, dias: diasRegistrados })
         e.preventDefault();
+        const idBedel = localStorage.getItem('idBedel'); // Retrieve idBedel from local storage
+        console.log("idBedel from localStorage:", idBedel); // Log the idBedel
+
+        const reservaDTO = {
+            ...form,
+            idBedel: idBedel ? parseInt(idBedel) : 0, // Include idBedel in the request body, ensure it's an integer
+            dias: diasRegistrados
+        };
         const newErrors = { ...errors };
 
         // Validaciones locales
@@ -221,7 +229,7 @@ const RegistrarReservaP = ({ resetForm }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...form, dias: diasRegistrados }),
+                body: JSON.stringify(reservaDTO),
 
             });
 

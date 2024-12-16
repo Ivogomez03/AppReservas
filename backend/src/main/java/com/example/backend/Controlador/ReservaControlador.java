@@ -35,6 +35,7 @@ public class ReservaControlador {
     @PostMapping("/reserva/registrar")
     public ResponseEntity<ApiResponse<?>> registrarReserva(@RequestBody ReservaDTO reservaDTO)
             throws ClassNotFoundException {
+        System.out.println("Received idBedel: " + reservaDTO.getIdBedel()); // Log the idBedel
         try {
             // Llama al servicio para registrar la reserva
             List<CDU01ReservasYAulas> aulasDisponibles = reservaServicio.registrarReserva(reservaDTO);
@@ -60,6 +61,7 @@ public class ReservaControlador {
 
     @PostMapping("/reserva/guardar")
     public ResponseEntity<ErrorAlGuardar> guardarReserva(@RequestBody ObjetoFinalCU1 objetoFinal) {
+        System.out.println("Received idBedel: " + objetoFinal.getReserva().getIdBedel()); // Log the idBedel
         try {
 
             // Llama al servicio para registrar la reserva
