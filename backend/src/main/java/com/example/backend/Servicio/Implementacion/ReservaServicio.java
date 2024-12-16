@@ -111,11 +111,13 @@ public class ReservaServicio implements IReservaServicio {
         return true;
     }
 
+    private static final String APELLIDO_PROFESOR_REGEX = "^[A-Z][a-zA-Z]*(\\s[A-Z][a-zA-Z]*)?$";
+
     // Validar apellido
     @Override
     public boolean valdiarApellido(String nombre) {
 
-        Pattern pattern = Pattern.compile(NOMBRE_PROFESOR_REGEX);
+        Pattern pattern = Pattern.compile(APELLIDO_PROFESOR_REGEX);
 
         if (nombre == null) {
             throw new ValidationException("El apellido del profesor no puede ser nulo");

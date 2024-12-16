@@ -4,7 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +25,8 @@ public abstract class Reserva {
     private String nombreCatedra;
     private int idProfesor;
     private int idCatedra;
+    @OneToOne
+    @JoinColumn(name = "bedelId")
+    private Bedel bedel;
 
 }

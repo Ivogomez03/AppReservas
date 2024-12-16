@@ -1,11 +1,13 @@
 package com.example.backend.Modelos;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +24,6 @@ public class Bedel extends Usuario{
     @JoinColumn(name = "idAdminCreador", referencedColumnName = "idUsuario")
     private Administrador AdminCreador;
 
-
+    @OneToOne(mappedBy = "bedel", cascade = CascadeType.ALL)
+    private Reserva reserva;
 }
