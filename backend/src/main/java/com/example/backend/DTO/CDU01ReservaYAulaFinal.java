@@ -10,4 +10,4 @@ public class CDU01ReservaYAulaFinal {
     private CDU01FechaDTO fechas;
     private CDU01DiasDTO dias;
 }
-// Ahora cada reserva tiene su aula espacifica
+// Ahora cada reserva tiene su aula especifica

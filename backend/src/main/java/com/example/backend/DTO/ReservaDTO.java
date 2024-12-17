@@ -1,6 +1,7 @@
 package com.example.backend.DTO;
 
 import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,5 @@ public class ReservaDTO {
     private boolean periodicaSegundoCuatrimestre;
     private List<CDU01DiasDTO> dias;
     private List<CDU01FechaDTO> fechasespecificas;
-    private int idBedel; // Add this field
+    private int idBedel;
 }

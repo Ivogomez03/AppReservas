@@ -1,8 +1,8 @@
 package com.example.backend.Servicio.Implementacion;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -393,6 +393,7 @@ public class AulaServicio implements IAulaServicio {
                 .collect(Collectors.toList());
 
         Map<Integer, Long> superposiciones = new HashMap<>();
+        Map<Integer, HorarioSuperpuestoDTO> horariosSuperpuestos = new HashMap<>();
         Map<Integer, ReservaSuperpuestaDTO> reservasSuperpuestas = new HashMap<>();
 
         reservasEsporadicas.stream()
@@ -403,6 +404,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(fechaEspecifica -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin());
                     superposiciones.put(fechaEspecifica.getAula().getIdAula(), overlap);
+                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
                     reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -415,6 +417,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(dia -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, dia.getHoraInicio(), dia.getHoraFin());
                     superposiciones.put(dia.getAula().getIdAula(), overlap);
+                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
                     reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -429,7 +432,64 @@ public class AulaServicio implements IAulaServicio {
                 .orElse(null);
 
         if (aulaConMenorSuperposicion != null) {
-            HorarioSuperpuestoDTO horario = new HorarioSuperpuestoDTO(horaInicio, horaFin);
+            HorarioSuperpuestoDTO horario = horariosSuperpuestos.get(aulaConMenorSuperposicion.getIdAula());
+            ReservaSuperpuestaDTO reservaSuperpuesta = reservasSuperpuestas.get(aulaConMenorSuperposicion.getIdAula());
+            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario, reservaSuperpuesta);
+        }
+        return null;
+    }
+
+    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase,
+            List<Esporadica> reservasEsporadicas, List<Aula> aulasOcupadasPeriodicas, LocalDate fecha,
+            LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
+        List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
+        List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
+                .map(this::convertirAEntidad)
+                .filter(aula -> aula.getCapacidad() >= capacidadMinima)
+                .collect(Collectors.toList());
+
+        Map<Integer, Long> superposiciones = new HashMap<>();
+        Map<Integer, HorarioSuperpuestoDTO> horariosSuperpuestos = new HashMap<>();
+        Map<Integer, ReservaSuperpuestaDTO> reservasSuperpuestas = new HashMap<>();
+
+        reservasEsporadicas.stream()
+                .flatMap(esporadica -> esporadica.getFechaEspecifica().stream())
+                .filter(fechaEspecifica -> fechaEspecifica.getFecha().equals(fecha)
+                        && fechaEspecifica.getHoraInicio().isBefore(horaFin)
+                        && fechaEspecifica.getHoraFin().isAfter(horaInicio))
+                .forEach(fechaEspecifica -> {
+                    long overlap = calcularSuperposicion(horaInicio, horaFin, fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin());
+                    superposiciones.put(fechaEspecifica.getAula().getIdAula(), overlap);
+                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
+                    reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
+
+        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(fecha.minusDays(1), fecha.plusDays(1));
+        reservasPeriodicas.stream()
+                .flatMap(reserva -> reserva.getDias().stream())
+                .filter(dia -> convertirADiaSemana(fecha.getDayOfWeek()).equals(dia.getDiaSemana())
+                        && dia.getHoraInicio().isBefore(horaFin)
+                        && dia.getHoraFin().isAfter(horaInicio))
+                .forEach(dia -> {
+                    long overlap = calcularSuperposicion(horaInicio, horaFin, dia.getHoraInicio(), dia.getHoraFin());
+                    superposiciones.put(dia.getAula().getIdAula(), overlap);
+                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
+                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
+                    reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
+                });
+
+        if (superposiciones.isEmpty()) {
+            return null;
+        }
+
+        Aula aulaConMenorSuperposicion = aulasPorTipo.stream()
+                .filter(aula -> superposiciones.containsKey(aula.getIdAula()))
+                .min((a1, a2) -> Long.compare(superposiciones.get(a1.getIdAula()), superposiciones.get(a2.getIdAula())))
+                .orElse(null);
+
+        if (aulaConMenorSuperposicion != null) {
+            HorarioSuperpuestoDTO horario = horariosSuperpuestos.get(aulaConMenorSuperposicion.getIdAula());
             ReservaSuperpuestaDTO reservaSuperpuesta = reservasSuperpuestas.get(aulaConMenorSuperposicion.getIdAula());
             return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario, reservaSuperpuesta);
         }
@@ -452,60 +512,6 @@ public class AulaServicio implements IAulaServicio {
         dto.setIdProfesor(reserva.getIdProfesor());
         dto.setIdCatedra(reserva.getIdCatedra());
         return dto;
-    }
-
-    private AulaConHorariosDTO obtenerAulaConMenorSuperposicion(Class<?> tipoClase,
-            List<Esporadica> reservasEsporadicas, List<Aula> aulasOcupadasPeriodicas, LocalDate fecha,
-            LocalTime horaInicio, LocalTime horaFin, int capacidadMinima) {
-        List<AulaDTO> aulasPorTipoDTO = obtenerAulasPorClase(tipoClase);
-        List<Aula> aulasPorTipo = aulasPorTipoDTO.stream()
-                .map(this::convertirAEntidad)
-                .filter(aula -> aula.getCapacidad() >= capacidadMinima)
-                .collect(Collectors.toList());
-
-        Map<Integer, Long> superposiciones = new HashMap<>();
-        Map<Integer, ReservaSuperpuestaDTO> reservasSuperpuestas = new HashMap<>();
-
-        reservasEsporadicas.stream()
-                .flatMap(esporadica -> esporadica.getFechaEspecifica().stream())
-                .filter(fechaEspecifica -> fechaEspecifica.getFecha().equals(fecha)
-                        && fechaEspecifica.getHoraInicio().isBefore(horaFin)
-                        && fechaEspecifica.getHoraFin().isAfter(horaInicio))
-                .forEach(fechaEspecifica -> {
-                    long overlap = calcularSuperposicion(horaInicio, horaFin, fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin());
-                    superposiciones.put(fechaEspecifica.getAula().getIdAula(), overlap);
-                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
-                    reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
-                });
-
-        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(fecha.minusDays(1), fecha.plusDays(1));
-        reservasPeriodicas.stream()
-                .flatMap(reserva -> reserva.getDias().stream())
-                .filter(dia -> convertirADiaSemana(fecha.getDayOfWeek()).equals(dia.getDiaSemana())
-                        && dia.getHoraInicio().isBefore(horaFin)
-                        && dia.getHoraFin().isAfter(horaInicio))
-                .forEach(dia -> {
-                    long overlap = calcularSuperposicion(horaInicio, horaFin, dia.getHoraInicio(), dia.getHoraFin());
-                    superposiciones.put(dia.getAula().getIdAula(), overlap);
-                    ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
-                    reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
-                });
-
-        if (superposiciones.isEmpty()) {
-            return null;
-        }
-
-        Aula aulaConMenorSuperposicion = aulasPorTipo.stream()
-                .filter(aula -> superposiciones.containsKey(aula.getIdAula()))
-                .min((a1, a2) -> Long.compare(superposiciones.get(a1.getIdAula()), superposiciones.get(a2.getIdAula())))
-                .orElse(null);
-
-        if (aulaConMenorSuperposicion != null) {
-            HorarioSuperpuestoDTO horario = new HorarioSuperpuestoDTO(horaInicio, horaFin);
-            ReservaSuperpuestaDTO reservaSuperpuesta = reservasSuperpuestas.get(aulaConMenorSuperposicion.getIdAula());
-            return convertirAEntidadConHorarios(aulaConMenorSuperposicion, horario, reservaSuperpuesta);
-        }
-        return null;
     }
 
     public AulaConHorariosDTO convertirAEntidadConHorarios(Aula aula, HorarioSuperpuestoDTO horarioSuperpuesto, ReservaSuperpuestaDTO reservaSuperpuesta) {
