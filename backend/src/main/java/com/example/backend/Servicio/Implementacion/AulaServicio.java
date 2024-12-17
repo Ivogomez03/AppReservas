@@ -343,23 +343,21 @@ public class AulaServicio implements IAulaServicio {
                 .distinct()
                 .collect(Collectors.toList());
 
-        // Obtener el periodo actual
-        List<Periodo> periodos = periodoDAO.findAll();
-        List<Aula> aulasOcupadasPeriodicas = new ArrayList<>();
-        for (Periodo periodo : periodos) {
-            if (!fecha.isBefore(periodo.getFechaInicio()) && !fecha.isAfter(periodo.getFechaFin())) {
-                List<Periodica> reservasPeriodicas = reservaDAO
-                        .obtenerReservasPorFechasPeriodo(periodo.getFechaInicio(), periodo.getFechaFin());
-                aulasOcupadasPeriodicas.addAll(reservasPeriodicas.stream()
-                        .flatMap(reserva -> reserva.getDias().stream())
-                        .filter(dia -> dia.getDiaSemana().equals(convertirADiaSemana(fecha.getDayOfWeek()))
-                                && dia.getHoraInicio().isBefore(horaFin)
-                                && dia.getHoraFin().isAfter(horaInicio))
-                        .map(Dia::getAula)
-                        .distinct()
-                        .collect(Collectors.toList()));
-            }
-        }
+        // Obtener el periodo actual que incluye la fecha especificada
+        Periodo periodoActual = periodoDAO.findAll().stream()
+                .filter(periodo -> !fecha.isBefore(periodo.getFechaInicio()) && !fecha.isAfter(periodo.getFechaFin()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró un periodo que incluya la fecha especificada"));
+
+        List<Periodica> reservasPeriodicas = reservaDAO.obtenerReservasPorFechasPeriodo(periodoActual.getFechaInicio(), periodoActual.getFechaFin());
+        List<Aula> aulasOcupadasPeriodicas = reservasPeriodicas.stream()
+                .flatMap(reserva -> reserva.getDias().stream())
+                .filter(dia -> convertirADiaSemana(fecha.getDayOfWeek()).equals(dia.getDiaSemana())
+                        && dia.getHoraInicio().isBefore(horaFin)
+                        && dia.getHoraFin().isAfter(horaInicio))
+                .map(Dia::getAula)
+                .distinct()
+                .collect(Collectors.toList());
 
         // Combinar aulas ocupadas de reservas esporádicas y periódicas
         Set<Aula> aulasOcupadas = new HashSet<>(aulasOcupadasEsporadicas);
