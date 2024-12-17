@@ -9,6 +9,10 @@ const ModificarBedel = ({ resetForm }) => {
         e.preventDefault()
         navigate("/login/bienvenidoAdmin/BuscarBedel"); // Navega hacia la página anterior
     };
+    const isValidPassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        return passwordRegex.test(password);
+      };
 
     const onlyLetters = (value) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value);
     const onlyNumbers = (str) => /^[0-9]*$/.test(str);
@@ -120,10 +124,27 @@ const ModificarBedel = ({ resetForm }) => {
             }
         }
         console.log({ ...form })
+        // Actualizar el formulario y validar en tiempo real
+        setForm((prevForm) => {
+            const updatedForm = { ...prevForm, [name]: value };
 
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
+            // Validar contraseñas en tiempo real
+            setErrors((prevErrors) => {
+                const updatedErrors = { ...prevErrors };
+
+                if (name === "contrasena" || name === "confirmarContrasena") {
+                    // Limpiar errores si las contraseñas coinciden
+                    updatedErrors.contrasena = !isValidPassword(updatedForm.contrasena);
+                    updatedErrors.confirmarContrasena = updatedForm.contrasena !== updatedForm.confirmarContrasena;
+                }
+
+                // Limpiar errores del campo actual
+                updatedErrors[name] = false;
+
+                return updatedErrors;
+            });
+
+            return updatedForm;
         });
     };
 
@@ -132,6 +153,10 @@ const ModificarBedel = ({ resetForm }) => {
         const newErrors = { ...errors };
 
         // Validaciones locales
+        if (!isValidPassword(form.contrasena)) {
+            newErrors.contrasena = true;
+            setPlaceholders(prev => ({ ...prev, contrasena: "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número." }));
+        }
         if (!form.apellido || form.apellido.length > 50) {
             newErrors.apellido = true;
             setPlaceholders(prev => ({ ...prev, apellido: "Completa el apellido (máximo 50 caracteres)." }));
