@@ -143,7 +143,7 @@ const BuscarBedel = ({ resetForm }) => {
                 resetFormulario();
             } else {
                 console.error('Error en la respuesta:', response.status);
-                alert("No se pudieron cargar los bedeles.");
+                alert("No se encuentran Bedeles con los parámetros ingresados.");
             }
 
         } catch (error) {
