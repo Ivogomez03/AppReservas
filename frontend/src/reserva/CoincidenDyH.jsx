@@ -26,6 +26,7 @@ const CoincidenDyH = () => {
                         piso: aula.piso,
                         tipoPizarron: aula.tipoPizarron,
                         capacidad: aula.capacidad,
+                        diaSemana: aula.horarioSuperpuesto.diaSemana, // Add this field
                         inicioSolapamiento: aula.horarioSuperpuesto.horaInicio,
                         finSolapamiento: aula.horarioSuperpuesto.horaFin,
                         reservaSuperpuesta: aula.reservaSuperpuesta,
@@ -58,6 +59,7 @@ const CoincidenDyH = () => {
                             <th>Aula</th>
                             <th>Piso</th>
                             <th>Capacidad</th>
+                            <th>Día</th> {/* Add this column */}
                             <th>Inicio Conflicto</th>
                             <th>Fin Conflicto</th>
                             <th>Profesor</th>
@@ -71,6 +73,7 @@ const CoincidenDyH = () => {
                                 <td>{conflicto.numeroDeAula}</td>
                                 <td>{conflicto.piso}</td>
                                 <td>{conflicto.capacidad}</td>
+                                <td>{conflicto.diaSemana}</td> {/* Add this field */}
                                 <td>{conflicto.inicioSolapamiento}</td>
                                 <td>{conflicto.finSolapamiento}</td>
                                 <td>{`${conflicto.reservaSuperpuesta.apellidoProfesor}, ${conflicto.reservaSuperpuesta.nombreProfesor}`}</td>

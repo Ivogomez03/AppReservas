@@ -5,6 +5,9 @@
 package com.example.backend.DTO;
 
 import java.time.LocalTime;
+
+import com.example.backend.Modelos.DiaSemana;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +18,10 @@ import lombok.Setter;
 public class HorarioSuperpuestoDTO {
     private LocalTime horaInicio;
     private LocalTime horaFin;
+    private DiaSemana diaSemana; // Add this field
 
     @Override
     public String toString() {
-        return "HorarioSuperpuestoDTO{horaInicio=" + horaInicio + ", horaFin=" + horaFin + '}';
+        return "HorarioSuperpuestoDTO{horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", diaSemana=" + diaSemana + '}';
     }
 }

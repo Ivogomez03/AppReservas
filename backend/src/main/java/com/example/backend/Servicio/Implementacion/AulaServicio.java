@@ -404,7 +404,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(fechaEspecifica -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin());
                     superposiciones.put(fechaEspecifica.getAula().getIdAula(), overlap);
-                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
+                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin(), convertirADiaSemana(fechaEspecifica.getFecha().getDayOfWeek())));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
                     reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -417,7 +417,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(dia -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, dia.getHoraInicio(), dia.getHoraFin());
                     superposiciones.put(dia.getAula().getIdAula(), overlap);
-                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
+                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin(), dia.getDiaSemana()));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
                     reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -460,7 +460,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(fechaEspecifica -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin());
                     superposiciones.put(fechaEspecifica.getAula().getIdAula(), overlap);
-                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin()));
+                    horariosSuperpuestos.put(fechaEspecifica.getAula().getIdAula(), new HorarioSuperpuestoDTO(fechaEspecifica.getHoraInicio(), fechaEspecifica.getHoraFin(), convertirADiaSemana(fechaEspecifica.getFecha().getDayOfWeek())));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(fechaEspecifica.getEsporadica());
                     reservasSuperpuestas.putIfAbsent(fechaEspecifica.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -474,7 +474,7 @@ public class AulaServicio implements IAulaServicio {
                 .forEach(dia -> {
                     long overlap = calcularSuperposicion(horaInicio, horaFin, dia.getHoraInicio(), dia.getHoraFin());
                     superposiciones.put(dia.getAula().getIdAula(), overlap);
-                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin()));
+                    horariosSuperpuestos.put(dia.getAula().getIdAula(), new HorarioSuperpuestoDTO(dia.getHoraInicio(), dia.getHoraFin(), dia.getDiaSemana()));
                     ReservaSuperpuestaDTO reservaSuperpuestaDTO = convertirAReservaSuperpuestaDTO(dia.getPeriodica());
                     reservasSuperpuestas.putIfAbsent(dia.getAula().getIdAula(), reservaSuperpuestaDTO);
                 });
@@ -546,7 +546,7 @@ public class AulaServicio implements IAulaServicio {
         if (horarioSuperpuesto != null) {
             dto.setHorarioSuperpuesto(horarioSuperpuesto);
             logger.info("Horario asignado al DTO: " + horarioSuperpuesto.getHoraInicio() + " - "
-                    + horarioSuperpuesto.getHoraFin());
+                    + horarioSuperpuesto.getHoraFin() + " (" + horarioSuperpuesto.getDiaSemana() + ")");
         } else {
             logger.info("Horario superpuesto es nulo");
         }
