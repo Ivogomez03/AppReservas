@@ -192,8 +192,13 @@ const RegistrarBedel = ({ resetForm }) => {
         },
         body: JSON.stringify(form),
       });
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        alert(errorMessage)
 
+      }
       const result = await response.json(); // Usamos .json() para recibir la respuesta como objeto JSON
+
       console.log(result); // Ver la estructura del objeto JSON en la consola
 
       const newBackendErrors = { ...backendErrors };
@@ -201,8 +206,14 @@ const RegistrarBedel = ({ resetForm }) => {
       if (result.errorId !== "Id valida") {
         newBackendErrors.idUsuario = result.errorId;
       }
+      else {
+        newBackendErrors.idUsuario = "";
+      }
       if (result.errorContrasena !== "Contraseña valida") {
         newBackendErrors.contrasena = result.errorContrasena;
+      }
+      else {
+        newBackendErrors.contrasena = "";
       }
 
       setBackendErrors(newBackendErrors);

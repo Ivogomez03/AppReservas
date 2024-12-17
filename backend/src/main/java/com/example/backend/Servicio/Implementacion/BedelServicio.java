@@ -3,7 +3,6 @@ package com.example.backend.Servicio.Implementacion;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.DTO.BedelDTO;
@@ -54,7 +53,7 @@ public class BedelServicio implements IBedelServicios {
 
         String errorContrasena = this.validatePassword(contra);
         String errorId = this.existeBedelPorId(bedelDTO.getIdUsuario());
-        Administrador idAdmin = adminDAO.findById(bedelDTO.getIdUsuario()).get();
+        Administrador idAdmin = adminDAO.findById(bedelDTO.getIdUsuario()).orElse(null);
 
         if (errorContrasena.equals("Contraseña valida") && errorId.equals("Id valida") && idAdmin == null) {
 
@@ -68,14 +67,7 @@ public class BedelServicio implements IBedelServicios {
             bedel.setAdminCreador(gestorAdmin.buscarAdministrador(bedelDTO.getIdAdminCreador()));
 
             bedelDAO.save(bedel);
-        }
-        else if(!errorContrasena.equals("Contraseña valida")){
-            throw new ValidationException("La contraseña no es valida");
-        }
-        else if(!errorId.equals("Id valida")){
-            throw new ValidationException("El id ya existe");
-        }
-        else if(idAdmin != null){
+        } else if (idAdmin != null) {
             throw new ValidationException("Hay un administrador con el mismo id");
         }
 
@@ -115,15 +107,15 @@ public class BedelServicio implements IBedelServicios {
     public void eliminarBedel(BedelDTO bedelSeleccionado) {
         // Buscar el Bedel en la base de datos;
         Bedel bedel = bedelDAO.findById(bedelSeleccionado.getIdUsuario()).get();
-        if(bedel == null){
-            throw new ValidationException("El bedel no esta en la base de datos") ;
+        if (bedel == null) {
+            throw new ValidationException("El bedel no esta en la base de datos");
         }
 
         // Cambiar el atributo habilitado a false
         bedel.setHabilitado(false);
 
         // Guardar el Bedel actualizado en la base de datos
-        bedelDAO.save(bedel);   
+        bedelDAO.save(bedel);
     }
 
     @Override
@@ -182,9 +174,8 @@ public class BedelServicio implements IBedelServicios {
             // datos nulos o caracteres maximos se valida en front
             Bedel bedel = bedelDAO.findById(bedelDTO.getIdUsuario()).get();
             if (bedel == null) {
-                throw new ValidationException("El bedel no esta en la base de datos") ;
-            }
-            else{
+                throw new ValidationException("El bedel no esta en la base de datos");
+            } else {
                 bedel.setNombre(bedelDTO.getNombre());
                 bedel.setApellido(bedelDTO.getApellido());
                 bedel.setIdUsuario(bedelDTO.getIdUsuario());
@@ -192,10 +183,10 @@ public class BedelServicio implements IBedelServicios {
                 bedel.setTurnoDeTrabajo(bedelDTO.getTurnoDeTrabajo());
                 bedel.setHabilitado(true);
                 bedel.setAdminCreador(gestorAdmin.buscarAdministrador(bedelDTO.getIdAdminCreador()));
-    
+
                 // Guardar los cambios en la base de datos
                 bedelDAO.save(bedel);
-    
+
                 // Convertir el Bedel actualizado a DTO y devolverlo
                 return "Bedel ha sido modificado correctamente";
             }
@@ -218,5 +209,4 @@ public class BedelServicio implements IBedelServicios {
         return convertirABedelDTO(bedel);
     }
 
-    
 }

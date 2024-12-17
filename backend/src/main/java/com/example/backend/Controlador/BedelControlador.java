@@ -15,6 +15,8 @@ import com.example.backend.Excepciones.ValidationException;
 import com.example.backend.Servicio.Implementacion.BedelServicio;
 import com.example.backend.Modelos.TurnoDeTrabajo;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 @RestController
@@ -25,8 +27,15 @@ public class BedelControlador {
 
     // Endpoint para CU13
     @PostMapping("/bedel/CU13")
-    public ValidarContrasenaDTO validarBedel(@RequestBody BedelDTO bedeldto) {
-        return bedelServicio.validarBedel(bedeldto);
+    public ResponseEntity<Object> validarBedel(@RequestBody BedelDTO bedeldto) {
+        try {
+            ValidarContrasenaDTO dto = bedelServicio.validarBedel(bedeldto);
+            return ResponseEntity.ok(dto);
+        } catch (ValidationException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al modificar el bedel: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 
     @DeleteMapping("/bedel/CU15")

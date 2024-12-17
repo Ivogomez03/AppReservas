@@ -38,16 +38,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .back-button:hover {
-    color: #ffffff; /* Cambia el color al pasar el mouse */
-  }
-  
-  svg {
-    stroke-width: 2; /* Hace la flecha más gruesa */
-    stroke: currentColor; /* Asegura que tome el color actual */
-  }
+}
+
+.back-button:hover {
+    color: #ffffff;
+    /* Cambia el color al pasar el mouse */
+}
+
+svg {
+    stroke-width: 2;
+    /* Hace la flecha más gruesa */
+    stroke: currentColor;
+    /* Asegura que tome el color actual */
+}
 
 .formulario {
     position: relative;
@@ -218,4 +221,9 @@ h2 {
     margin-top: 10px;
     color: green;
     /* Puedes cambiar el color según tu diseño */
+}
+
+.error-message {
+    color: red;
+    font-size: 10px;
 }
